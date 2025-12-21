@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+class {{ class }}
+{
+    private static $model = Model::class;
+
+    /**
+     * Copy it and customized your logic
+     */
+    public function doAnyThing()
+    {
+        try {
+            return 'data';
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+}

@@ -1,0 +1,58 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Models\{{ model }};
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class {{ class }}
+{
+    public function query()
+    {
+        return {{ model }}::query();
+    }
+
+    public function getAll(?bool $paginate = false): Collection|LengthAwarePaginator
+    {
+        $query = {{ model }}::query();
+        return $paginate ? $query->paginate(config('paginate.count')) : $query->get();
+    }
+
+    public function find(string $id): ?{{ model }}
+    {
+        return {{ model }}::find($id);
+    }
+
+    public function findOrFail(string $id): {{ model }}
+    {
+        return {{ model }}::findOrFail($id);
+    }
+
+    public function create(array $data): {{ model }}
+    {
+        return {{ model }}::create($data);
+    }
+
+    public function update(string $id, array $data): {{ model }}
+    {
+        ${{ modelVariable }} = {{ model }}::findOrFail($id);
+        ${{ modelVariable }}->update($data);
+        return ${{ modelVariable }}->fresh();
+    }
+
+    public function delete(string $id): bool
+    {
+        return {{ model }}::destroy($id);
+    }
+
+    public function exists(string $id): bool
+    {
+        return {{ model }}::where('id', $id)->exists();
+    }
+
+    public function count(): int
+    {
+        return {{ model }}::count();
+    }
+}

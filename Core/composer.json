@@ -1,0 +1,26 @@
+{
+    "name": "graphicode-solutions/laravel-features",
+    "description": "This package for handle feature-based structure",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Graphicode\\Features\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "abdulrhman-developer0",
+            "email": "tknwtknwlwjy10@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "graphicode/graphicode-standard": "v3.0"
+    },
+    "extra": {
+        "providers": [
+
+        ]
+    }
+}

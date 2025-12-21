@@ -1,0 +1,141 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Metadata\{{ model }}Metadata;
+use {{ rootNamespace }}Models\{{ model }};
+use {{ rootNamespace }}Requests\{{ model }}Request;
+use {{ rootNamespace }}Services\{{ model }}Service;
+use {{ rootNamespace }}Transformers\{{ model }}Collection;
+use {{ rootNamespace }}Transformers\{{ model }}Resource;
+use App\Traits\ApiResponses;
+use App\Traits\HandleServiceExceptions;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
+
+class {{ class }} extends Controller
+{
+    use ApiResponses, HandleServiceExceptions, AuthorizesRequests;
+
+
+    /**
+     * Inject your service in constructor
+     */
+    public function __construct(
+        protected {{ model }}Service $service
+    ) {}
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return $this->executeService(function () {
+            $this->authorize('viewAny', {{ model }}::class);
+
+            $result = $this->service->get{{ models }}(
+                search: request('search'),
+                filter: request('filter'),
+                sort: request('sort'),
+                paginate: request()->has('page')
+            );
+
+            return $this->okResponse(
+                request()->has('page')
+                    ? new {{ model }}Collection($result)
+                    : {{ model }}Resource::collection($result),
+                "Success"
+            );
+        }, '{{ class }}@index');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store({{ model }}Request $request)
+    {
+        return $this->executeService(function () use ($request) {
+            $this->authorize('create', {{ model }}::class);
+
+            ${{ modelVariable }} = $this->service->store{{ model }}(
+                $request->validated()
+            );
+
+            return $this->okResponse(
+                {{ model }}Resource::make(${{ modelVariable }}),
+                "{{ model }} created successfully"
+            );
+        }, '{{ class }}@store');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            ${{ modelVariable }} = $this->service->get{{ model }}ById($id);
+            $this->authorize('view', ${{ modelVariable }});
+
+            return $this->okResponse(
+                {{ model }}Resource::make(${{ modelVariable }}),
+                "{{ model }} retrieved successfully"
+            );
+        }, '{{ class }}@show');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update({{ model }}Request $request, string $id)
+    {
+        return $this->executeService(function () use ($request, $id) {
+            ${{ modelVariable }} = $this->service->get{{ model }}ById($id);
+            $this->authorize('update', ${{ modelVariable }});
+
+            ${{ modelVariable }} = $this->service->update{{ model }}(
+                $id,
+                $request->validated()
+            );
+
+            return $this->okResponse(
+                {{ model }}Resource::make(${{ modelVariable }}),
+                "{{ model }} updated successfully"
+            );
+        }, '{{ class }}@update');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            ${{ modelVariable }} = $this->service->get{{ model }}ById($id);
+            $this->authorize('delete', ${{ modelVariable }});
+
+            $this->service->delete{{ model }}($id);
+
+            return $this->okResponse(
+                null,
+                "{{ model }} deleted successfully"
+            );
+        }, '{{ class }}@destroy');
+    }
+
+    /**
+     * Get metadata for this resource
+     */
+    public function metadata()
+    {
+        return $this->executeService(function () {
+            $this->authorize('viewAny', {{ model }}::class);
+
+            return $this->okResponse(
+                {{ model }}Metadata::get(),
+                "Metadata retrieved successfully"
+            );
+        }, '{{ class }}@metadata');
+    }
+}

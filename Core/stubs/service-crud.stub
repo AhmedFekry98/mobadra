@@ -1,0 +1,111 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Metadata\{{ model }}Metadata;
+use {{ rootNamespace }}Models\{{ model }};
+use {{ rootNamespace }}Repositories\{{ model }}Repository;
+use App\Traits\HasGlobalQueryHandlers;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class {{ class }}
+{
+    use HasGlobalQueryHandlers;
+
+    public function __construct(
+        protected {{ model }}Repository $repository
+    ) {}
+
+    /**
+     * Get All {{ models }} with global query handlers
+     */
+    public function get{{ models }}(?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
+    {
+        $query = $this->repository->query();
+
+        $data = [
+            'search' => $search,
+            'filter' => $filter,
+            'sort' => $sort,
+        ];
+
+        $config = [
+            'searchable_columns' => {{ model }}Metadata::getSearchableColumns(),
+            'filters' => {{ model }}Metadata::getFilters(),
+            'operators' => {{ model }}Metadata::getOperators(),
+            'sortable_columns' => $this->getSortableColumns(),
+        ];
+
+        return $this->getWithGlobalHandlers($query, $data, $config, $paginate);
+    }
+
+    /**
+     * Get sortable columns from metadata
+     */
+    protected function getSortableColumns(): array
+    {
+        return collect({{ model }}Metadata::getFilters())
+            ->pluck('column')
+            ->toArray();
+    }
+
+    /**
+     * Create {{ model }}
+     */
+    public function store{{ model }}(array $data): {{ model }}
+    {
+        $creationData = collect($data)->except([
+            // ignore any key?
+        ])->toArray();
+
+        // manipulate the data before creation?
+        ${{ modelSingular }} = $this->repository->create($creationData);
+
+        // write any logic after creation?
+
+        return ${{ modelSingular }};
+    }
+
+    /**
+     * Get {{ model }} By Id
+     */
+    public function get{{ model }}ById(string $id): {{ model }}
+    {
+        return $this->repository->findOrFail($id);
+    }
+
+
+    /**
+     * Update {{ model }}
+     */
+    public function update{{ model }}(string $id, array $data): {{ model }}
+    {
+        return $this->repository->update($id, $data);
+    }
+
+    /**
+     * Delete {{ model }}
+     */
+    public function delete{{ model }}(string $id): bool
+    {
+        return $this->repository->delete($id);
+    }
+
+    /**
+     * Check if {{ model }} exists
+     */
+    public function {{ modelSingular }}Exists(string $id): bool
+    {
+        return $this->repository->exists($id);
+    }
+
+    /**
+     * Get total {{ modelPlural }} count
+     */
+    public function getTotalCount(): int
+    {
+        return $this->repository->count();
+    }
+}

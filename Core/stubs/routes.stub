@@ -1,0 +1,14 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+// Route::prefix("{{ pluralPrefix }}")->group(function() {
+
+//     Route::get('/', [MayController::class, 'index']);
+//     Route::post('/', [MayController::class, 'store']);
+//     Route::get('/{id}', [MayController::class, 'show']);
+//     Route::put('/{id}', [MayController::class, 'update']);
+//     Route::delete('/{id}', [MayController::class, 'destroy']);
+
+// });
+
