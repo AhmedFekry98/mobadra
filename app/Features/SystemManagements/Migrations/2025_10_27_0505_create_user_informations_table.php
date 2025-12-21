@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('phone_code')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone_number')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', Gender::values())->nullable();
             $table->string('nationality')->nullable();

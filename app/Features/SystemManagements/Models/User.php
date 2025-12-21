@@ -21,7 +21,9 @@ class User extends Model implements HasMedia
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'email_verified_at',
+        'phone_verified_at',
     ];
 
     protected $hidden = [
@@ -31,6 +33,7 @@ class User extends Model implements HasMedia
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     /**
@@ -62,6 +65,18 @@ class User extends Model implements HasMedia
     public function getRoleNameAttribute()
     {
         return $this->role->name;
+    }
+
+    /**
+     * Assign role to user
+     */
+    public function assignRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->first()?->id;
+        }
+        $this->role_id = $role;
+        $this->save();
     }
 
     public function allPermissions()

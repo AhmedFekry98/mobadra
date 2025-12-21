@@ -18,7 +18,7 @@ class UserInformationSeeder extends Seeder
         foreach ($users as $user) {
             $user->userInformation()->create([
                 'phone_code' => fake()->countryCode(),
-                'phone' => fake()->phoneNumber(),
+                'phone_number' => fake()->phoneNumber(),
                 'date_of_birth' => fake()->date(),
             'gender' => fake()->randomElement(\App\Enums\Gender::cases()),
                 'nationality' => fake()->country(),

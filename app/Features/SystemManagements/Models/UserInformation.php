@@ -18,7 +18,7 @@ class UserInformation extends Model
     protected $fillable = [
         'user_id',
         'phone_code',
-        'phone',
+        'phone_number',
         'date_of_birth',
         'gender',
         'nationality',

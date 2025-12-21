@@ -8,6 +8,7 @@ use App\Features\AuthManagement\Controllers\MagicLoginController;
 use App\Features\AuthManagement\Controllers\ResetPasswordController;
 use App\Features\AuthManagement\Controllers\ProfileController;
 use App\Features\AuthManagement\Controllers\SignUpController;
+use App\Features\AuthManagement\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 // login
@@ -21,7 +22,7 @@ Route::prefix('login')->group(function () {
 Route::post('magic/request', [MagicLoginController::class, 'requestLink']);
 
 // sign up
-Route::post('sign-up', [SignUpController::class, 'signUp']);
+Route::post('sign-up/{role}', [SignUpController::class, 'signUp'])->where('role', 'student|teacher');
 
 // forgot password
 Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
@@ -42,6 +43,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('auth/become-provider', [ProfileController::class, 'becomeProvider']);
 });
 
-
-
-
+// verification routes
+Route::prefix('verify')->group(function () {
+    // send OTP
+    Route::post('email/send-otp', [VerificationController::class, 'sendEmailOtp'])->name('verify.email.send');
+    Route::post('phone/send-otp', [VerificationController::class, 'sendPhoneOtp'])->name('verify.phone.send');
+    // verify OTP
+    Route::post('email', [VerificationController::class, 'verifyEmail'])->name('verify.email');
+    Route::post('phone', [VerificationController::class, 'verifyPhone'])->name('verify.phone');
+});
