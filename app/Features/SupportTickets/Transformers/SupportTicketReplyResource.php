@@ -35,7 +35,21 @@ class SupportTicketReplyResource extends JsonResource
                 ];
             }),
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
+            'created_at_formatted' => $this->formatTime($resource?->created_at),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];
+    }
+
+    protected function formatTime($datetime): ?string
+    {
+        if (!$datetime) {
+            return null;
+        }
+
+        $dayName = $datetime->format('D');
+        $time = $datetime->format('g:i A');
+        $diffForHumans = $datetime->diffForHumans();
+
+        return "{$dayName}, {$time} ({$diffForHumans})";
     }
 }
