@@ -131,6 +131,76 @@ class PermissionSeeder extends Seeder
                     ['name' => 'audit.cleanup', 'caption' => 'Cleanup'],
                 ],
             ],
+
+            // Terms
+            [
+                'group' => 'Terms',
+                'items' => [
+                    ['name' => 'term.viewAny', 'caption' => 'Show Terms'],
+                    ['name' => 'term.view', 'caption' => 'View Single Term'],
+                    ['name' => 'term.create', 'caption' => 'Create New Term'],
+                    ['name' => 'term.update', 'caption' => 'Update Term'],
+                    ['name' => 'term.delete', 'caption' => 'Delete Term'],
+                    ['name' => 'term.restore', 'caption' => 'Restore Term'],
+                    ['name' => 'term.forceDelete', 'caption' => 'Force Delete Term'],
+                ],
+            ],
+
+            // Courses
+            [
+                'group' => 'Courses',
+                'items' => [
+                    ['name' => 'course.viewAny', 'caption' => 'Show Courses'],
+                    ['name' => 'course.view', 'caption' => 'View Single Course'],
+                    ['name' => 'course.create', 'caption' => 'Create New Course'],
+                    ['name' => 'course.update', 'caption' => 'Update Course'],
+                    ['name' => 'course.delete', 'caption' => 'Delete Course'],
+                    ['name' => 'course.restore', 'caption' => 'Restore Course'],
+                    ['name' => 'course.forceDelete', 'caption' => 'Force Delete Course'],
+                ],
+            ],
+
+            // Chapters
+            [
+                'group' => 'Chapters',
+                'items' => [
+                    ['name' => 'chapter.viewAny', 'caption' => 'Show Chapters'],
+                    ['name' => 'chapter.view', 'caption' => 'View Single Chapter'],
+                    ['name' => 'chapter.create', 'caption' => 'Create New Chapter'],
+                    ['name' => 'chapter.update', 'caption' => 'Update Chapter'],
+                    ['name' => 'chapter.delete', 'caption' => 'Delete Chapter'],
+                    ['name' => 'chapter.restore', 'caption' => 'Restore Chapter'],
+                    ['name' => 'chapter.forceDelete', 'caption' => 'Force Delete Chapter'],
+                ],
+            ],
+
+            // Lessons
+            [
+                'group' => 'Lessons',
+                'items' => [
+                    ['name' => 'lesson.viewAny', 'caption' => 'Show Lessons'],
+                    ['name' => 'lesson.view', 'caption' => 'View Single Lesson'],
+                    ['name' => 'lesson.create', 'caption' => 'Create New Lesson'],
+                    ['name' => 'lesson.update', 'caption' => 'Update Lesson'],
+                    ['name' => 'lesson.delete', 'caption' => 'Delete Lesson'],
+                    ['name' => 'lesson.restore', 'caption' => 'Restore Lesson'],
+                    ['name' => 'lesson.forceDelete', 'caption' => 'Force Delete Lesson'],
+                ],
+            ],
+
+            // Lesson Contents
+            [
+                'group' => 'Lesson Contents',
+                'items' => [
+                    ['name' => 'lesson_content.viewAny', 'caption' => 'Show Lesson Contents'],
+                    ['name' => 'lesson_content.view', 'caption' => 'View Single Lesson Content'],
+                    ['name' => 'lesson_content.create', 'caption' => 'Create New Lesson Content'],
+                    ['name' => 'lesson_content.update', 'caption' => 'Update Lesson Content'],
+                    ['name' => 'lesson_content.delete', 'caption' => 'Delete Lesson Content'],
+                    ['name' => 'lesson_content.restore', 'caption' => 'Restore Lesson Content'],
+                    ['name' => 'lesson_content.forceDelete', 'caption' => 'Force Delete Lesson Content'],
+                ],
+            ],
         ];
 
         foreach ($permissions as $group) {

@@ -4,8 +4,6 @@ namespace App\Features\AuthManagement\Services;
 
 use App\Features\SystemManagements\Models\Role;
 use App\Features\SystemManagements\Models\User;
-use App\Features\SystemManagements\Models\UserInformation;
-use App\Features\SystemManagements\Models\UserService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
@@ -35,13 +33,8 @@ class ProfileService
                 $this->updateUserInformation($user, $data['user_information']);
             }
 
-            // Update user services
-            if (isset($data['user_services'])) {
-                $this->updateUserServices($user, $data['user_services']);
-            }
-
             // Reload relationships
-            return $user->fresh(['user_information', 'user_services.service']);
+            return $user->fresh(['userInformation']);
         });
     }
 
@@ -58,23 +51,6 @@ class ProfileService
     }
 
     /**
-     * Update user services
-     */
-    protected function updateUserServices(User $user, array $serviceIds): void
-    {
-        // Remove existing services - use where clause to ensure proper deletion
-        UserService::where('user_id', $user->id)->delete();
-
-        // Add new services
-        foreach ($serviceIds as $serviceId) {
-            UserService::create([
-                'user_id' => $user->id,
-                'service_id' => $serviceId,
-            ]);
-        }
-    }
-
-    /**
      * Update user profile image
      */
     protected function updateUserImage(User $user, UploadedFile $image): void
@@ -87,32 +63,8 @@ class ProfileService
             $user->addMediaFromRequest('image')
                 ->toMediaCollection('user-image');
         }
+
     }
-
-    /**
-     * become provider
-     */
-    public function becomeProvider(User $user): User
-    {
-
-        if ($user->roleName == 'provider') {
-            throw new \Exception('User is already a provider');
-        }
-
-        if ($user->roleName == 'customer') {
-            return DB::transaction(function () use ($user) {
-                $providerRole = Role::where('name', 'provider')->first();
-                if (!$providerRole) {
-                    throw new \Exception('Provider role not found');
-                }
-
-                $user->role_id = $providerRole->id;
-                $user->save();
-                return $user->fresh();
-            });
-        }
-        throw new \Exception('User role is not eligible for provider conversion');
-    }
-
 
 }
+

@@ -3,13 +3,18 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Database\Seeders\Courses\ChapterSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\SystemManagements\UserSeeder;
 use Database\Seeders\SystemManagements\RoleSeeder;
 use Database\Seeders\SystemManagements\PermissionSeeder;
 use Database\Seeders\SystemManagements\RolePermissionSeeder;
-use Database\Seeders\Badges\BadgeSeeder;
-use Database\Seeders\Badges\BadgeConditionSeeder;
+use Database\Seeders\Courses\CourseSeeder;
+use Database\Seeders\Courses\CoursesSeeder;
+use Database\Seeders\Courses\LessonContentSeeder;
+use Database\Seeders\Courses\LessonSeeder;
+use Database\Seeders\Courses\TermSeeder;
 use Database\Seeders\SystemManagements\GeneralSettingSeeder;
 use Database\Seeders\SystemManagements\AuditSeeder;
 use Database\Seeders\SystemManagements\FAQSeeder;
@@ -27,7 +32,11 @@ class DatabaseSeeder extends Seeder
         UserSeeder::class,
         PermissionSeeder::class,
         RolePermissionSeeder::class,
-        BadgeSeeder::class,
+        TermSeeder::class,
+        CoursesSeeder::class,
+        ChapterSeeder::class,
+        LessonSeeder::class,
+        LessonContentSeeder::class,
         GeneralSettingSeeder::class,
         AuditSeeder::class,
         FAQSeeder::class,
@@ -43,6 +52,7 @@ class DatabaseSeeder extends Seeder
         PermissionSeeder::class,
         RolePermissionSeeder::class,
         GeneralSettingSeeder::class,
+        TermSeeder::class,
     ];
 
 

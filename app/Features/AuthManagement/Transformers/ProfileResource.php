@@ -27,9 +27,6 @@ class ProfileResource extends JsonResource
             'image' => $resource?->getFirstMediaUrl('user-image'),
             'role' => RoleResource::make($resource?->role) ?? 'admin',
             'user_information' => UserInformationResource::make($resource?->userInformation),
-            'user_services' => $resource?->userServices
-                ? UserServiceResource::collection($resource->userServices)
-                : collect(),
             'permissions' => $resource?->allPermissions()
                 ? PermissionResource::collection($resource->allPermissions())->pluck('name')
                 : collect(),
