@@ -18,7 +18,7 @@ class UserInformationResource extends JsonResource
         return [
             'id' => $resource?->id,
             'phone_code' => $resource?->phone_code,
-            'phone' => $resource?->phone,
+            'phone_number' => $resource?->phone_number,
             'date_of_birth' => $resource?->date_of_birth ?
                 (is_string($resource->date_of_birth) ? $resource->date_of_birth : $resource->date_of_birth->format('Y-m-d'))
                 : null,

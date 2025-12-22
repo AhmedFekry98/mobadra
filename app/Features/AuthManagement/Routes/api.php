@@ -39,8 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth/profile', [ProfileController::class, 'show']);
     // update auth user profile
     Route::put('auth/profile', [ProfileController::class, 'update']);
-    // become provider
-    Route::put('auth/become-provider', [ProfileController::class, 'becomeProvider']);
 });
 
 // verification routes

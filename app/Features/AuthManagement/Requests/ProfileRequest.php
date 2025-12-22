@@ -46,7 +46,7 @@ class ProfileRequest extends BaseFormRequest
             // User Information fields
             'user_information' => ['sometimes', 'array'],
             'user_information.phone_code' => ['sometimes', 'nullable', 'string', 'max:10'],
-            'user_information.phone' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'user_information.phone_number' => ['sometimes', 'nullable', 'string', 'max:20'],
             'user_information.date_of_birth' => ['sometimes', 'nullable', 'date', 'before:today'],
             'user_information.gender' => ['sometimes', 'nullable', Rule::in(Gender::values())],
             'user_information.nationality' => ['sometimes', 'nullable', 'string', 'max:100'],
@@ -79,7 +79,7 @@ class ProfileRequest extends BaseFormRequest
         return [
             'image' => 'profile image',
             'user_information.phone_code' => 'phone code',
-            'user_information.phone' => 'phone number',
+            'user_information.phone_number' => 'phone number',
             'user_information.date_of_birth' => 'date of birth',
             'user_information.emergency_contact_name' => 'emergency contact name',
             'user_information.emergency_contact_phone' => 'emergency contact phone',
