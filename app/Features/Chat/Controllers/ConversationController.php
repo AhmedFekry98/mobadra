@@ -43,11 +43,7 @@ class ConversationController extends Controller
             $userId = auth()->user()->id;
             $data = $request->validated();
 
-            $conversation = match ($data['type']) {
-                'private' => $this->service->createPrivateConversation($userId, $data['participant_id']),
-                'group' => $this->service->createGroupConversation($data['group_id'], $userId),
-                'support' => $this->service->createSupportConversation($userId),
-            };
+            $conversation = $this->service->createPrivateConversation($userId, $data['participant_id']);
 
             return $this->okResponse(
                 ConversationResource::make($conversation),

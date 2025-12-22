@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\Chat\Requests;
+namespace App\Features\Community\Requests;
 
 use App\Abstracts\BaseFormRequest;
 use App\Traits\HandlesFailedValidation;
 
-class CreateConversationRequest extends BaseFormRequest
+class CreateCommentRequest extends BaseFormRequest
 {
     use HandlesFailedValidation;
 
@@ -17,7 +17,8 @@ class CreateConversationRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'participant_id' => ['required', 'exists:users,id'],
+            'content' => ['required', 'string', 'max:2000'],
+            'parent_id' => ['nullable', 'exists:comments,id'],
         ];
     }
 }

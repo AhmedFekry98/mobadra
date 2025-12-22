@@ -3,8 +3,10 @@
 namespace App\Features\Chat\Repositories;
 
 use App\Features\Chat\Models\Conversation;
+use App\Features\Chat\Models\ConversationParticipant;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ConversationRepository
 {
@@ -41,10 +43,28 @@ class ConversationRepository
 
     public function getUserConversations(int $userId, ?string $type = null): LengthAwarePaginator
     {
+        // Get participant info with last_read_at for unread count calculation
+        $participantSubquery = ConversationParticipant::select('conversation_id', 'last_read_at')
+            ->where('user_id', $userId)
+            ->whereNull('left_at');
+
         $query = $this->model
-            ->whereHas('participants', function ($q) use ($userId) {
-                $q->where('user_id', $userId)->whereNull('left_at');
+            ->select('conversations.*')
+            ->joinSub($participantSubquery, 'my_participant', function ($join) {
+                $join->on('conversations.id', '=', 'my_participant.conversation_id');
             })
+            // Add unread count as subquery (optimized single query)
+            ->addSelect([
+                'unread_count' => DB::table('messages')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('messages.conversation_id', 'conversations.id')
+                    ->where('messages.sender_id', '!=', $userId)
+                    ->where('messages.is_deleted', false)
+                    ->where(function ($q) {
+                        $q->whereColumn('messages.created_at', '>', 'my_participant.last_read_at')
+                            ->orWhereNull('my_participant.last_read_at');
+                    })
+            ])
             ->with(['latestMessage.sender', 'participants.user'])
             ->where('is_active', true);
 
@@ -64,24 +84,6 @@ class ConversationRepository
             })
             ->whereHas('participants', function ($q) use ($userId2) {
                 $q->where('user_id', $userId2)->whereNull('left_at');
-            })
-            ->first();
-    }
-
-    public function findGroupConversation(int $groupId): ?Conversation
-    {
-        return $this->model
-            ->where('type', 'group')
-            ->where('group_id', $groupId)
-            ->first();
-    }
-
-    public function findSupportConversation(int $userId): ?Conversation
-    {
-        return $this->model
-            ->where('type', 'support')
-            ->whereHas('participants', function ($q) use ($userId) {
-                $q->where('user_id', $userId)->whereNull('left_at');
             })
             ->first();
     }

@@ -24,8 +24,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['conversation_id', 'user_id']);
-            $table->index(['user_id']);
-            $table->index(['conversation_id']);
+            $table->index(['user_id', 'left_at']);
+            $table->index(['conversation_id', 'user_id', 'left_at']);
+            $table->index(['user_id', 'last_read_at']);
         });
     }
 

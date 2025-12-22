@@ -35,7 +35,8 @@ class Message extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('attachments');
+        $this->addMediaCollection('attachments')
+            ->useDisk('media');
     }
 
     public function conversation()

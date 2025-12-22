@@ -2,7 +2,6 @@
 
 namespace App\Features\Chat\Models;
 
-use App\Features\Groups\Models\Group;
 use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +14,6 @@ class Conversation extends Model
         'type',
         'name',
         'description',
-        'group_id',
         'created_by',
         'is_active',
         'last_message_at',
@@ -25,11 +23,6 @@ class Conversation extends Model
         'is_active' => 'boolean',
         'last_message_at' => 'datetime',
     ];
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
 
     public function creator()
     {
@@ -66,16 +59,6 @@ class Conversation extends Model
     public function isPrivate(): bool
     {
         return $this->type === 'private';
-    }
-
-    public function isGroup(): bool
-    {
-        return $this->type === 'group';
-    }
-
-    public function isSupport(): bool
-    {
-        return $this->type === 'support';
     }
 
     public function hasParticipant(int $userId): bool

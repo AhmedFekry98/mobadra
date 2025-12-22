@@ -1,17 +1,22 @@
 # Chat Feature
 
-A complete real-time chat system supporting private conversations, group chats, and support tickets.
+A real-time chat system supporting private 1-to-1 conversations between teachers and students in the same group.
 
 ## Features
 
-- **Private Chat (1-to-1)**: Direct messaging between any two users
-- **Group Chat**: Group conversations linked to study groups
-- **Support Chat**: Customer support conversations
+- **Private Chat (1-to-1)**: Direct messaging between teacher and student in the same group
 - **Real-time**: WebSocket support via Laravel Broadcasting
 - **Message Types**: Text, images, files, audio, video
 - **Read Receipts**: Track message read status
 - **Typing Indicators**: Show when users are typing
 - **Attachments**: File uploads with Spatie Media Library
+
+## Chat Rules
+
+- **Teachers** can only start conversations with students in their groups
+- **Students** can only start conversations with teachers in their groups
+- Only 1-to-1 private conversations between teacher ↔ student
+- No group chats or support chats
 
 ---
 
@@ -26,14 +31,6 @@ A complete real-time chat system supporting private conversations, group chats, 
 | `messages` | Chat messages |
 | `message_reads` | Read receipts |
 
-### Conversation Types
-
-| Type | Description |
-|------|-------------|
-| `private` | 1-to-1 chat between two users |
-| `group` | Group chat linked to a study group |
-| `support` | Support ticket conversation |
-
 ---
 
 ## API Endpoints
@@ -47,8 +44,6 @@ GET    /api/conversations/{id}               # Get conversation details
 POST   /api/conversations/{id}/read          # Mark as read
 POST   /api/conversations/{id}/mute          # Mute notifications
 POST   /api/conversations/{id}/unmute        # Unmute notifications
-POST   /api/conversations/{id}/participants  # Add participant (group only)
-DELETE /api/conversations/{id}/participants/{userId}  # Remove participant
 ```
 
 ### Messages
@@ -74,7 +69,6 @@ Content-Type: application/json
 Authorization: Bearer {token}
 
 {
-    "type": "private",
     "participant_id": 5
 }
 ```
@@ -93,28 +87,11 @@ Authorization: Bearer {token}
 }
 ```
 
-### Create Group Conversation
-
-```http
-POST /api/conversations
-Content-Type: application/json
-Authorization: Bearer {token}
-
+**Error Response (if not in same group):**
+```json
 {
-    "type": "group",
-    "group_id": 3
-}
-```
-
-### Create Support Conversation
-
-```http
-POST /api/conversations
-Content-Type: application/json
-Authorization: Bearer {token}
-
-{
-    "type": "support"
+    "success": false,
+    "message": "You can only start a conversation with teachers/students in your groups"
 }
 ```
 
@@ -310,10 +287,10 @@ app/Features/Chat/
 │   ├── MessageRead.php
 │   └── UserTyping.php
 ├── Migrations/
-│   ├── 2025_12_22_0001_create_conversations_table.php
-│   ├── 2025_12_22_0002_create_conversation_participants_table.php
-│   ├── 2025_12_22_0003_create_messages_table.php
-│   └── 2025_12_22_0004_create_message_reads_table.php
+│   ├── 2025_12_23_0001_create_conversations_table.php
+│   ├── 2025_12_23_0002_create_conversation_participants_table.php
+│   ├── 2025_12_23_0003_create_messages_table.php
+│   └── 2025_12_23_0004_create_message_reads_table.php
 ├── Models/
 │   ├── Conversation.php
 │   ├── ConversationParticipant.php
@@ -343,9 +320,8 @@ app/Features/Chat/
 ## Authorization
 
 - Users can only access conversations they are participants in
-- Only conversation admins can add/remove participants in group chats
 - Users can only edit/delete their own messages
-- Admins can delete any message in their group
+- Teachers and students must be in the same group to start a conversation
 
 ---
 

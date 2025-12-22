@@ -7,6 +7,7 @@ use App\Features\Chat\Models\ConversationParticipant;
 use App\Features\Chat\Repositories\ConversationRepository;
 use App\Features\Groups\Models\Group;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ConversationService
 {
@@ -24,12 +25,21 @@ class ConversationService
         return $this->repository->findByIdOrFail($id);
     }
 
+    /**
+     * Create a private conversation between teacher and student
+     * Validates that both users share at least one group
+     */
     public function createPrivateConversation(int $userId1, int $userId2): Conversation
     {
         // Check if conversation already exists
         $existing = $this->repository->findPrivateConversation($userId1, $userId2);
         if ($existing) {
             return $existing;
+        }
+
+        // Validate that users share at least one group (teacher-student relationship)
+        if (!$this->usersShareGroup($userId1, $userId2)) {
+            throw new \Exception('You can only start a conversation with teachers/students in your groups');
         }
 
         $conversation = $this->repository->create([
@@ -45,55 +55,32 @@ class ConversationService
         return $conversation->load('participants.user');
     }
 
-    public function createGroupConversation(int $groupId, int $createdBy): Conversation
+    /**
+     * Check if two users share at least one group (one as teacher, one as student)
+     * Optimized: Single query using UNION for better performance with large datasets
+     */
+    protected function usersShareGroup(int $userId1, int $userId2): bool
     {
-        // Check if conversation already exists for this group
-        $existing = $this->repository->findGroupConversation($groupId);
-        if ($existing) {
-            return $existing;
-        }
-
-        $group = Group::findOrFail($groupId);
-
-        $conversation = $this->repository->create([
-            'type' => 'group',
-            'name' => $group->name . ' Chat',
-            'group_id' => $groupId,
-            'created_by' => $createdBy,
-            'is_active' => true,
-        ]);
-
-        // Add all group students and teachers as participants
-        foreach ($group->groupStudents()->where('status', 'active')->get() as $student) {
-            $this->addParticipant($conversation->id, $student->student_id, 'member');
-        }
-
-        foreach ($group->groupTeachers as $teacher) {
-            $this->addParticipant($conversation->id, $teacher->teacher_id, 'admin');
-        }
-
-        return $conversation->load('participants.user');
-    }
-
-    public function createSupportConversation(int $userId): Conversation
-    {
-        // Check if user already has a support conversation
-        $existing = $this->repository->findSupportConversation($userId);
-        if ($existing) {
-            return $existing;
-        }
-
-        $conversation = $this->repository->create([
-            'type' => 'support',
-            'name' => 'Support Chat',
-            'created_by' => $userId,
-            'is_active' => true,
-        ]);
-
-        // Add user as participant
-        $this->addParticipant($conversation->id, $userId, 'member');
-
-        return $conversation->load('participants.user');
+        // Single optimized query using raw SQL with UNION
+        // Checks both directions: user1 as teacher + user2 as student, OR user2 as teacher + user1 as student
+        return DB::table('groups as g')
+            ->join('group_teachers as gt', 'g.id', '=', 'gt.group_id')
+            ->join('group_students as gs', 'g.id', '=', 'gs.group_id')
+            ->where(function ($query) use ($userId1, $userId2) {
+                // user1 is teacher, user2 is student
+                $query->where(function ($q) use ($userId1, $userId2) {
+                    $q->where('gt.teacher_id', $userId1)
+                      ->where('gs.student_id', $userId2)
+                      ->where('gs.status', 'active');
+                })
+                // OR user2 is teacher, user1 is student
+                ->orWhere(function ($q) use ($userId1, $userId2) {
+                    $q->where('gt.teacher_id', $userId2)
+                      ->where('gs.student_id', $userId1)
+                      ->where('gs.status', 'active');
+                });
+            })
+            ->exists();
     }
 
     public function addParticipant(int $conversationId, int $userId, string $role = 'member'): ConversationParticipant
