@@ -29,12 +29,9 @@ return new class extends Migration
             $table->string('emergency_contact_phone')->nullable();
             $table->text('bio')->nullable();
             $table->json('social_links')->nullable();
-            $table->boolean('is_verified')->default(false);
-            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
 
             $table->index(['user_id']);
-            $table->index(['is_verified']);
         });
     }
 

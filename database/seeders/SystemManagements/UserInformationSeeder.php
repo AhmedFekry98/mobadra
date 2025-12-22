@@ -36,8 +36,6 @@ class UserInformationSeeder extends Seeder
                     'linkedin' => 'https://linkedin.com',
                     'instagram' => 'https://instagram.com',
                 ]),
-                'is_verified' => true,
-                'verified_at' => now(),
             ]);
         }
     }

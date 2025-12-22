@@ -24,6 +24,8 @@ class ProfileResource extends JsonResource
             'id' => $resource?->id,
             'name' => $resource?->name,
             'email' => $resource?->email,
+            'phone_verified' => (bool) $resource?->phone_verified_at,
+            'email_verified' => (bool) $resource?->email_verified_at,
             'image' => $resource?->getFirstMediaUrl('user-image'),
             'role' => RoleResource::make($resource?->role) ?? 'admin',
             'user_information' => UserInformationResource::make($resource?->userInformation),

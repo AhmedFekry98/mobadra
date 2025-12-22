@@ -31,15 +31,11 @@ class UserInformation extends Model
         'emergency_contact_phone',
         'bio',
         'social_links',
-        'is_verified',
-        'verified_at',
     ];
 
     protected $casts = [
         'date_of_birth' => 'date',
         'social_links' => 'array',
-        'is_verified' => 'boolean',
-        'verified_at' => 'datetime',
         'gender' => Gender::class,
     ];
 
