@@ -201,6 +201,84 @@ class PermissionSeeder extends Seeder
                     ['name' => 'lesson_content.forceDelete', 'caption' => 'Force Delete Lesson Content'],
                 ],
             ],
+
+            // Groups
+            [
+                'group' => 'Groups',
+                'items' => [
+                    ['name' => 'groups.view', 'caption' => 'View Groups'],
+                    ['name' => 'groups.create', 'caption' => 'Create Group'],
+                    ['name' => 'groups.update', 'caption' => 'Update Group'],
+                    ['name' => 'groups.delete', 'caption' => 'Delete Group'],
+                ],
+            ],
+
+            // Group Students
+            [
+                'group' => 'Group Students',
+                'items' => [
+                    ['name' => 'group_students.view', 'caption' => 'View Group Students'],
+                    ['name' => 'group_students.create', 'caption' => 'Enroll Student'],
+                    ['name' => 'group_students.update', 'caption' => 'Update Student Status'],
+                    ['name' => 'group_students.delete', 'caption' => 'Remove Student'],
+                ],
+            ],
+
+            // Group Teachers
+            [
+                'group' => 'Group Teachers',
+                'items' => [
+                    ['name' => 'group_teachers.view', 'caption' => 'View Group Teachers'],
+                    ['name' => 'group_teachers.create', 'caption' => 'Assign Teacher'],
+                    ['name' => 'group_teachers.update', 'caption' => 'Update Teacher'],
+                    ['name' => 'group_teachers.delete', 'caption' => 'Remove Teacher'],
+                ],
+            ],
+
+            // Group Sessions
+            [
+                'group' => 'Group Sessions',
+                'items' => [
+                    ['name' => 'group_sessions.view', 'caption' => 'View Sessions'],
+                    ['name' => 'group_sessions.create', 'caption' => 'Create Session'],
+                    ['name' => 'group_sessions.update', 'caption' => 'Update Session'],
+                    ['name' => 'group_sessions.delete', 'caption' => 'Delete Session'],
+                ],
+            ],
+
+            // Attendance
+            [
+                'group' => 'Attendance',
+                'items' => [
+                    ['name' => 'attendance.view', 'caption' => 'View Attendance'],
+                    ['name' => 'attendance.create', 'caption' => 'Record Attendance'],
+                    ['name' => 'attendance.update', 'caption' => 'Update Attendance'],
+                    ['name' => 'attendance.report', 'caption' => 'View Attendance Reports'],
+                ],
+            ],
+
+            // Support Tickets
+            [
+                'group' => 'Support Tickets',
+                'items' => [
+                    ['name' => 'support_tickets.view', 'caption' => 'View Support Tickets'],
+                    ['name' => 'support_tickets.create', 'caption' => 'Create Support Ticket'],
+                    ['name' => 'support_tickets.update', 'caption' => 'Update Support Ticket'],
+                    ['name' => 'support_tickets.delete', 'caption' => 'Delete Support Ticket'],
+                    ['name' => 'support_tickets.assign', 'caption' => 'Assign Support Ticket'],
+                ],
+            ],
+
+            // Support Ticket Replies
+            [
+                'group' => 'Support Ticket Replies',
+                'items' => [
+                    ['name' => 'support_ticket_replies.view', 'caption' => 'View Replies'],
+                    ['name' => 'support_ticket_replies.create', 'caption' => 'Create Reply'],
+                    ['name' => 'support_ticket_replies.update', 'caption' => 'Update Reply'],
+                    ['name' => 'support_ticket_replies.delete', 'caption' => 'Delete Reply'],
+                ],
+            ],
         ];
 
         foreach ($permissions as $group) {
