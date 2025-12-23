@@ -12,7 +12,11 @@ class SupportTicketCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
+            'per_page' => $this->collection->count(),
+            'current_page' => $this->currentPage(),
+            'last_page' => $this->lastPage(),
+            'next_page_url' => $this->nextPageUrl(),
+            'items' => SupportTicketResource::collection($this->collection),
         ];
     }
 }
