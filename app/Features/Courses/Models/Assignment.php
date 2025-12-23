@@ -30,4 +30,19 @@ class Assignment extends Model
     {
         return $this->morphOne(LessonContent::class, 'contentable');
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
+
+    public function getStudentSubmission(int $studentId)
+    {
+        return $this->submissions()->where('student_id', $studentId)->first();
+    }
+
+    public function isOverdue(): bool
+    {
+        return $this->due_date && now()->gt($this->due_date);
+    }
 }
