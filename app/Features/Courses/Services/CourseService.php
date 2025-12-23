@@ -93,4 +93,22 @@ class CourseService
     {
         return $this->repository->count();
     }
+
+    public function getQuizzesByCourseId(string $courseId): Collection
+    {
+        $course = $this->getCourseById($courseId);
+        return $course->quizzes()->with('questions.options')->get();
+    }
+
+    public function getAssignmentsByCourseId(string $courseId): Collection
+    {
+        $course = $this->getCourseById($courseId);
+        return $course->assignments()->get();
+    }
+
+    public function getMaterialsByCourseId(string $courseId): Collection
+    {
+        $course = $this->getCourseById($courseId);
+        return $course->materials()->get();
+    }
 }

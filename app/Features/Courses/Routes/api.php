@@ -18,6 +18,9 @@ Route::prefix('terms')->name('terms.')->group(function () {
 // Courses
 Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('metadata', [CourseController::class, 'metadata'])->name('metadata');
+    Route::get('{courseId}/quizzes', [CourseController::class, 'quizzes'])->name('quizzes');
+    Route::get('{courseId}/assignments', [CourseController::class, 'assignments'])->name('assignments');
+    Route::get('{courseId}/materials', [CourseController::class, 'materials'])->name('materials');
     Route::apiResource('', CourseController::class)->parameters(['' => 'course']);
 });
 
