@@ -48,6 +48,7 @@ class ProfileRequest extends BaseFormRequest
             'user_information.phone_code' => ['sometimes', 'nullable', 'string', 'max:10'],
             'user_information.phone_number' => ['sometimes', 'nullable', 'string', 'max:20'],
             'user_information.date_of_birth' => ['sometimes', 'nullable', 'date', 'before:today'],
+            'user_information.grade_id' => ['sometimes', 'nullable', 'exists:grades,id'],
             'user_information.gender' => ['sometimes', 'nullable', Rule::in(Gender::values())],
             'user_information.nationality' => ['sometimes', 'nullable', 'string', 'max:100'],
             'user_information.address' => ['sometimes', 'nullable', 'string', 'max:500'],
