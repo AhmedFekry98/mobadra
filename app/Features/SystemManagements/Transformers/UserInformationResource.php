@@ -2,6 +2,7 @@
 
 namespace App\Features\SystemManagements\Transformers;
 
+use App\Features\Grades\Transformers\GradeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +24,7 @@ class UserInformationResource extends JsonResource
                 (is_string($resource->date_of_birth) ? $resource->date_of_birth : $resource->date_of_birth->format('Y-m-d'))
                 : null,
             'gender' => $resource?->gender,
-            'grade'=> $resource?->grade,
+            'grade'=> GradeResource::make($resource?->grade),
             'nationality' => $resource?->nationality,
             'address' => $resource?->address,
             'city' => $resource?->city,
