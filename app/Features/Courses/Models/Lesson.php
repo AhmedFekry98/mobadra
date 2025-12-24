@@ -10,9 +10,11 @@ class Lesson extends Model
     use HasFactory;
 
     protected $fillable = [
-        'chapter_id',
+        'course_id',
         'title',
         'description',
+        'lesson_type',
+        'duration_minutes',
         'order',
         'is_active',
     ];
@@ -20,15 +22,45 @@ class Lesson extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'order' => 'integer',
+        'duration_minutes' => 'integer',
     ];
 
-    public function chapter()
+    public function course()
     {
-        return $this->belongsTo(Chapter::class);
+        return $this->belongsTo(Course::class);
     }
 
+    // Lesson Contents
     public function contents()
     {
         return $this->hasMany(LessonContent::class);
+    }
+
+    public function quizzes()
+    {
+        return $this->selfLearningContents()
+            ->where('contentable_type', Quiz::class)
+            ->with('contentable');
+    }
+
+    public function assignments()
+    {
+        return $this->selfLearningContents()
+            ->where('contentable_type', Assignment::class)
+            ->with('contentable');
+    }
+
+    public function materials()
+    {
+        return $this->selfLearningContents()
+            ->where('contentable_type', Material::class)
+            ->with('contentable');
+    }
+
+    public function videos()
+    {
+        return $this->selfLearningContents()
+            ->where('contentable_type', VideoContent::class)
+            ->with('contentable');
     }
 }

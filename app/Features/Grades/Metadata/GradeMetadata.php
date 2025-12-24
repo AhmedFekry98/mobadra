@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Features\Courses\Metadata;
+namespace App\Features\Grades\Metadata;
 
-class ChapterMetadata
+class GradeMetadata
 {
     public static function get(): array
     {
@@ -16,7 +16,8 @@ class ChapterMetadata
     public static function getSearchableColumns(): array
     {
         return [
-            'title',
+            'name',
+            'code',
             'description',
         ];
     }
@@ -25,24 +26,31 @@ class ChapterMetadata
     {
         return [
             [
-                'column' => 'title',
-                'label' => 'Title',
+                'column' => 'name',
+                'label' => 'Name',
                 'type' => 'text',
                 'operators' => ['=', 'like', '!='],
                 'searchable' => true
             ],
             [
-                'column' => 'description',
-                'label' => 'Description',
+                'column' => 'code',
+                'label' => 'Code',
                 'type' => 'text',
-                'operators' => ['like', '=', '!='],
+                'operators' => ['=', 'like', '!='],
                 'searchable' => true
             ],
             [
-                'column' => 'course_id',
-                'label' => 'Course',
-                'type' => 'select',
-                'operators' => ['=', 'in'],
+                'column' => 'min_age',
+                'label' => 'Minimum Age',
+                'type' => 'number',
+                'operators' => ['=', '>', '<', '>=', '<='],
+                'searchable' => false
+            ],
+            [
+                'column' => 'max_age',
+                'label' => 'Maximum Age',
+                'type' => 'number',
+                'operators' => ['=', '>', '<', '>=', '<='],
                 'searchable' => false
             ],
             [
@@ -91,11 +99,6 @@ class ChapterMetadata
                 'label' => 'Text',
                 'component' => 'TextInput',
                 'validation' => 'string|max:255'
-            ],
-            'select' => [
-                'label' => 'Select',
-                'component' => 'SelectInput',
-                'validation' => 'string'
             ],
             'number' => [
                 'label' => 'Number',

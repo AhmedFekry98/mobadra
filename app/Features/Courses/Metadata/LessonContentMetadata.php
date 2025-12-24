@@ -26,7 +26,6 @@ class LessonContentMetadata
     {
         return [
             'video' => 'Video Content',
-            'live_session' => 'Live Session',
             'quiz' => 'Quiz',
             'assignment' => 'Assignment',
             'material' => 'Material',

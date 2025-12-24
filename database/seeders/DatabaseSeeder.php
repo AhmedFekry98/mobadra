@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use Database\Seeders\Courses\ChapterSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\SystemManagements\UserSeeder;
 use Database\Seeders\SystemManagements\RoleSeeder;
@@ -19,6 +18,7 @@ use Database\Seeders\SystemManagements\GeneralSettingSeeder;
 use Database\Seeders\SystemManagements\AuditSeeder;
 use Database\Seeders\SystemManagements\FAQSeeder;
 use Database\Seeders\SystemManagements\UserInformationSeeder;
+use App\Features\Grades\Seeders\GradeSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -32,9 +32,9 @@ class DatabaseSeeder extends Seeder
         UserSeeder::class,
         PermissionSeeder::class,
         RolePermissionSeeder::class,
+        GradeSeeder::class,
         TermSeeder::class,
         CoursesSeeder::class,
-        ChapterSeeder::class,
         LessonSeeder::class,
         LessonContentSeeder::class,
         GeneralSettingSeeder::class,
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
         UserSeeder::class,
         PermissionSeeder::class,
         RolePermissionSeeder::class,
+        GradeSeeder::class,
         GeneralSettingSeeder::class,
         TermSeeder::class,
     ];

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\Courses\Transformers;
+namespace App\Features\Grades\Transformers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ChapterCollection extends ResourceCollection
+class GradeCollection extends ResourceCollection
 {
     public function toArray(Request $request): array
     {
@@ -14,7 +14,7 @@ class ChapterCollection extends ResourceCollection
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'next_page_url' => $this->nextPageUrl(),
-            'items' => ChapterResource::collection($this->collection),
+            'items' => GradeResource::collection($this->collection),
         ];
     }
 }

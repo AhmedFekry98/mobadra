@@ -3,6 +3,7 @@
 namespace App\Features\Groups\Models;
 
 use App\Features\Courses\Models\Course;
+use App\Features\Grades\Models\Grade;
 use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Group extends Model
 
     protected $fillable = [
         'course_id',
+        'grade_id',
         'name',
         'max_capacity',
         'days',
@@ -36,6 +38,11 @@ class Group extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
     }
 
     public function students()

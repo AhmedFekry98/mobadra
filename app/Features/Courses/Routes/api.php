@@ -2,7 +2,6 @@
 
 use App\Features\Courses\Controllers\TermController;
 use App\Features\Courses\Controllers\CourseController;
-use App\Features\Courses\Controllers\ChapterController;
 use App\Features\Courses\Controllers\LessonController;
 use App\Features\Courses\Controllers\LessonContentController;
 use App\Features\Courses\Controllers\QuizController;
@@ -18,23 +17,14 @@ Route::prefix('terms')->name('terms.')->group(function () {
 // Courses
 Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('metadata', [CourseController::class, 'metadata'])->name('metadata');
-    Route::get('{courseId}/quizzes', [CourseController::class, 'quizzes'])->name('quizzes');
-    Route::get('{courseId}/assignments', [CourseController::class, 'assignments'])->name('assignments');
-    Route::get('{courseId}/materials', [CourseController::class, 'materials'])->name('materials');
+    Route::get('{courseId}/lessons', [CourseController::class, 'lessons'])->name('lessons');
     Route::apiResource('', CourseController::class)->parameters(['' => 'course']);
-});
-
-// Chapters
-Route::prefix('chapters')->name('chapters.')->group(function () {
-    Route::get('metadata', [ChapterController::class, 'metadata'])->name('metadata');
-    Route::get('course/{courseId}', [ChapterController::class, 'getByCourse'])->name('by_course');
-    Route::apiResource('', ChapterController::class)->parameters(['' => 'chapter']);
 });
 
 // Lessons
 Route::prefix('lessons')->name('lessons.')->group(function () {
     Route::get('metadata', [LessonController::class, 'metadata'])->name('metadata');
-    Route::get('chapter/{chapterId}', [LessonController::class, 'getByChapter'])->name('by_chapter');
+    Route::get('course/{courseId}', [LessonController::class, 'getByCourse'])->name('by_course');
     Route::apiResource('', LessonController::class)->parameters(['' => 'lesson']);
 });
 
@@ -42,6 +32,10 @@ Route::prefix('lessons')->name('lessons.')->group(function () {
 Route::prefix('lesson-contents')->name('lesson_contents.')->group(function () {
     Route::get('metadata', [LessonContentController::class, 'metadata'])->name('metadata');
     Route::get('lesson/{lessonId}', [LessonContentController::class, 'getByLesson'])->name('by_lesson');
+    Route::get('lesson/{lessonId}/videos', [LessonContentController::class, 'getVideosByLesson'])->name('videos_by_lesson');
+    Route::get('lesson/{lessonId}/quizzes', [LessonContentController::class, 'getQuizzesByLesson'])->name('quizzes_by_lesson');
+    Route::get('lesson/{lessonId}/assignments', [LessonContentController::class, 'getAssignmentsByLesson'])->name('assignments_by_lesson');
+    Route::get('lesson/{lessonId}/materials', [LessonContentController::class, 'getMaterialsByLesson'])->name('materials_by_lesson');
     Route::apiResource('', LessonContentController::class)->parameters(['' => 'lesson_content']);
 });
 
@@ -71,5 +65,4 @@ Route::prefix('assignments')->name('assignments.')->group(function () {
     Route::post('submissions/{submissionId}/grade', [AssignmentController::class, 'gradeSubmission'])->name('submissions.grade');
 });
 
-// My Assignments (Student)
-Route::get('my-assignments', [AssignmentController::class, 'myAssignments'])->name('assignments.my');
+

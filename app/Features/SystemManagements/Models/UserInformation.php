@@ -3,6 +3,7 @@
 namespace App\Features\SystemManagements\Models;
 
 use App\Enums\Gender;
+use App\Features\Grades\Models\Grade;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,7 @@ class UserInformation extends Model
 
     protected $fillable = [
         'user_id',
+        'grade_id',
         'phone_code',
         'phone_number',
         'date_of_birth',
@@ -42,5 +44,10 @@ class UserInformation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
     }
 }

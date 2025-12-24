@@ -21,17 +21,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Live Sessions
-        Schema::create('live_sessions', function (Blueprint $table) {
-            $table->id();
-            $table->string('meeting_url')->nullable();
-            $table->string('meeting_provider')->default('zoom'); // zoom, google_meet, teams
-            $table->dateTime('start_time');
-            $table->dateTime('end_time')->nullable();
-            $table->integer('max_participants')->nullable();
-            $table->timestamps();
-        });
-
         // Quizzes
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
@@ -74,7 +63,6 @@ return new class extends Migration
         Schema::dropIfExists('materials');
         Schema::dropIfExists('assignments');
         Schema::dropIfExists('quizzes');
-        Schema::dropIfExists('live_sessions');
         Schema::dropIfExists('video_contents');
     }
 };

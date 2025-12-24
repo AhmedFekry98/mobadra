@@ -23,6 +23,7 @@ class UserInformationResource extends JsonResource
                 (is_string($resource->date_of_birth) ? $resource->date_of_birth : $resource->date_of_birth->format('Y-m-d'))
                 : null,
             'gender' => $resource?->gender,
+            'grade'=> $resource?->grade,
             'nationality' => $resource?->nationality,
             'address' => $resource?->address,
             'city' => $resource?->city,

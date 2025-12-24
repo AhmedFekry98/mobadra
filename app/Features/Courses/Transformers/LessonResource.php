@@ -12,12 +12,13 @@ class LessonResource extends JsonResource
         $resource = $this->resource;
         return [
             'id' => $resource?->id,
-            'chapter_id' => $resource?->chapter_id,
-            'chapter' => $resource?->chapter ? new ChapterResource($resource->chapter) : null,
+            'course_id' => $resource?->course_id,
             'title' => $resource?->title,
             'description' => $resource?->description,
+            'lesson_type' => $resource?->lesson_type,
             'order' => $resource?->order,
             'is_active' => $resource?->is_active,
+            'contents' => $resource?->contents ? LessonContentResource::collection($resource->contents) : [],
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];

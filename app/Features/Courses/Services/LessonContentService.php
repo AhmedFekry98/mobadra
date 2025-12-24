@@ -154,6 +154,46 @@ class LessonContentService
         return $this->repository->getByLessonId($lessonId);
     }
 
+    public function getVideosByLessonId(string $lessonId): Collection
+    {
+        return $this->repository->query()
+            ->where('lesson_id', $lessonId)
+            ->where('contentable_type', VideoContent::class)
+            ->with('contentable')
+            ->orderBy('order')
+            ->get();
+    }
+
+    public function getQuizzesByLessonId(string $lessonId): Collection
+    {
+        return $this->repository->query()
+            ->where('lesson_id', $lessonId)
+            ->where('contentable_type', Quiz::class)
+            ->with('contentable')
+            ->orderBy('order')
+            ->get();
+    }
+
+    public function getAssignmentsByLessonId(string $lessonId): Collection
+    {
+        return $this->repository->query()
+            ->where('lesson_id', $lessonId)
+            ->where('contentable_type', Assignment::class)
+            ->with('contentable')
+            ->orderBy('order')
+            ->get();
+    }
+
+    public function getMaterialsByLessonId(string $lessonId): Collection
+    {
+        return $this->repository->query()
+            ->where('lesson_id', $lessonId)
+            ->where('contentable_type', Material::class)
+            ->with('contentable')
+            ->orderBy('order')
+            ->get();
+    }
+
     public function lessonContentExists(string $id): bool
     {
         return $this->repository->exists($id);

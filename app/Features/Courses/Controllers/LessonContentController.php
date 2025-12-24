@@ -117,7 +117,6 @@ class LessonContentController extends Controller
     {
         return $this->executeService(function () use ($lessonId) {
             $this->authorize('viewAny', LessonContent::class);
-
             $lessonContents = $this->service->getLessonContentsByLessonId($lessonId);
 
             return $this->okResponse(
@@ -125,5 +124,57 @@ class LessonContentController extends Controller
                 "Lesson contents retrieved successfully"
             );
         }, 'LessonContentController@getByLesson');
+    }
+
+    public function getVideosByLesson(string $lessonId)
+    {
+        return $this->executeService(function () use ($lessonId) {
+            $this->authorize('viewAny', LessonContent::class);
+            $videos = $this->service->getVideosByLessonId($lessonId);
+
+            return $this->okResponse(
+                LessonContentResource::collection($videos),
+                "Videos retrieved successfully"
+            );
+        }, 'LessonContentController@getVideosByLesson');
+    }
+
+    public function getQuizzesByLesson(string $lessonId)
+    {
+        return $this->executeService(function () use ($lessonId) {
+            $this->authorize('viewAny', LessonContent::class);
+            $quizzes = $this->service->getQuizzesByLessonId($lessonId);
+
+            return $this->okResponse(
+                LessonContentResource::collection($quizzes),
+                "Quizzes retrieved successfully"
+            );
+        }, 'LessonContentController@getQuizzesByLesson');
+    }
+
+    public function getAssignmentsByLesson(string $lessonId)
+    {
+        return $this->executeService(function () use ($lessonId) {
+            $this->authorize('viewAny', LessonContent::class);
+            $assignments = $this->service->getAssignmentsByLessonId($lessonId);
+
+            return $this->okResponse(
+                LessonContentResource::collection($assignments),
+                "Assignments retrieved successfully"
+            );
+        }, 'LessonContentController@getAssignmentsByLesson');
+    }
+
+    public function getMaterialsByLesson(string $lessonId)
+    {
+        return $this->executeService(function () use ($lessonId) {
+            $this->authorize('viewAny', LessonContent::class);
+            $materials = $this->service->getMaterialsByLessonId($lessonId);
+
+            return $this->okResponse(
+                LessonContentResource::collection($materials),
+                "Materials retrieved successfully"
+            );
+        }, 'LessonContentController@getMaterialsByLesson');
     }
 }

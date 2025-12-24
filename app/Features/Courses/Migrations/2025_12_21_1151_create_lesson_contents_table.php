@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // جدول محتوى الدرس (Lesson Contents)
         Schema::create('lesson_contents', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('lesson_id')->constrained('lessons')->cascadeOnDelete();
             $table->string('content_type');
             $table->string('contentable_type')->nullable();
@@ -21,11 +21,15 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('order')->default(0);
-            $table->integer('duration')->default(0); // in seconds
+            $table->integer('duration')->default(0); // seconds
             $table->boolean('is_required')->default(false);
             $table->boolean('is_published')->default(false);
             $table->timestamps();
+
+            $table->index(['contentable_type', 'contentable_id']);
+            $table->index('lesson_id');
         });
+
     }
 
     /**

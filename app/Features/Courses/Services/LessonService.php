@@ -19,7 +19,7 @@ class LessonService
 
     public function getLessons(?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        $query = $this->repository->query()->with('chapter');
+        $query = $this->repository->query()->with('course');
 
         $data = [
             'search' => $search,
@@ -64,9 +64,9 @@ class LessonService
         return $this->repository->delete($id);
     }
 
-    public function getLessonsByChapterId(string $chapterId): Collection
+    public function getLessonsByCourseId(string $courseId): Collection
     {
-        return $this->repository->getByChapterId($chapterId);
+        return $this->repository->getByCourseId($courseId);
     }
 
     public function lessonExists(string $id): bool

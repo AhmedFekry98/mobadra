@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\Courses\Requests;
+namespace App\Features\Grades\Requests;
 
 use App\Abstracts\BaseFormRequest;
 use App\Traits\HandlesFailedValidation;
 
-class LessonRequest extends BaseFormRequest
+class GradeRequest extends BaseFormRequest
 {
     use HandlesFailedValidation;
 
@@ -18,20 +18,22 @@ class LessonRequest extends BaseFormRequest
     {
         if ($this->isMethod('put')) {
             return [
-                'course_id' => ['sometimes', 'exists:courses,id'],
-                'title' => ['sometimes', 'string', 'max:255'],
+                'name' => ['sometimes', 'string', 'max:255'],
+                'code' => ['sometimes', 'string', 'max:50', 'unique:grades,code,' . $this->route('grade')],
                 'description' => ['sometimes', 'nullable', 'string'],
-                'lesson_type' => ['sometimes', 'in:online,offline'],
+                'min_age' => ['sometimes', 'nullable', 'integer', 'min:1'],
+                'max_age' => ['sometimes', 'nullable', 'integer', 'min:1', 'gte:min_age'],
                 'order' => ['sometimes', 'integer', 'min:0'],
                 'is_active' => ['sometimes', 'boolean'],
             ];
         }
 
         return [
-            'course_id' => ['required', 'exists:courses,id'],
-            'title' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:50', 'unique:grades,code'],
             'description' => ['nullable', 'string'],
-            'lesson_type' => ['required', 'in:online,offline'],
+            'min_age' => ['nullable', 'integer', 'min:1'],
+            'max_age' => ['nullable', 'integer', 'min:1', 'gte:min_age'],
             'order' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
         ];

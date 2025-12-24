@@ -22,6 +22,7 @@ class CoursesSeeder extends Seeder
                 'title' => 'Introduction to Programming',
                 'description' => 'Learn the fundamentals of programming with practical examples',
                 'slug' => 'intro-to-programming',
+                'grade_id' => 1,
                 'is_active' => true,
             ],
             [
@@ -29,6 +30,7 @@ class CoursesSeeder extends Seeder
                 'title' => 'Web Development Basics',
                 'description' => 'Learn HTML, CSS, and JavaScript fundamentals',
                 'slug' => 'web-dev-basics',
+                'grade_id' => 2,
                 'is_active' => true,
             ],
             [
@@ -36,6 +38,7 @@ class CoursesSeeder extends Seeder
                 'title' => 'Database Fundamentals',
                 'description' => 'Learn SQL and database design principles',
                 'slug' => 'database-fundamentals',
+                'grade_id' => 3,
                 'is_active' => true,
             ],
             [
@@ -43,6 +46,7 @@ class CoursesSeeder extends Seeder
                 'title' => 'Advanced Programming',
                 'description' => 'Advanced programming concepts and design patterns',
                 'slug' => 'advanced-programming',
+                'grade_id' => 4,
                 'is_active' => false,
             ],
             [
@@ -50,6 +54,7 @@ class CoursesSeeder extends Seeder
                 'title' => 'API Development',
                 'description' => 'Build RESTful APIs with Laravel',
                 'slug' => 'api-development',
+                'grade_id' => 5,
                 'is_active' => false,
             ],
         ];

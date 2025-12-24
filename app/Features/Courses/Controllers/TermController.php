@@ -37,7 +37,7 @@ class TermController extends Controller
 
             return $this->okResponse(
                 request()->has('page')
-                    ? new TermCollection($result)
+                    ? TermCollection::make($result)
                     : TermResource::collection($result),
                 "Success"
             );

@@ -279,6 +279,17 @@ class PermissionSeeder extends Seeder
                     ['name' => 'support_ticket_replies.delete', 'caption' => 'Delete Reply'],
                 ],
             ],
+
+            // genders
+           [
+            'group' => 'Grades',
+            'items' => [
+                    ['name' => 'grades.view', 'caption' => 'View Grades'],
+                    ['name' => 'grades.create', 'caption' => 'Create Grade'],
+                    ['name' => 'grades.update', 'caption' => 'Update Grade'],
+                    ['name' => 'grades.delete', 'caption' => 'Delete Grade'],
+                ],
+            ],
         ];
 
         foreach ($permissions as $group) {

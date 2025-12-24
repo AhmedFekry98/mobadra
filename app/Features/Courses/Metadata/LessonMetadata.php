@@ -39,10 +39,18 @@ class LessonMetadata
                 'searchable' => true
             ],
             [
-                'column' => 'chapter_id',
-                'label' => 'Chapter',
+                'column' => 'course_id',
+                'label' => 'Course',
                 'type' => 'select',
                 'operators' => ['=', 'in'],
+                'searchable' => false
+            ],
+            [
+                'column' => 'lesson_type',
+                'label' => 'Lesson Type',
+                'type' => 'select',
+                'operators' => ['='],
+                'options' => ['online', 'offline'],
                 'searchable' => false
             ],
             [

@@ -37,7 +37,7 @@ class LessonController extends Controller
 
             return $this->okResponse(
                 request()->has('page')
-                    ? new LessonCollection($result)
+                    ? LessonCollection::make($result)
                     : LessonResource::collection($result),
                 "Success"
             );
@@ -113,17 +113,17 @@ class LessonController extends Controller
         }, 'LessonController@metadata');
     }
 
-    public function getByChapter(string $chapterId)
+    public function getByCourse(string $courseId)
     {
-        return $this->executeService(function () use ($chapterId) {
+        return $this->executeService(function () use ($courseId) {
             $this->authorize('viewAny', Lesson::class);
 
-            $lessons = $this->service->getLessonsByChapterId($chapterId);
+            $lessons = $this->service->getLessonsByCourseId($courseId);
 
             return $this->okResponse(
                 LessonResource::collection($lessons),
                 "Lessons retrieved successfully"
             );
-        }, 'LessonController@getByChapter');
+        }, 'LessonController@getByCourse');
     }
 }

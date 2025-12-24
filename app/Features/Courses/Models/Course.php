@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Models;
 
+use App\Features\Grades\Models\Grade;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -13,10 +14,12 @@ class Course extends Model implements HasMedia
 
     protected $fillable = [
         'term_id',
+        'grade_id',
         'title',
         'description',
         'slug',
         'is_active',
+        'final_quiz_id',
     ];
 
     protected $casts = [
@@ -28,63 +31,29 @@ class Course extends Model implements HasMedia
         return $this->belongsTo(Term::class);
     }
 
-    public function chapters()
+    public function grade()
     {
-        return $this->hasMany(Chapter::class);
+        return $this->belongsTo(Grade::class);
     }
 
     public function lessons()
     {
-        return $this->hasManyThrough(Lesson::class, Chapter::class);
+        return $this->hasMany(Lesson::class)->orderBy('order');
     }
 
-    public function lessonContents()
+    public function onlineLessons()
     {
-        return $this->hasManyThrough(
-            LessonContent::class,
-            Lesson::class,
-            'chapter_id', // Foreign key on lessons table (via chapters)
-            'lesson_id',  // Foreign key on lesson_contents table
-            'id',         // Local key on courses table
-            'id'          // Local key on lessons table
-        )->join('chapters', 'lessons.chapter_id', '=', 'chapters.id')
-         ->where('chapters.course_id', $this->id);
+        return $this->lessons()->where('lesson_type', 'online');
     }
 
-    public function quizzes()
+    public function offlineLessons()
     {
-        return Quiz::whereIn('id', function ($query) {
-            $query->select('contentable_id')
-                ->from('lesson_contents')
-                ->join('lessons', 'lesson_contents.lesson_id', '=', 'lessons.id')
-                ->join('chapters', 'lessons.chapter_id', '=', 'chapters.id')
-                ->where('chapters.course_id', $this->id)
-                ->where('lesson_contents.contentable_type', Quiz::class);
-        });
+        return $this->lessons()->where('lesson_type', 'offline');
     }
 
-    public function assignments()
+    public function finalQuiz()
     {
-        return Assignment::whereIn('id', function ($query) {
-            $query->select('contentable_id')
-                ->from('lesson_contents')
-                ->join('lessons', 'lesson_contents.lesson_id', '=', 'lessons.id')
-                ->join('chapters', 'lessons.chapter_id', '=', 'chapters.id')
-                ->where('chapters.course_id', $this->id)
-                ->where('lesson_contents.contentable_type', Assignment::class);
-        });
-    }
-
-    public function materials()
-    {
-        return Material::whereIn('id', function ($query) {
-            $query->select('contentable_id')
-                ->from('lesson_contents')
-                ->join('lessons', 'lesson_contents.lesson_id', '=', 'lessons.id')
-                ->join('chapters', 'lessons.chapter_id', '=', 'chapters.id')
-                ->where('chapters.course_id', $this->id)
-                ->where('lesson_contents.contentable_type', Material::class);
-        });
+        return $this->belongsTo(Quiz::class, 'final_quiz_id');
     }
 
     // media

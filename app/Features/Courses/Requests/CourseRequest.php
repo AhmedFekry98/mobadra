@@ -19,6 +19,7 @@ class CourseRequest extends BaseFormRequest
         if ($this->isMethod('put')) {
             return [
                 'term_id' => ['sometimes', 'exists:terms,id'],
+                'grade_id' => ['sometimes','exists:grades,id'],
                 'title' => ['sometimes', 'string', 'max:255'],
                 'description' => ['sometimes', 'nullable', 'string'],
                 'slug' => ['sometimes', 'string', 'max:255', 'unique:courses,slug,' . $this->route('course')],
@@ -29,6 +30,7 @@ class CourseRequest extends BaseFormRequest
 
         return [
             'term_id' => ['required', 'exists:terms,id'],
+            'grade_id' => ['required','exists:grades,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'slug' => ['required', 'string', 'max:255', 'unique:courses,slug'],

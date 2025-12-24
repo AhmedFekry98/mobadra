@@ -2,7 +2,7 @@
 
 namespace Database\Seeders\Courses;
 
-use App\Features\Courses\Models\Chapter;
+use App\Features\Courses\Models\Course;
 use App\Features\Courses\Models\Lesson;
 use Illuminate\Database\Seeder;
 
@@ -13,130 +13,212 @@ class LessonSeeder extends Seeder
      */
     public function run(): void
     {
-        $gettingStarted = Chapter::where('title', 'Getting Started')->first();
-        $basicConcepts = Chapter::where('title', 'Basic Concepts')->first();
-        $controlFlow = Chapter::where('title', 'Control Flow')->first();
-        $htmlFundamentals = Chapter::where('title', 'HTML Fundamentals')->first();
-        $cssStyling = Chapter::where('title', 'CSS Styling')->first();
-        $sqlBasics = Chapter::where('title', 'SQL Basics')->first();
-        $oop = Chapter::where('title', 'Object-Oriented Programming')->first();
+        $programming = Course::where('title', 'Introduction to programming')->first();
+        $webDevCourse = Course::where('title', 'Web Development Basics')->first();
+        $dataScience = Course::where('title', 'Data Science with Python')->first();
 
         $lessons = [
-            // Getting Started lessons
+            // Python Course lessons
             [
-                'chapter_id' => $gettingStarted?->id,
-                'title' => 'Welcome to the Course',
+                'course_id' => $programming?->id,
+                'title' => 'Welcome to Python',
                 'description' => 'Course overview and objectives',
+                'lesson_type' => 'online',
                 'order' => 1,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $gettingStarted?->id,
+                'course_id' => $programming?->id,
                 'title' => 'Setting Up Your Environment',
-                'description' => 'Install and configure development tools',
+                'description' => 'Install and configure Python',
+                'lesson_type' => 'online',
                 'order' => 2,
                 'is_active' => true,
             ],
-
-            // Basic Concepts lessons
             [
-                'chapter_id' => $basicConcepts?->id,
+                'course_id' => $programming?->id,
                 'title' => 'Variables and Data Types',
                 'description' => 'Understanding variables and data types',
-                'order' => 1,
+                'lesson_type' => 'online',
+                'order' => 3,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $basicConcepts?->id,
-                'title' => 'Operators',
-                'description' => 'Arithmetic and logical operators',
-                'order' => 2,
+                'course_id' => $programming?->id,
+                'title' => 'Control Flow',
+                'description' => 'If statements and loops',
+                'lesson_type' => 'online',
+                'order' => 4,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $programming?->id,
+                'title' => 'Functions',
+                'description' => 'Creating and using functions',
+                'lesson_type' => 'online',
+                'order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $programming?->id,
+                'title' => 'Object-Oriented programming',
+                'description' => 'Classes and objects in Python',
+                'lesson_type' => 'online',
+                'order' => 6,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $programming?->id,
+                'title' => 'File Handling',
+                'description' => 'Reading and writing files',
+                'lesson_type' => 'online',
+                'order' => 7,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $programming?->id,
+                'title' => 'Practice Session',
+                'description' => 'Hands-on practice session',
+                'lesson_type' => 'offline',
+                'order' => 8,
                 'is_active' => true,
             ],
 
-            // Control Flow lessons
+            // Web Development Course lessons
             [
-                'chapter_id' => $controlFlow?->id,
-                'title' => 'If Statements',
-                'description' => 'Conditional logic with if/else',
-                'order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'chapter_id' => $controlFlow?->id,
-                'title' => 'Loops',
-                'description' => 'For and while loops',
-                'order' => 2,
-                'is_active' => true,
-            ],
-
-            // HTML lessons
-            [
-                'chapter_id' => $htmlFundamentals?->id,
+                'course_id' => $webDevCourse?->id,
                 'title' => 'Introduction to HTML',
                 'description' => 'Basic HTML tags and structure',
+                'lesson_type' => 'online',
                 'order' => 1,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $htmlFundamentals?->id,
+                'course_id' => $webDevCourse?->id,
                 'title' => 'HTML Forms',
                 'description' => 'Creating forms and inputs',
+                'lesson_type' => 'online',
                 'order' => 2,
                 'is_active' => true,
             ],
-
-            // CSS lessons
             [
-                'chapter_id' => $cssStyling?->id,
-                'title' => 'CSS Selectors',
-                'description' => 'Selecting elements to style',
-                'order' => 1,
+                'course_id' => $webDevCourse?->id,
+                'title' => 'CSS Basics',
+                'description' => 'Styling web pages',
+                'lesson_type' => 'online',
+                'order' => 3,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $cssStyling?->id,
+                'course_id' => $webDevCourse?->id,
                 'title' => 'CSS Flexbox',
                 'description' => 'Layout with Flexbox',
-                'order' => 2,
+                'lesson_type' => 'online',
+                'order' => 4,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $webDevCourse?->id,
+                'title' => 'JavaScript Basics',
+                'description' => 'Introduction to JavaScript',
+                'lesson_type' => 'online',
+                'order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $webDevCourse?->id,
+                'title' => 'DOM Manipulation',
+                'description' => 'Working with the DOM',
+                'lesson_type' => 'online',
+                'order' => 6,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $webDevCourse?->id,
+                'title' => 'Responsive Design',
+                'description' => 'Making websites responsive',
+                'lesson_type' => 'online',
+                'order' => 7,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $webDevCourse?->id,
+                'title' => 'Project Workshop',
+                'description' => 'Build a complete website',
+                'lesson_type' => 'offline',
+                'order' => 8,
                 'is_active' => true,
             ],
 
-            // SQL lessons
+            // Data Science Course lessons
             [
-                'chapter_id' => $sqlBasics?->id,
-                'title' => 'SELECT Queries',
-                'description' => 'Retrieving data from tables',
+                'course_id' => $dataScience?->id,
+                'title' => 'Introduction to Data Science',
+                'description' => 'Overview of data science',
+                'lesson_type' => 'online',
                 'order' => 1,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $sqlBasics?->id,
-                'title' => 'INSERT, UPDATE, DELETE',
-                'description' => 'Modifying data in tables',
+                'course_id' => $dataScience?->id,
+                'title' => 'NumPy Basics',
+                'description' => 'Working with NumPy arrays',
+                'lesson_type' => 'online',
                 'order' => 2,
                 'is_active' => true,
             ],
-
-            // OOP lessons
             [
-                'chapter_id' => $oop?->id,
-                'title' => 'Classes and Objects',
-                'description' => 'Understanding classes and objects',
-                'order' => 1,
+                'course_id' => $dataScience?->id,
+                'title' => 'Pandas DataFrames',
+                'description' => 'Data manipulation with Pandas',
+                'lesson_type' => 'online',
+                'order' => 3,
                 'is_active' => true,
             ],
             [
-                'chapter_id' => $oop?->id,
-                'title' => 'Inheritance',
-                'description' => 'Extending classes',
-                'order' => 2,
+                'course_id' => $dataScience?->id,
+                'title' => 'Data Visualization',
+                'description' => 'Creating charts and graphs',
+                'lesson_type' => 'online',
+                'order' => 4,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $dataScience?->id,
+                'title' => 'Machine Learning Intro',
+                'description' => 'Introduction to ML concepts',
+                'lesson_type' => 'online',
+                'order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $dataScience?->id,
+                'title' => 'Supervised Learning',
+                'description' => 'Classification and regression',
+                'lesson_type' => 'online',
+                'order' => 6,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $dataScience?->id,
+                'title' => 'Model Evaluation',
+                'description' => 'Evaluating ML models',
+                'lesson_type' => 'online',
+                'order' => 7,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $dataScience?->id,
+                'title' => 'Data Science Lab',
+                'description' => 'Hands-on data analysis project',
+                'lesson_type' => 'offline',
+                'order' => 8,
                 'is_active' => true,
             ],
         ];
 
         foreach ($lessons as $lesson) {
-            if ($lesson['chapter_id']) {
+            if ($lesson['course_id']) {
                 Lesson::create($lesson);
             }
         }

@@ -49,9 +49,9 @@ class LessonRepository
         return Lesson::destroy($id);
     }
 
-    public function getByChapterId(string $chapterId): Collection
+    public function getByCourseId(string $courseId): Collection
     {
-        return Lesson::where('chapter_id', $chapterId)->orderBy('order')->get();
+        return Lesson::where('course_id', $courseId)->orderBy('order')->get();
     }
 
     public function exists(string $id): bool

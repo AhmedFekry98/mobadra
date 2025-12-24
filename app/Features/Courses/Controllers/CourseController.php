@@ -7,9 +7,6 @@ use App\Features\Courses\Requests\CourseRequest;
 use App\Features\Courses\Services\CourseService;
 use App\Features\Courses\Transformers\CourseCollection;
 use App\Features\Courses\Transformers\CourseResource;
-use App\Features\Courses\Transformers\QuizResource;
-use App\Features\Courses\Transformers\AssignmentResource;
-use App\Features\Courses\Transformers\MaterialResource;
 use App\Features\Courses\Metadata\CourseMetadata;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
@@ -40,7 +37,7 @@ class CourseController extends Controller
 
             return $this->okResponse(
                 request()->has('page')
-                    ? new CourseCollection($result)
+                    ? CourseCollection::make($result)
                     : CourseResource::collection($result),
                 "Success"
             );
@@ -122,50 +119,4 @@ class CourseController extends Controller
             );
         }, 'CourseController@metadata');
     }
-
-    public function quizzes(string $courseId)
-    {
-        return $this->executeService(function () use ($courseId) {
-            $course = $this->service->getCourseById($courseId);
-            $this->authorize('view', $course);
-
-            $quizzes = $this->service->getQuizzesByCourseId($courseId);
-
-            return $this->okResponse(
-                QuizResource::collection($quizzes),
-                "Quizzes retrieved successfully"
-            );
-        }, 'CourseController@quizzes');
-    }
-
-    public function assignments(string $courseId)
-    {
-        return $this->executeService(function () use ($courseId) {
-            $course = $this->service->getCourseById($courseId);
-            $this->authorize('view', $course);
-
-            $assignments = $this->service->getAssignmentsByCourseId($courseId);
-
-            return $this->okResponse(
-                AssignmentResource::collection($assignments),
-                "Assignments retrieved successfully"
-            );
-        }, 'CourseController@assignments');
-    }
-
-    public function materials(string $courseId)
-    {
-        return $this->executeService(function () use ($courseId) {
-            $course = $this->service->getCourseById($courseId);
-            $this->authorize('view', $course);
-
-            $materials = $this->service->getMaterialsByCourseId($courseId);
-
-            return $this->okResponse(
-                MaterialResource::collection($materials),
-                "Materials retrieved successfully"
-            );
-        }, 'CourseController@materials');
-    }
-
 }
