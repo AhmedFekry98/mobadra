@@ -12,16 +12,19 @@ class LessonResource extends JsonResource
         $resource = $this->resource;
         return [
             'id' => $resource?->id,
-            'course_id' => $resource?->course_id,
-            'course_name' => $resource?->course?->title,
-            'term_id' => $resource?->course?->term_id,
-            'term_name' => $resource?->course?->term?->name,
+            'course' => [
+                'id' => $resource?->course_id,
+                'name' => $resource?->course?->title,
+            ],
+            'term' => [
+                'id' => $resource?->course?->term_id,
+                'name' => $resource?->course?->term?->name,
+            ],
             'title' => $resource?->title,
             'description' => $resource?->description,
             'lesson_type' => $resource?->lesson_type,
             'order' => $resource?->order,
             'is_active' => $resource?->is_active,
-            'contents' => $resource?->contents ? LessonContentResource::collection($resource->contents) : [],
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];
