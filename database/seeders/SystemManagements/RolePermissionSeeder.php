@@ -33,7 +33,7 @@ class RolePermissionSeeder extends Seeder
 
 
             $editPost = Permission::where('name', 'edit_posts')->first();
-            $viewPost = Permission::where('name', 'view_posts')->first();
+            $viewPost = Permission::where('name', 'grades.view')->first();
 
             if ($editPost) {
                 RolePermission::firstOrCreate([
