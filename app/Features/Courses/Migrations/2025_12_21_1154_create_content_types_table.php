@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('video_contents', function (Blueprint $table) {
             $table->id();
             $table->string('video_url');
-            $table->string('video_provider')->default('youtube'); // youtube, vimeo, local
+            $table->enum('video_provider', ['bunny']);
             $table->integer('duration')->default(0); // in seconds
             $table->string('thumbnail_url')->nullable();
             $table->timestamps();

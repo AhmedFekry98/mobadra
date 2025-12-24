@@ -14,7 +14,7 @@ class LessonResource extends JsonResource
             'id' => $resource?->id,
             'course' => [
                 'id' => $resource?->course_id,
-                'name' => $resource?->course?->title,
+                'title' => $resource?->course?->title,
             ],
             'term' => [
                 'id' => $resource?->course?->term_id,
