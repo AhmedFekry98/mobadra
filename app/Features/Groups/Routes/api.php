@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('groups')->name('groups.')->group(function () {
     Route::get('metadata', [GroupController::class, 'metadata'])->name('metadata');
     Route::get('course/{courseId}', [GroupController::class, 'getByCourse'])->name('by_course');
+    Route::get('lessons', [GroupController::class, 'getAllLessons'])->name('all_lessons');
+    Route::get('{groupId}/lessons', [GroupController::class, 'getLessons'])->name('lessons');
     Route::apiResource('', GroupController::class)->parameters(['' => 'group']);
 
     // Group Students

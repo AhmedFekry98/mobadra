@@ -8,6 +8,7 @@ use App\Features\Groups\Services\GroupService;
 use App\Features\Groups\Transformers\GroupCollection;
 use App\Features\Groups\Transformers\GroupResource;
 use App\Features\Groups\Metadata\GroupMetadata;
+use App\Features\Courses\Transformers\LessonResource;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -122,5 +123,38 @@ class GroupController extends Controller
                 "Group metadata retrieved successfully"
             );
         }, 'GroupController@metadata');
+    }
+
+    public function getLessons(string $groupId)
+    {
+        return $this->executeService(function () use ($groupId) {
+            $group = $this->service->getGroupById($groupId);
+            $this->authorize('view', $group);
+
+            $lessonType = request('type'); // online, offline, or null for all
+
+            $lessons = $this->service->getLessonsByGroup($groupId, $lessonType);
+
+            return $this->okResponse(
+                LessonResource::collection($lessons),
+                "Lessons retrieved successfully"
+            );
+        }, 'GroupController@getLessons');
+    }
+
+    public function getAllLessons()
+    {
+        return $this->executeService(function () {
+            $this->authorize('viewAny', Group::class);
+
+            $lessonType = request('type'); // online, offline, or null for all
+
+            $lessons = $this->service->getAllGroupsLessons($lessonType);
+
+            return $this->okResponse(
+                LessonResource::collection($lessons),
+                "Lessons retrieved successfully"
+            );
+        }, 'GroupController@getAllLessons');
     }
 }

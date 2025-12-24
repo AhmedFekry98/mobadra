@@ -13,6 +13,9 @@ class LessonResource extends JsonResource
         return [
             'id' => $resource?->id,
             'course_id' => $resource?->course_id,
+            'course_name' => $resource?->course?->title,
+            'term_id' => $resource?->course?->term_id,
+            'term_name' => $resource?->course?->term?->name,
             'title' => $resource?->title,
             'description' => $resource?->description,
             'lesson_type' => $resource?->lesson_type,

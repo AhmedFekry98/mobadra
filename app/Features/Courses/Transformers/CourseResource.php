@@ -2,7 +2,6 @@
 
 namespace App\Features\Courses\Transformers;
 
-use App\Features\Grades\Transformers\GradeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,8 +12,14 @@ class CourseResource extends JsonResource
         $resource = $this->resource;
         return [
             'id' => $resource?->id,
-            'term' => $resource?->term ? TermResource::make($resource->term) : null,
-            'grade' => $resource?->grade ? GradeResource::make($resource->grade) : null,
+            'term' =>  [
+                'id' => $resource?->term_id,
+                'name' => $resource?->term?->name,
+            ],
+            'grade' => [
+                'id' => $resource?->grade_id,
+                'name' => $resource?->grade?->name,
+            ],
             'title' => $resource?->title,
             'description' => $resource?->description,
             'slug' => $resource?->slug,
