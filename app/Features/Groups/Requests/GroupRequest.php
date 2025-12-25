@@ -25,6 +25,7 @@ class GroupRequest extends BaseFormRequest
     {
         return [
             'course_id' => ['required', 'exists:courses,id'],
+            'grade_id' => ['required', 'exists:grades,id'],
             'name' => ['required', 'string', 'max:255'],
             'max_capacity' => ['sometimes', 'integer', 'min:1', 'max:100'],
             'days' => ['required', 'array', 'min:1'],
@@ -33,8 +34,9 @@ class GroupRequest extends BaseFormRequest
             'end_date' => ['required', 'date', 'after:start_date'],
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
-            'location' => ['nullable', 'string', 'max:255'],
             'location_type' => ['sometimes', 'string', 'in:online,physical'],
+            'location' => ['required_if:location_type,physical','nullable', 'string', 'max:255'],
+            'map_url' => ['required_if:location_type,physical','nullable', 'url', 'max:500'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -43,6 +45,7 @@ class GroupRequest extends BaseFormRequest
     {
         return [
             'course_id' => ['sometimes', 'exists:courses,id'],
+            'grade_id' => ['sometimes', 'exists:grades,id'],
             'name' => ['sometimes', 'string', 'max:255'],
             'max_capacity' => ['sometimes', 'integer', 'min:1', 'max:100'],
             'days' => ['sometimes', 'array', 'min:1'],
@@ -53,6 +56,7 @@ class GroupRequest extends BaseFormRequest
             'end_time' => ['sometimes', 'date_format:H:i', 'after:start_time'],
             'location' => ['nullable', 'string', 'max:255'],
             'location_type' => ['sometimes', 'string', 'in:online,physical'],
+            'location_map_url' => ['nullable', 'url', 'max:500'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }

@@ -24,6 +24,7 @@ class Group extends Model
         'end_time',
         'location',
         'location_type',
+        'location_map_url',
         'is_active',
     ];
 

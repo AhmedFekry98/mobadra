@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->foreignId('grade_id')->nullable()->constrained('grades')->nullOnDelete();
             $table->string('name');
             $table->integer('max_capacity')->default(25);
             $table->json('days'); // ["friday", "saturday"]
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->enum('location_type', ['online', 'physical'])->default('online');
             $table->string('location')->nullable();
+            $table->text('location_map_url')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
