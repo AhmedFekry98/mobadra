@@ -32,7 +32,7 @@ class GroupMetadata
             ],
             'location_types' => [
                 ['value' => 'online', 'label' => 'Online'],
-                ['value' => 'physical', 'label' => 'Physical'],
+                ['value' => 'offline', 'label' => 'offline'],
             ],
             'meeting_providers' => [
                 ['value' => 'zoom', 'label' => 'Zoom'],
