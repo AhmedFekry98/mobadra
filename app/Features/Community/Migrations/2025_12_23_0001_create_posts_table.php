@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('channel_id')->nullable()->constrained('channels')->nullOnDelete();
             $table->text('content');
             $table->enum('visibility', ['public', 'private'])->default('public');
             $table->boolean('is_pinned')->default(false);

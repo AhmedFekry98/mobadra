@@ -17,6 +17,7 @@ class CreatePostRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
+            'channel_id' => ['required', 'exists:channels,id'],
             'content' => ['required', 'string', 'max:5000'],
             'visibility' => ['sometimes', 'string', 'in:public,private'],
             'attachments' => ['nullable', 'array'],

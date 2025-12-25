@@ -4,6 +4,7 @@ namespace App\Features\Community\Services;
 
 use App\Features\Community\Models\Post;
 use App\Features\Community\Repositories\PostRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostService
@@ -12,9 +13,9 @@ class PostService
         protected PostRepository $repository
     ) {}
 
-    public function getPosts(?int $userId = null): LengthAwarePaginator
+    public function getPosts(?int $userId = null, bool $paginate = false): Collection|LengthAwarePaginator
     {
-        return $this->repository->getPosts($userId);
+        return $this->repository->getPosts($userId, $paginate);
     }
 
     public function getPostById(int $id): Post
@@ -33,6 +34,7 @@ class PostService
             'user_id' => $userId,
             'content' => $data['content'],
             'visibility' => $data['visibility'] ?? 'public',
+            'channel_id' => $data['channel_id'],
         ]);
 
         // Handle attachments

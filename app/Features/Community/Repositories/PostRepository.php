@@ -3,6 +3,7 @@
 namespace App\Features\Community\Repositories;
 
 use App\Features\Community\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostRepository
@@ -38,10 +39,10 @@ class PostRepository
         return $this->findByIdOrFail($id)->delete();
     }
 
-    public function getPosts(?int $userId = null): LengthAwarePaginator
+    public function getPosts(?int $userId = null, bool $paginate = false): Collection|LengthAwarePaginator
     {
         $query = $this->model
-            ->with(['user', 'media'])
+            ->with(['user', 'media', 'channel'])
             ->where('is_active', true)
             ->orderByDesc('is_pinned')
             ->orderByDesc('created_at');
@@ -50,7 +51,7 @@ class PostRepository
             $query->where('user_id', $userId);
         }
 
-        return $query->paginate(15);
+        return $paginate ? $query->paginate(15) : $query->get();
     }
 
     public function getPostWithDetails(int $id): Post

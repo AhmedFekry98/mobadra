@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use App\Features\Community\Requests\CreatePostRequest;
 use App\Features\Community\Requests\UpdatePostRequest;
 use App\Features\Community\Services\PostService;
+use App\Features\Community\Transformers\PostCollection;
 use App\Features\Community\Transformers\PostResource;
 use Illuminate\Http\Request;
 
@@ -26,10 +27,13 @@ class PostController extends Controller
     {
         return $this->executeService(function () use ($request) {
             $userId = $request->query('user_id');
-            $posts = $this->service->getPosts($userId);
+            $paginate = $request->has('page');
+            $posts = $this->service->getPosts($userId, $paginate);
 
             return $this->okResponse(
-                PostResource::collection($posts),
+                $paginate
+                    ? PostCollection::make($posts)
+                    : PostResource::collection($posts),
                 "Posts retrieved successfully"
             );
         }, 'PostController@index');

@@ -14,6 +14,11 @@ class PostResource extends JsonResource
 
         return [
             'id' => $resource?->id,
+            'channel' => $resource?->channel ? [
+                'id' => $resource->channel->id,
+                'name' => $resource->channel->name,
+                'slug' => $resource->channel->slug,
+            ] : null,
             'content' => $resource?->content,
             'visibility' => $resource?->visibility,
             'is_pinned' => $resource?->is_pinned,
@@ -33,7 +38,6 @@ class PostResource extends JsonResource
                 'size' => $media->size,
                 'extension' => $media->extension,
             ]),
-            'comments' => $this->whenLoaded('rootComments', fn() => CommentResource::collection($resource->rootComments)),
             'created_at' => $resource?->created_at?->toISOString(),
             'created_at_human' => $resource?->created_at?->diffForHumans(),
             'updated_at' => $resource?->updated_at?->toISOString(),
