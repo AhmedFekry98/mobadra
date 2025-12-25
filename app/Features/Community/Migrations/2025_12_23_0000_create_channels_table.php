@@ -20,8 +20,6 @@ return new class extends Migration
             $table->nullableMorphs('channelable'); // للربط مع Group أو Grade
             $table->boolean('is_active')->default(true);
             $table->boolean('is_private')->default(false);
-            $table->string('icon')->nullable();
-            $table->string('color')->nullable();
             $table->integer('sort_order')->default(0);
             $table->timestamps();
 
