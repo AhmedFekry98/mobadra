@@ -20,6 +20,10 @@ class LessonResource extends JsonResource
                 'id' => $resource?->course?->term_id,
                 'name' => $resource?->course?->term?->name,
             ],
+            "video" => [
+                'count' => $resource?->contents?->where('content_type', 'video')->count() ?? 0,
+                'total_duration' => $resource?->contents?->where('content_type', 'video')->sum('duration') ?? 0,
+            ],
             'title' => $resource?->title,
             'description' => $resource?->description,
             'lesson_type' => $resource?->lesson_type,

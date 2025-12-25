@@ -12,7 +12,10 @@ class LessonContentResource extends JsonResource
         $resource = $this->resource;
         return [
             'id' => $resource?->id,
-            'lesson_id' => $resource?->lesson_id,
+            'lesson' => [
+                'id' => $resource?->lesson?->id,
+                'title' => $resource?->lesson?->title,
+            ],
             'content_type' => $resource?->content_type,
             'contentable_type' => $resource?->contentable_type,
             'contentable_id' => $resource?->contentable_id,

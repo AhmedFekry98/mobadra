@@ -56,7 +56,9 @@ class GroupService
     public function getLessonsByGroup(string $groupId, ?string $lessonType = null): Collection
     {
         $group = $this->repository->findOrFail($groupId);
-        $query = $group->course->lessons()->orderBy('order');
+        $query = $group->course->lessons()
+            ->with(['contents'])
+            ->orderBy('order');
 
         if ($lessonType) {
             $query->where('lesson_type', $lessonType);
@@ -71,7 +73,7 @@ class GroupService
         $courseIds = $groups->pluck('course_id')->unique()->filter();
 
         $query = \App\Features\Courses\Models\Lesson::whereIn('course_id', $courseIds)
-            ->with(['course.term'])
+            ->with(['course.term', 'contents'])
             ->orderBy('course_id')
             ->orderBy('order');
 

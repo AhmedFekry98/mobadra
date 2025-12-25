@@ -12,7 +12,7 @@ class GroupPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('groups.view');
+        return $user->hasPermission('groups.viewAny');
     }
 
     public function view(User $user, Group $group): bool

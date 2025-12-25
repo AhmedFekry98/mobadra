@@ -210,6 +210,7 @@ class PermissionSeeder extends Seeder
                     ['name' => 'groups.create', 'caption' => 'Create Group'],
                     ['name' => 'groups.update', 'caption' => 'Update Group'],
                     ['name' => 'groups.delete', 'caption' => 'Delete Group'],
+                    ['name' => 'groups.viewAny', 'caption' => 'View All Groups'],
                 ],
             ],
 
@@ -261,11 +262,14 @@ class PermissionSeeder extends Seeder
             [
                 'group' => 'Support Tickets',
                 'items' => [
-                    ['name' => 'support_tickets.view', 'caption' => 'View Support Tickets'],
+                    ['name' => 'support_tickets.viewAny', 'caption' => 'View All Support Tickets'],
+                    ['name' => 'support_tickets.view', 'caption' => 'View Own Support Tickets'],
                     ['name' => 'support_tickets.create', 'caption' => 'Create Support Ticket'],
                     ['name' => 'support_tickets.update', 'caption' => 'Update Support Ticket'],
                     ['name' => 'support_tickets.delete', 'caption' => 'Delete Support Ticket'],
                     ['name' => 'support_tickets.assign', 'caption' => 'Assign Support Ticket'],
+                    ['name' => 'support_tickets.reply', 'caption' => 'Reply to Support Ticket'],
+                    ['name' => 'support_tickets.close', 'caption' => 'Close Support Ticket'],
                 ],
             ],
 

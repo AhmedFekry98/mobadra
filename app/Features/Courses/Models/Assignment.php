@@ -4,10 +4,12 @@ namespace App\Features\Courses\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Assignment extends Model
+class Assignment extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'instructions',
@@ -44,5 +46,11 @@ class Assignment extends Model
     public function isOverdue(): bool
     {
         return $this->due_date && now()->gt($this->due_date);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('assignment_files')
+            ->useDisk('media');
     }
 }

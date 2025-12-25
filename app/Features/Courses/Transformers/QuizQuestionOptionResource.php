@@ -15,10 +15,7 @@ class QuizQuestionOptionResource extends JsonResource
             'id' => $resource?->id,
             'option_text' => $resource?->option_text,
             'order' => $resource?->order,
-            'is_correct' => $this->when(
-                request()->routeIs('*.results') || request()->has('show_answers'),
-                $resource?->is_correct
-            ),
+            'is_correct' => (bool) $resource?->is_correct,
         ];
     }
 }

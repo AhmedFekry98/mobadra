@@ -12,13 +12,13 @@ class SupportTicketPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('support_tickets.view');
+        return $user->hasPermission('support_tickets.viewAny');
     }
 
     public function view(User $user, SupportTicket $ticket): bool
     {
         // User can view their own tickets or staff can view all
-        return $user->id === $ticket->user_id || $user->hasPermission('support_tickets.view');
+        return $user->id === $ticket->user_id || $user->hasPermission('support_tickets.viewAny');
     }
 
     public function create(User $user): bool

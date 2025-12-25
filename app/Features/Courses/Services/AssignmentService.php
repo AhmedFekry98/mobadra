@@ -102,4 +102,46 @@ class AssignmentService
             ->orderByDesc('created_at')
             ->paginate(20);
     }
+
+    public function getFiles(int $assignmentId): array
+    {
+        $assignment = Assignment::findOrFail($assignmentId);
+
+        return $assignment->getMedia('assignment_files')->map(function ($media) {
+            return [
+                'id' => $media->id,
+                'file_url' => $media->getUrl(),
+                'file_name' => $media->file_name,
+                'file_size' => $media->size,
+                'file_type' => $media->mime_type,
+            ];
+        })->toArray();
+    }
+
+    public function addFiles(int $assignmentId, array $data): Assignment
+    {
+        $assignment = Assignment::findOrFail($assignmentId);
+
+        if (!empty($data['files'])) {
+            foreach ($data['files'] as $file) {
+                $assignment->addMedia($file)->toMediaCollection('assignment_files');
+            }
+        }
+
+        return $assignment->load('media');
+    }
+
+    public function removeFile(int $assignmentId, int $mediaId): Assignment
+    {
+        $assignment = Assignment::findOrFail($assignmentId);
+
+        $media = $assignment->getMedia('assignment_files')->where('id', $mediaId)->first();
+        if (!$media) {
+            throw new \Exception('File not found');
+        }
+
+        $media->delete();
+
+        return $assignment->load('media');
+    }
 }

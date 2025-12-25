@@ -11,14 +11,15 @@ class MaterialResource extends JsonResource
     {
         $resource = $this->resource;
 
+        $media = $resource?->getFirstMedia('material_file');
+
         return [
             'id' => $resource?->id,
-            'title' => $resource?->title,
-            'description' => $resource?->description,
-            'file_url' => $resource?->getFirstMediaUrl('material-file'),
-            'file_name' => $resource?->getFirstMedia('material-file')?->file_name,
-            'file_size' => $resource?->getFirstMedia('material-file')?->size,
-            'file_type' => $resource?->getFirstMedia('material-file')?->mime_type,
+            'file_url' => $media?->getUrl(),
+            'file_name' => $media?->file_name,
+            'file_size' => $media?->size,
+            'file_type' => $media?->mime_type ?? $resource?->file_type,
+            'is_downloadable' => $resource?->is_downloadable,
             'created_at' => $resource?->created_at?->toISOString(),
             'updated_at' => $resource?->updated_at?->toISOString(),
         ];

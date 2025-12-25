@@ -91,22 +91,46 @@ class LessonContentService
                 'shuffle_questions' => $data['shuffle_questions'] ?? false,
                 'show_answers' => $data['show_answers'] ?? false,
             ]),
-            'assignment' => Assignment::create([
-                'instructions' => $data['instructions'] ?? null,
-                'due_date' => $data['due_date'] ?? null,
-                'max_score' => $data['max_score'] ?? 100,
-                'allow_late_submission' => $data['allow_late_submission'] ?? false,
-                'allowed_file_types' => $data['allowed_file_types'] ?? null,
-                'max_file_size' => $data['max_file_size'] ?? null,
-            ]),
-            'material' => Material::create([
-                'file_url' => $data['file_url'],
-                'file_type' => $data['file_type'],
-                'file_size' => $data['file_size'] ?? null,
-                'is_downloadable' => $data['is_downloadable'] ?? true,
-            ]),
+            'assignment' => $this->createAssignment($data),
+            'material' => $this->createMaterial($data),
             default => throw new \InvalidArgumentException("Invalid content type: {$contentType}"),
         };
+    }
+
+    protected function createAssignment(array $data): Assignment
+    {
+        $assignment = Assignment::create([
+            'instructions' => $data['instructions'] ?? null,
+            'due_date' => $data['due_date'] ?? null,
+            'max_score' => $data['max_score'] ?? 100,
+            'allow_late_submission' => $data['allow_late_submission'] ?? false,
+            'allowed_file_types' => $data['allowed_file_types'] ?? null,
+            'max_file_size' => $data['max_file_size'] ?? null,
+        ]);
+
+        // Handle file uploads for assignment
+        if (!empty($data['files'])) {
+            foreach ($data['files'] as $file) {
+                $assignment->addMedia($file)->toMediaCollection('assignment_files');
+            }
+        }
+
+        return $assignment;
+    }
+
+    protected function createMaterial(array $data): Material
+    {
+        $material = Material::create([
+            'file_type' => $data['file_type'] ?? null,
+            'is_downloadable' => $data['is_downloadable'] ?? true,
+        ]);
+
+        // Handle file upload for material
+        if (!empty($data['file'])) {
+            $material->addMedia($data['file'])->toMediaCollection('material_file');
+        }
+
+        return $material;
     }
 
     public function getLessonContentById(string $id): ?LessonContent
@@ -123,6 +147,20 @@ class LessonContentService
             // Update the polymorphic content if content_data is provided
             $contentData = $data['content_data'] ?? $data['contentData'] ?? null;
             if ($contentData && $lessonContent->contentable) {
+                // Handle file uploads for assignment
+                if ($lessonContent->contentable instanceof Assignment && !empty($contentData['files'])) {
+                    foreach ($contentData['files'] as $file) {
+                        $lessonContent->contentable->addMedia($file)->toMediaCollection('assignment_files');
+                    }
+                    unset($contentData['files']);
+                }
+
+                // Handle file upload for material
+                if ($lessonContent->contentable instanceof Material && !empty($contentData['file'])) {
+                    $lessonContent->contentable->addMedia($contentData['file'])->toMediaCollection('material_file');
+                    unset($contentData['file']);
+                }
+
                 $lessonContent->contentable->update($contentData);
             }
 

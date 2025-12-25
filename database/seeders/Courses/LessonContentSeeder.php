@@ -52,9 +52,7 @@ class LessonContentSeeder extends Seeder
                 'is_required' => false,
                 'is_published' => true,
                 'data' => [
-                    'file_url' => 'https://example.com/syllabus.pdf',
                     'file_type' => 'pdf',
-                    'file_size' => 1024000,
                     'is_downloadable' => true,
                 ],
             ],
@@ -184,9 +182,7 @@ class LessonContentSeeder extends Seeder
                 'is_required' => false,
                 'is_published' => true,
                 'data' => [
-                    'file_url' => 'https://example.com/html-cheatsheet.pdf',
                     'file_type' => 'pdf',
-                    'file_size' => 512000,
                     'is_downloadable' => true,
                 ],
             ],

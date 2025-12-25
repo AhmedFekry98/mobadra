@@ -44,12 +44,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Materials (PDFs, documents, files)
+        // Materials (PDFs, documents, files) - files stored via Spatie Media Library
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('file_url');
-            $table->string('file_type'); // pdf, doc, ppt, etc.
-            $table->integer('file_size')->nullable(); // in bytes
+            $table->string('file_type')->nullable(); // pdf, doc, ppt, etc.
             $table->boolean('is_downloadable')->default(true);
             $table->timestamps();
         });

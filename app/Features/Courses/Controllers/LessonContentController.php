@@ -177,4 +177,5 @@ class LessonContentController extends Controller
             );
         }, 'LessonContentController@getMaterialsByLesson');
     }
+
 }

@@ -2,9 +2,12 @@
 
 namespace App\Features\Courses\Controllers;
 
+use App\Features\Courses\Models\Assignment;
+use App\Features\Courses\Requests\AddAssignmentFilesRequest;
 use App\Features\Courses\Requests\CreateSubmissionRequest;
 use App\Features\Courses\Requests\GradeSubmissionRequest;
 use App\Features\Courses\Services\AssignmentService;
+use App\Features\Courses\Transformers\AssignmentResource;
 use App\Features\Courses\Transformers\AssignmentSubmissionResource;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
@@ -95,5 +98,41 @@ class AssignmentController extends Controller
                 "Assignments retrieved"
             );
         }, 'AssignmentController@myAssignments');
+    }
+
+    public function getFiles(string $assignmentId)
+    {
+        return $this->executeService(function () use ($assignmentId) {
+            $files = $this->service->getFiles($assignmentId);
+
+            return $this->okResponse(
+                $files,
+                "Files retrieved successfully"
+            );
+        }, 'AssignmentController@getFiles');
+    }
+
+    public function addFiles(string $assignmentId, AddAssignmentFilesRequest $request)
+    {
+        return $this->executeService(function () use ($assignmentId, $request) {
+            $assignment = $this->service->addFiles($assignmentId, $request->validated());
+
+            return $this->okResponse(
+                AssignmentResource::make($assignment),
+                "Files added successfully"
+            );
+        }, 'AssignmentController@addFiles');
+    }
+
+    public function removeFile(string $assignmentId, string $mediaId)
+    {
+        return $this->executeService(function () use ($assignmentId, $mediaId) {
+            $assignment = $this->service->removeFile($assignmentId, $mediaId);
+
+            return $this->okResponse(
+                AssignmentResource::make($assignment),
+                "File removed successfully"
+            );
+        }, 'AssignmentController@removeFile');
     }
 }
