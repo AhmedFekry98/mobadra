@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Services;
 
+use App\Features\Community\Services\ChannelService;
 use App\Features\Groups\Models\Group;
 use App\Features\Groups\Repositories\GroupRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,12 +11,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class GroupService
 {
     public function __construct(
-        protected GroupRepository $repository
+        protected GroupRepository $repository,
+        protected ChannelService $channelService
     ) {}
 
-    public function getAllGroups(?bool $paginate = false): Collection|LengthAwarePaginator
+    public function getAllGroups(?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($paginate);
+        return $this->repository->getAll($paginate, $type);
     }
 
     public function getGroupById(string $id): ?Group
@@ -25,7 +27,12 @@ class GroupService
 
     public function storeGroup(array $data): Group
     {
-        return $this->repository->create($data);
+        $group = $this->repository->create($data);
+
+        // إنشاء Channel تلقائياً للـ Group
+        $this->channelService->createChannelForGroup($group);
+
+        return $group;
     }
 
     public function updateGroup(string $id, array $data): Group

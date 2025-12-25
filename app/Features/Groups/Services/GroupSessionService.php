@@ -18,9 +18,9 @@ class GroupSessionService
         return $this->repository->getAll($paginate);
     }
 
-    public function getSessionsByGroup(string $groupId): Collection
+    public function getSessionsByGroup(string $groupId, ?string $type = null): Collection
     {
-        return $this->repository->getByGroupId($groupId);
+        return $this->repository->getByGroupId($groupId, $type);
     }
 
     public function getSessionById(string $id): ?GroupSession

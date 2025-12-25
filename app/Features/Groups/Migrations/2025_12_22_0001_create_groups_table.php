@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->time('start_time');
             $table->time('end_time');
-            $table->enum('location_type', ['online', 'physical'])->default('online');
+            $table->enum('location_type', ['online', 'offline'])->default('online');
             $table->string('location')->nullable();
             $table->text('location_map_url')->nullable();
             $table->boolean('is_active')->default(true);

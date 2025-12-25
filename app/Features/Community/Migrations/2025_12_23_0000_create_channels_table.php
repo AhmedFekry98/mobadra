@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->enum('type', ['general', 'group', 'grade'])->default('general');
-            $table->nullableMorphs('channelable'); // للربط مع Group أو Grade
+            $table->nullableMorphs('channelable'); // for linking with Group or Grade
             $table->boolean('is_active')->default(true);
             $table->boolean('is_private')->default(false);
             $table->integer('sort_order')->default(0);

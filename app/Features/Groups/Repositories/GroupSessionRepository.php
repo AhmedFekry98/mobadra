@@ -22,11 +22,17 @@ class GroupSessionRepository
             : $query->get();
     }
 
-    public function getByGroupId(string $groupId): Collection
+    public function getByGroupId(string $groupId, ?string $type = null): Collection
     {
-        return GroupSession::where('group_id', $groupId)
-            ->orderBy('session_date')
-            ->get();
+        $query = GroupSession::where('group_id', $groupId)->orderBy('session_date');
+
+        if ($type !== null) {
+            $query->whereHas('group', function ($q) use ($type) {
+                $q->where('location_type', $type);
+            });
+        }
+
+        return $query->get();
     }
 
     public function find(string $id): ?GroupSession

@@ -34,9 +34,9 @@ class GroupRequest extends BaseFormRequest
             'end_date' => ['required', 'date', 'after:start_date'],
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
-            'location_type' => ['sometimes', 'string', 'in:online,physical'],
-            'location' => ['required_if:location_type,physical','nullable', 'string', 'max:255'],
-            'map_url' => ['required_if:location_type,physical','nullable', 'url', 'max:500'],
+            'location_type' => ['sometimes', 'string', 'in:online,offline'],
+            'location' => ['required_if:location_type,offline','nullable', 'string', 'max:255'],
+            'location_map_url' => ['required_if:location_type,offline','nullable', 'url', 'max:500'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -55,7 +55,7 @@ class GroupRequest extends BaseFormRequest
             'start_time' => ['sometimes', 'date_format:H:i'],
             'end_time' => ['sometimes', 'date_format:H:i', 'after:start_time'],
             'location' => ['nullable', 'string', 'max:255'],
-            'location_type' => ['sometimes', 'string', 'in:online,physical'],
+            'location_type' => ['sometimes', 'string', 'in:online,offline'],
             'location_map_url' => ['nullable', 'url', 'max:500'],
             'is_active' => ['sometimes', 'boolean'],
         ];

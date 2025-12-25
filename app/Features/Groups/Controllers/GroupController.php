@@ -30,12 +30,13 @@ class GroupController extends Controller
             $this->authorize('viewAny', Group::class);
 
             $result = $this->service->getAllGroups(
-                paginate: request()->has('page')
+                paginate: request()->has('page'),
+                type: request('type')
             );
 
             return $this->okResponse(
                 request()->has('page')
-                    ? new GroupCollection($result)
+                    ? GroupCollection::make($result)
                     : GroupResource::collection($result),
                 "Success"
             );
