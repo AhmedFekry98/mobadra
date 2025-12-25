@@ -40,6 +40,7 @@ class LessonContentResource extends JsonResource
         if ($resource->content_type === 'video') {
             return [
                 'id' => $contentable->id,
+                'video_url' => $contentable->video_url,
                 'video_provider' => $contentable->video_provider,
                 'duration' => $contentable->duration,
                 'embed_html' => $contentable->embed_html,
