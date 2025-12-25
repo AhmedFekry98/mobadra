@@ -99,20 +99,6 @@ class GroupController extends Controller
         }, 'GroupController@destroy');
     }
 
-    public function getByCourse(string $courseId)
-    {
-        return $this->executeService(function () use ($courseId) {
-            $this->authorize('viewAny', Group::class);
-
-            $groups = $this->service->getGroupsByCourse($courseId);
-
-            return $this->okResponse(
-                GroupResource::collection($groups),
-                "Groups retrieved successfully"
-            );
-        }, 'GroupController@getByCourse');
-    }
-
     public function metadata()
     {
         return $this->executeService(function () {
@@ -125,36 +111,4 @@ class GroupController extends Controller
         }, 'GroupController@metadata');
     }
 
-    public function getLessons(string $groupId)
-    {
-        return $this->executeService(function () use ($groupId) {
-            $group = $this->service->getGroupById($groupId);
-            $this->authorize('view', $group);
-
-            $lessonType = request('type'); // online, offline, or null for all
-
-            $lessons = $this->service->getLessonsByGroup($groupId, $lessonType);
-
-            return $this->okResponse(
-                LessonResource::collection($lessons),
-                "Lessons retrieved successfully"
-            );
-        }, 'GroupController@getLessons');
-    }
-
-    public function getAllLessons()
-    {
-        return $this->executeService(function () {
-            $this->authorize('viewAny', Group::class);
-
-            $lessonType = request('type'); // online, offline, or null for all
-
-            $lessons = $this->service->getAllGroupsLessons($lessonType);
-
-            return $this->okResponse(
-                LessonResource::collection($lessons),
-                "Lessons retrieved successfully"
-            );
-        }, 'GroupController@getAllLessons');
-    }
 }

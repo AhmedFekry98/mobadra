@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('topic')->nullable();
-            $table->foreignId('lesson_content_id')->nullable()->constrained('lesson_contents')->nullOnDelete();
+            $table->foreignId('lesson_id')->nullable()->constrained('lessons')->nullOnDelete();
             $table->boolean('is_cancelled')->default(false);
             $table->string('cancellation_reason')->nullable();
             $table->string('meeting_provider')->nullable(); // zoom, google_meet, teams

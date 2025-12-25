@@ -30,6 +30,7 @@ class GroupSessionService
 
     public function storeSession(array $data): GroupSession
     {
+
         return $this->repository->create($data);
     }
 

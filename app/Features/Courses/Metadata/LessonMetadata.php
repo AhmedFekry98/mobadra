@@ -46,14 +46,6 @@ class LessonMetadata
                 'searchable' => false
             ],
             [
-                'column' => 'lesson_type',
-                'label' => 'Lesson Type',
-                'type' => 'select',
-                'operators' => ['='],
-                'options' => ['online', 'offline'],
-                'searchable' => false
-            ],
-            [
                 'column' => 'order',
                 'label' => 'Order',
                 'type' => 'number',

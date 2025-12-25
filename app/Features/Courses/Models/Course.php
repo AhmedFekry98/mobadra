@@ -41,16 +41,6 @@ class Course extends Model implements HasMedia
         return $this->hasMany(Lesson::class)->orderBy('order');
     }
 
-    public function onlineLessons()
-    {
-        return $this->lessons()->where('lesson_type', 'online');
-    }
-
-    public function offlineLessons()
-    {
-        return $this->lessons()->where('lesson_type', 'offline');
-    }
-
     public function finalQuiz()
     {
         return $this->belongsTo(Quiz::class, 'final_quiz_id');

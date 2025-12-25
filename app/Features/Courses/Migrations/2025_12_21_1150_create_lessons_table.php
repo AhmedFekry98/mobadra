@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
-            $table->enum('lesson_type',['online','offline'])->default('online');
             $table->integer('duration_minutes')->default(0);
             $table->string('title');
             $table->text('description')->nullable();

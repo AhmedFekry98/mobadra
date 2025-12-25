@@ -2,7 +2,7 @@
 
 namespace App\Features\Groups\Models;
 
-use App\Features\Courses\Models\LessonContent;
+use App\Features\Courses\Models\Lesson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,9 @@ class GroupSession extends Model
         'start_time',
         'end_time',
         'topic',
-        'lesson_content_id',
+        'lesson_id',
+        'session_type',
+        'session_number',
         'is_cancelled',
         'cancellation_reason',
         'meeting_provider',
@@ -36,9 +38,9 @@ class GroupSession extends Model
         return $this->belongsTo(Group::class);
     }
 
-    public function lessonContent()
+    public function lesson()
     {
-        return $this->belongsTo(LessonContent::class);
+        return $this->belongsTo(Lesson::class);
     }
 
     public function attendances()

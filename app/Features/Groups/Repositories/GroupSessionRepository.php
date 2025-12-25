@@ -41,6 +41,7 @@ class GroupSessionRepository
 
     public function create(array $data): GroupSession
     {
+
         return GroupSession::create($data);
     }
 

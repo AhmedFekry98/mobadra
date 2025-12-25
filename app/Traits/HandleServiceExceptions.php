@@ -88,8 +88,10 @@ trait HandleServiceExceptions
         switch ($errorCode) {
             case 1062: // Duplicate entry
                 return $this->conflictResponse('Duplicate entry detected');
-            case 1452: // Foreign key constraint
+            case 1451: // Foreign key constraint - cannot delete parent row
                 return $this->badResponse('Cannot delete: resource is being used elsewhere');
+            case 1452: // Foreign key constraint - cannot add/update child row (referenced record not found)
+                return $this->badResponse('Referenced resource not found. Please check the provided IDs.');
             default:
                 return $this->serverErrorResponse(
                     app()->environment('production')

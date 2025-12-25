@@ -21,7 +21,6 @@ class LessonRequest extends BaseFormRequest
                 'course_id' => ['sometimes', 'exists:courses,id'],
                 'title' => ['sometimes', 'string', 'max:255'],
                 'description' => ['sometimes', 'nullable', 'string'],
-                'lesson_type' => ['sometimes', 'in:online,offline'],
                 'order' => ['sometimes', 'integer', 'min:0'],
                 'is_active' => ['sometimes', 'boolean'],
             ];
@@ -31,7 +30,6 @@ class LessonRequest extends BaseFormRequest
             'course_id' => ['required', 'exists:courses,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'lesson_type' => ['required', 'in:online,offline'],
             'order' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
         ];

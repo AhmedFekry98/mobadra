@@ -26,7 +26,6 @@ class LessonResource extends JsonResource
             ],
             'title' => $resource?->title,
             'description' => $resource?->description,
-            'lesson_type' => $resource?->lesson_type,
             'order' => $resource?->order,
             'is_active' => $resource?->is_active,
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),

@@ -13,7 +13,6 @@ class Lesson extends Model
         'course_id',
         'title',
         'description',
-        'lesson_type',
         'duration_minutes',
         'order',
         'is_active',
