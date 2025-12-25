@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'bunny' => [
+        'stream_library_id' => env('BUNNY_STREAM_LIBRARY_ID'),
+        'stream_api_key' => env('BUNNY_STREAM_API_KEY'),
+        'stream_cdn_hostname' => env('BUNNY_STREAM_CDN_HOSTNAME'), // e.g., vz-xxxxx.b-cdn.net
+        'token_authentication_key' => env('BUNNY_TOKEN_AUTH_KEY'),
+        'token_expiry_seconds' => env('BUNNY_TOKEN_EXPIRY', 86400), // 24 hours default
+    ],
+
 ];
