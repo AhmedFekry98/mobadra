@@ -22,16 +22,20 @@ class GroupSessionController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function index(string $groupId)
+    public function index()
     {
-        return $this->executeService(function () use ($groupId) {
+
+        return $this->executeService(function () {
             $this->authorize('viewAny', Group::class);
 
-            $sessions = $this->service->getSessionsByGroup($groupId);
+            $sessions = $this->service->getAllSessions(
+                paginate: true,
+                type:$type = request('type')
+            );
 
             return $this->okResponse(
                 GroupSessionResource::collection($sessions),
-                "Sessions retrieved successfully"
+                "All sessions retrieved successfully"
             );
         }, 'GroupSessionController@index');
     }
@@ -95,5 +99,19 @@ class GroupSessionController extends Controller
                 "Session deleted successfully"
             );
         }, 'GroupSessionController@destroy');
+    }
+
+    public function indexByGroup(string $groupId)
+    {
+        return $this->executeService(function () use ($groupId) {
+            $this->authorize('viewAny', Group::class);
+            $type = request('type');
+            $sessions = $this->service->getSessionsByGroup($groupId, $type);
+
+            return $this->okResponse(
+                GroupSessionResource::collection($sessions),
+                "Sessions retrieved successfully"
+            );
+        }, 'GroupSessionController@index');
     }
 }

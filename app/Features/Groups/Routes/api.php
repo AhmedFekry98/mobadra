@@ -42,7 +42,7 @@ Route::prefix('groups')->name('groups.')->group(function () {
     // Group Sessions
     Route::prefix('{groupId}/sessions')->name('sessions.')->group(function () {
         // return all sessions for group
-        Route::get('', [GroupSessionController::class, 'index'])->name('index');
+        Route::get('', [GroupSessionController::class, 'indexByGroup'])->name('index');
         // create new session for group
         Route::post('', [GroupSessionController::class, 'store'])->name('store');
     });
@@ -53,6 +53,8 @@ Route::prefix('groups')->name('groups.')->group(function () {
 
 // Group Sessions (standalone routes)
 Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
+    // return all group sessions
+    Route::get('', [GroupSessionController::class, 'index'])->name('index');
     // get session details
     Route::get('{id}', [GroupSessionController::class, 'show'])->name('show');
     // update session details
