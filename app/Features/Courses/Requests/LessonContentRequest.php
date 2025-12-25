@@ -70,7 +70,7 @@ class LessonContentRequest extends BaseFormRequest
 
         return match ($contentType) {
             'video' => [
-                'content_data.video_url' => [$required, 'string', 'url'],
+                'content_data.video_url' => [$required, 'string'],
                 'content_data.video_provider' => ['sometimes', 'string', 'in:bunny'],
                 'content_data.duration' => ['sometimes', 'integer', 'min:0'],
                 'content_data.thumbnail_url' => ['nullable', 'string'],
