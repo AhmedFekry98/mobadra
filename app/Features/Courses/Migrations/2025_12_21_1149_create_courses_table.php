@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('slug')->unique();
             $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('final_quiz_id')->nullable();
             $table->timestamps();
         });
     }

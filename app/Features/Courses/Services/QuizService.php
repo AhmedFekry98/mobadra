@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Services;
 
+use App\Features\Courses\Models\Course;
 use App\Features\Courses\Models\Quiz;
 use App\Features\Courses\Models\QuizAttempt;
 use App\Features\Courses\Models\QuizAnswer;
@@ -163,5 +164,76 @@ class QuizService
             'pass_rate' => $attempts->where('passed', true)->count() / max($attempts->count(), 1) * 100,
             'attempts' => $attempts,
         ];
+    }
+
+    public function createFinalQuiz(int $courseId, array $data): Quiz
+    {
+        return DB::transaction(function () use ($courseId, $data) {
+            $course = Course::findOrFail($courseId);
+
+            if ($course->final_quiz_id) {
+                throw new \Exception('This course already has a final quiz');
+            }
+
+            $quiz = Quiz::create([
+                'time_limit' => $data['time_limit'] ?? null,
+                'passing_score' => $data['passing_score'] ?? 60,
+                'max_attempts' => $data['max_attempts'] ?? 1,
+                'shuffle_questions' => $data['shuffle_questions'] ?? false,
+                'show_answers' => $data['show_answers'] ?? false,
+            ]);
+
+            $course->update(['final_quiz_id' => $quiz->id]);
+
+            return $quiz;
+        });
+    }
+
+    public function getFinalQuizByCourseId(int $courseId): ?Quiz
+    {
+        $course = Course::findOrFail($courseId);
+
+        if (!$course->final_quiz_id) {
+            return null;
+        }
+
+        return Quiz::with(['questions.options'])->findOrFail($course->final_quiz_id);
+    }
+
+    public function updateFinalQuiz(int $courseId, array $data): Quiz
+    {
+        $course = Course::findOrFail($courseId);
+
+        if (!$course->final_quiz_id) {
+            throw new \Exception('This course does not have a final quiz');
+        }
+
+        $quiz = Quiz::findOrFail($course->final_quiz_id);
+
+        $quiz->update([
+            'time_limit' => $data['time_limit'] ?? $quiz->time_limit,
+            'passing_score' => $data['passing_score'] ?? $quiz->passing_score,
+            'max_attempts' => $data['max_attempts'] ?? $quiz->max_attempts,
+            'shuffle_questions' => $data['shuffle_questions'] ?? $quiz->shuffle_questions,
+            'show_answers' => $data['show_answers'] ?? $quiz->show_answers,
+        ]);
+
+        return $quiz->fresh(['questions.options']);
+    }
+
+    public function deleteFinalQuiz(int $courseId): bool
+    {
+        return DB::transaction(function () use ($courseId) {
+            $course = Course::findOrFail($courseId);
+
+            if (!$course->final_quiz_id) {
+                throw new \Exception('This course does not have a final quiz');
+            }
+
+            $quiz = Quiz::findOrFail($course->final_quiz_id);
+            $course->update(['final_quiz_id' => null]);
+
+            return $quiz->delete();
+        });
     }
 }

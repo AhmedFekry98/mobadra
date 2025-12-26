@@ -7,6 +7,7 @@ use App\Features\Courses\Requests\CourseRequest;
 use App\Features\Courses\Services\CourseService;
 use App\Features\Courses\Transformers\CourseCollection;
 use App\Features\Courses\Transformers\CourseResource;
+use App\Features\Courses\Transformers\LessonResource;
 use App\Features\Courses\Metadata\CourseMetadata;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
@@ -118,5 +119,18 @@ class CourseController extends Controller
                 "Course metadata retrieved successfully"
             );
         }, 'CourseController@metadata');
+    }
+
+    public function lessons(string $courseId)
+    {
+        return $this->executeService(function () use ($courseId) {
+            $course = $this->service->getCourseById($courseId);
+            $this->authorize('view', $course);
+
+            return $this->okResponse(
+                LessonResource::collection($course->lessons),
+                "Course lessons retrieved successfully"
+            );
+        }, 'CourseController@lessons');
     }
 }

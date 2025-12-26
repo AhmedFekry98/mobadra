@@ -43,6 +43,7 @@ class RolePermissionSeeder extends Seeder
                 'support_tickets.create',
             ])->get();
 
+            $course = Permission::where('name', 'course.viewAny')->first();
 
             if ($editPost) {
                 RolePermission::firstOrCreate([
@@ -75,10 +76,10 @@ class RolePermissionSeeder extends Seeder
                 ]);
             }
 
-            if ($viewPost) {
+            if ($course) {
                 RolePermission::firstOrCreate([
                     'role_id' => 2, // student
-                    'permission_id' => $viewPost->id,
+                    'permission_id' => $course->id,
                 ]);
             }
 

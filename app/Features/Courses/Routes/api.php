@@ -57,6 +57,12 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
     Route::post('attempts/{attemptId}/complete', [QuizController::class, 'completeAttempt'])->name('attempts.complete');
     // get attempt result
     Route::get('attempts/{attemptId}', [QuizController::class, 'attemptResult'])->name('attempts.result');
+
+    // Final Quiz (by Course ID)
+    Route::get('course/{courseId}/final', [QuizController::class, 'showFinalQuiz'])->name('final.show');
+    Route::post('course/{courseId}/final', [QuizController::class, 'storeFinalQuiz'])->name('final.store');
+    Route::put('course/{courseId}/final', [QuizController::class, 'updateFinalQuiz'])->name('final.update');
+    Route::delete('course/{courseId}/final', [QuizController::class, 'destroyFinalQuiz'])->name('final.destroy');
 });
 
 // Assignments
