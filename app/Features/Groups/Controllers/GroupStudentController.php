@@ -89,4 +89,66 @@ class GroupStudentController extends Controller
             );
         }, 'GroupStudentController@updateStatus');
     }
+
+    /**
+     * Enroll current student in a group based on selected schedule
+     * POST /groups/enroll-by-schedule
+     * Body: { type, days, start_time, end_time, location? }
+     */
+    public function enrollBySchedule()
+    {
+        return $this->executeService(function () {
+            $user = auth()->user();
+            $gradeId = $user->userInformation?->grade_id;
+
+            if (!$gradeId) {
+                return $this->errorResponse(
+                    "Student grade not found. Please update your profile.",
+                    422
+                );
+            }
+
+            $locationType = request('type');
+            $days = request('days');
+            $startTime = request('start_time');
+            $endTime = request('end_time');
+            $location = request('location');
+
+            // Validate required fields
+            if (!$locationType || !in_array($locationType, ['online', 'offline'])) {
+                return $this->errorResponse("Invalid location type. Must be 'online' or 'offline'.", 422);
+            }
+
+            if (!$days || !is_array($days) || empty($days)) {
+                return $this->errorResponse("Days are required.", 422);
+            }
+
+            if (!$startTime || !$endTime) {
+                return $this->errorResponse("Start time and end time are required.", 422);
+            }
+
+            if ($locationType === 'offline' && !$location) {
+                return $this->errorResponse("Location is required for offline groups.", 422);
+            }
+
+            $result = $this->service->enrollStudentBySchedule(
+                $user->id,
+                $gradeId,
+                $locationType,
+                $days,
+                $startTime,
+                $endTime,
+                $location
+            );
+
+            if (is_array($result) && isset($result['error'])) {
+                return $this->errorResponse($result['error'], 422);
+            }
+
+            return $this->okResponse(
+                GroupStudentResource::make($result->load(['student', 'group'])),
+                "Student enrolled successfully"
+            );
+        }, 'GroupStudentController@enrollBySchedule');
+    }
 }

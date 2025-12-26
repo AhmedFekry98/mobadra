@@ -93,4 +93,56 @@ class GroupStudentService
     {
         return $this->repository->countActiveByGroupId($groupId);
     }
+
+    /**
+     * Enroll student in a group based on selected schedule
+     * Automatically finds an available group with capacity
+     */
+    public function enrollStudentBySchedule(
+        string $studentId,
+        string $gradeId,
+        string $locationType,
+        array $days,
+        string $startTime,
+        string $endTime,
+        ?string $location = null
+    ): GroupStudent|array {
+        return DB::transaction(function () use ($studentId, $gradeId, $locationType, $days, $startTime, $endTime, $location) {
+            // Find a group with capacity for this schedule
+            $group = $this->groupRepository->findGroupWithCapacityForSchedule(
+                $gradeId,
+                $locationType,
+                $days,
+                $startTime,
+                $endTime,
+                $location
+            );
+
+            if (!$group) {
+                return ['error' => 'No available group found for this schedule'];
+            }
+
+            // Check if student is already in any group with same schedule
+            $existingEnrollment = $this->repository->findStudentInSameSchedule(
+                $studentId,
+                $gradeId,
+                $locationType,
+                $days,
+                $startTime,
+                $endTime,
+                $location
+            );
+
+            if ($existingEnrollment) {
+                return ['error' => 'Student is already enrolled in a group with this schedule'];
+            }
+
+            return $this->repository->create([
+                'group_id' => $group->id,
+                'student_id' => $studentId,
+                'enrolled_at' => now(),
+                'status' => 'active',
+            ]);
+        });
+    }
 }

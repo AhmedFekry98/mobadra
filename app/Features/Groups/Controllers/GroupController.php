@@ -112,4 +112,40 @@ class GroupController extends Controller
         }, 'GroupController@metadata');
     }
 
+    /**
+     * Get available schedules for student based on their grade
+     * For online groups: returns unique schedules (days + time)
+     * For offline groups: returns unique schedules (days + time + location)
+     */
+    public function availableSchedules()
+    {
+        return $this->executeService(function () {
+            $user = auth()->user();
+            $gradeId = $user->userInformation?->grade_id;
+
+            if (!$gradeId) {
+                return $this->errorResponse(
+                    "Student grade not found. Please update your profile.",
+                    422
+                );
+            }
+
+            $locationType = request('type'); // 'online' or 'offline'
+
+            if (!$locationType || !in_array($locationType, ['online', 'offline'])) {
+                return $this->errorResponse(
+                    "Invalid location type. Must be 'online' or 'offline'.",
+                    422
+                );
+            }
+
+            $schedules = $this->service->getAvailableSchedulesForStudent($gradeId, $locationType);
+
+            return $this->okResponse(
+                $schedules,
+                "Available schedules retrieved successfully"
+            );
+        }, 'GroupController@availableSchedules');
+    }
+
 }

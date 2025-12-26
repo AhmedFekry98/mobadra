@@ -60,5 +60,32 @@ class GroupService
         return $this->repository->findSimilarGroupWithCapacity($courseId, $days, $startTime, $endTime);
     }
 
+    /**
+     * Get available schedules for student based on their grade
+     */
+    public function getAvailableSchedulesForStudent(string $gradeId, string $locationType): array
+    {
+        return $this->repository->getAvailableSchedulesForStudent($gradeId, $locationType);
+    }
 
+    /**
+     * Find a group with capacity for a specific schedule
+     */
+    public function findGroupWithCapacityForSchedule(
+        string $gradeId,
+        string $locationType,
+        array $days,
+        string $startTime,
+        string $endTime,
+        ?string $location = null
+    ): ?Group {
+        return $this->repository->findGroupWithCapacityForSchedule(
+            $gradeId,
+            $locationType,
+            $days,
+            $startTime,
+            $endTime,
+            $location
+        );
+    }
 }

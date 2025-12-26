@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 // Groups
 Route::prefix('groups')->name('groups.')->group(function () {
     Route::get('metadata', [GroupController::class, 'metadata'])->name('metadata');
+    Route::get('available-schedules', [GroupController::class, 'availableSchedules'])->name('available_schedules');
+    Route::post('enroll-by-schedule', [GroupStudentController::class, 'enrollBySchedule'])->name('enroll_by_schedule');
     Route::apiResource('', GroupController::class)->parameters(['' => 'group']);
 
     // Group Students

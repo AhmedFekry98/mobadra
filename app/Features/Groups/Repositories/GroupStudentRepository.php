@@ -81,4 +81,33 @@ class GroupStudentRepository
             ->where('student_id', $studentId)
             ->exists();
     }
+
+    /**
+     * Check if student is already enrolled in a group with same schedule
+     */
+    public function findStudentInSameSchedule(
+        string $studentId,
+        string $gradeId,
+        string $locationType,
+        array $days,
+        string $startTime,
+        string $endTime,
+        ?string $location = null
+    ): ?GroupStudent {
+        $query = GroupStudent::where('student_id', $studentId)
+            ->where('status', 'active')
+            ->whereHas('group', function ($q) use ($gradeId, $locationType, $days, $startTime, $endTime, $location) {
+                $q->where('grade_id', $gradeId)
+                    ->where('location_type', $locationType)
+                    ->where('days', json_encode($days))
+                    ->where('start_time', $startTime)
+                    ->where('end_time', $endTime);
+
+                if ($locationType === 'offline' && $location) {
+                    $q->where('location', $location);
+                }
+            });
+
+        return $query->first();
+    }
 }
