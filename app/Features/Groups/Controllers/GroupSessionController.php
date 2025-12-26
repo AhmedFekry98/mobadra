@@ -28,11 +28,17 @@ class GroupSessionController extends Controller
         return $this->executeService(function () {
             $this->authorize('viewAny', Group::class);
 
+            // Clean type parameter (handle malformed query strings)
+            $type = request('type');
+            if ($type && str_contains($type, '?')) {
+                $type = explode('?', $type)[0];
+            }
+
             $sessions = $this->service->getAllSessions(
                 paginate: request()->has('page'),
-                type: request('type')
+                type: $type
             );
-
+            
             return $this->okResponse(
                 request()->has('page')
                     ? GroupSessionResource::collection($sessions)
