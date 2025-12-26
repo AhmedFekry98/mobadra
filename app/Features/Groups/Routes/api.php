@@ -54,7 +54,7 @@ Route::prefix('groups')->name('groups.')->group(function () {
 // Group Sessions (standalone routes)
 Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
     // return all group sessions
-    Route::get('', [GroupSessionController::class, 'index'])->name('index');
+    Route::get('/', [GroupSessionController::class, 'index'])->name('index');
     // get session details
     Route::get('{id}', [GroupSessionController::class, 'show'])->name('show');
     // update session details
