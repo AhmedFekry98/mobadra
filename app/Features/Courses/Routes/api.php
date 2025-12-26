@@ -50,10 +50,10 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
     Route::delete('questions/{questionId}', [QuizController::class, 'destroyQuestion'])->name('questions.destroy');
 
     // Attempts (Student)
-    // Route::post('{quizId}/attempts', [QuizController::class, 'startAttempt'])->name('attempts.start');
-    // Route::post('attempts/{attemptId}/questions/{questionId}', [QuizController::class, 'submitAnswer'])->name('attempts.answer');
-    // Route::post('attempts/{attemptId}/complete', [QuizController::class, 'completeAttempt'])->name('attempts.complete');
-    // Route::get('attempts/{attemptId}', [QuizController::class, 'attemptResult'])->name('attempts.result');
+    Route::post('{quizId}/attempts', [QuizController::class, 'startAttempt'])->name('attempts.start');
+    Route::post('attempts/{attemptId}/questions/{questionId}', [QuizController::class, 'submitAnswer'])->name('attempts.answer');
+    Route::post('attempts/{attemptId}/complete', [QuizController::class, 'completeAttempt'])->name('attempts.complete');
+    Route::get('attempts/{attemptId}', [QuizController::class, 'attemptResult'])->name('attempts.result');
 });
 
 // Assignments

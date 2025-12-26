@@ -23,15 +23,14 @@ class QuizAttemptResource extends JsonResource
             'total_points' => $resource?->total_points,
             'percentage' => $resource?->percentage,
             'passed' => $resource?->passed,
-            'student' => $this->whenLoaded('student', fn() => [
+            'student' => [
                 'id' => $resource->student->id,
                 'name' => $resource->student->name,
-            ]),
-            'quiz' => $this->whenLoaded('quiz', fn() => [
+            ],
+            'quiz' => [
                 'id' => $resource->quiz->id,
                 'passing_score' => $resource->quiz->passing_score,
-            ]),
-            'answers' => $this->whenLoaded('answers', fn() => QuizAnswerResource::collection($resource->answers)),
+            ],
             'created_at' => $resource?->created_at?->toISOString(),
         ];
     }
