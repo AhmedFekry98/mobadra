@@ -38,7 +38,7 @@ class GroupSessionController extends Controller
                 paginate: request()->has('page'),
                 type: $type
             );
-            
+
             return $this->okResponse(
                 request()->has('page')
                     ? GroupSessionResource::collection($sessions)
@@ -120,6 +120,6 @@ class GroupSessionController extends Controller
                 GroupSessionResource::collection($sessions),
                 "Sessions retrieved successfully"
             );
-        }, 'GroupSessionController@index');
+        }, 'GroupSessionController@indexByGroup');
     }
 }

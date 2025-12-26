@@ -24,8 +24,11 @@ return new class extends Migration
             $table->string('meeting_provider')->nullable(); // zoom, google_meet, teams
             $table->string('meeting_id')->nullable();
             $table->string('meeting_password')->nullable();
-            $table->string('moderator_link')->nullable(); // رابط المدرس/Host
-            $table->string('attendee_link')->nullable();  // رابط الطلاب/Join
+            $table->text('moderator_link')->nullable(); // رابط المدرس/Host
+            $table->text('attendee_link')->nullable();  // رابط الطلاب/Join
+            $table->text('recording_url')->nullable();
+            $table->text('recording_download_url')->nullable();
+            $table->string('recording_password')->nullable();
             $table->timestamps();
 
             $table->index(['group_id']);

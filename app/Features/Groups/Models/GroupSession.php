@@ -26,6 +26,9 @@ class GroupSession extends Model
         'meeting_password',
         'moderator_link',
         'attendee_link',
+        'recording_url',
+        'recording_download_url',
+        'recording_password',
     ];
 
     protected $casts = [

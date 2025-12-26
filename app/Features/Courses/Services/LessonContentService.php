@@ -77,13 +77,6 @@ class LessonContentService
                 'duration' => $data['duration'] ?? 0,
                 'thumbnail_url' => $data['thumbnail_url'] ?? null,
             ]),
-            'live_session' => LiveSession::create([
-                'meeting_url' => $data['meeting_url'] ?? null,
-                'meeting_provider' => $data['meeting_provider'] ?? 'zoom',
-                'start_time' => $data['start_time'],
-                'end_time' => $data['end_time'] ?? null,
-                'max_participants' => $data['max_participants'] ?? null,
-            ]),
             'quiz' => Quiz::create([
                 'time_limit' => $data['time_limit'] ?? null,
                 'passing_score' => $data['passing_score'] ?? 60,
