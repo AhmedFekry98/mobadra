@@ -118,6 +118,18 @@ class QuizController extends Controller
         }, 'QuizController@attemptResult');
     }
 
+    public function attemptsByQuiz(string $quizId)
+    {
+        return $this->executeService(function () use ($quizId) {
+            $attempts = $this->service->getAttemptsByQuizId($quizId);
+
+            return $this->okResponse(
+                QuizAttemptResource::collection($attempts),
+                "Quiz attempts retrieved successfully"
+            );
+        }, 'QuizController@attemptsByQuiz');
+    }
+
     public function quizResults(string $quizId)
     {
         return $this->executeService(function () use ($quizId) {

@@ -150,6 +150,14 @@ class QuizService
         ])->findOrFail($attemptId);
     }
 
+    public function getAttemptsByQuizId(int $quizId)
+    {
+        return QuizAttempt::with(['student'])
+            ->where('quiz_id', $quizId)
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
     public function getQuizResults(int $quizId): array
     {
         $attempts = QuizAttempt::with(['student'])

@@ -58,6 +58,9 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
     // get attempt result
     Route::get('attempts/{attemptId}', [QuizController::class, 'attemptResult'])->name('attempts.result');
 
+    // get all attempts by quiz id
+    Route::get('{quizId}/attempts', [QuizController::class, 'attemptsByQuiz'])->name('attempts.byQuiz');
+
     // Final Quiz (by Course ID)
     Route::get('course/{courseId}/final', [QuizController::class, 'showFinalQuiz'])->name('final.show');
     Route::post('course/{courseId}/final', [QuizController::class, 'storeFinalQuiz'])->name('final.store');
