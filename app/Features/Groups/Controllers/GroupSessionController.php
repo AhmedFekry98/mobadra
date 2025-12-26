@@ -122,4 +122,36 @@ class GroupSessionController extends Controller
             );
         }, 'GroupSessionController@indexByGroup');
     }
+
+    public function getRecordings(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            $session = $this->service->getSessionById($id);
+            $this->authorize('view', Group::find($session->group_id));
+
+            $recordings = $this->service->getSessionRecordings($id);
+
+            return $this->okResponse(
+                $recordings,
+                $recordings['has_recordings']
+                    ? "Recordings retrieved successfully"
+                    : "No recordings available yet"
+            );
+        }, 'GroupSessionController@getRecordings');
+    }
+
+    public function deleteRecordings(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            $session = $this->service->getSessionById($id);
+            $this->authorize('delete', Group::find($session->group_id));
+
+            $this->service->deleteSessionRecordings($id);
+
+            return $this->okResponse(
+                null,
+                "Recordings deleted successfully"
+            );
+        }, 'GroupSessionController@deleteRecordings');
+    }
 }

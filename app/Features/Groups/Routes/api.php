@@ -64,6 +64,10 @@ Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
     // delete session
     Route::delete('{id}', [GroupSessionController::class, 'destroy'])->name('destroy');
 
+    // Session Recordings
+    Route::get('{id}/recordings', [GroupSessionController::class, 'getRecordings'])->name('recordings');
+    Route::delete('{id}/recordings', [GroupSessionController::class, 'deleteRecordings'])->name('recordings.delete');
+
     // // Session Attendance
     // Route::get('{sessionId}/attendance', [AttendanceController::class, 'getBySession'])->name('attendance');
     // Route::post('{sessionId}/attendance', [AttendanceController::class, 'recordAttendance'])->name('record_attendance');

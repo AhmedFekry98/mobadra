@@ -111,5 +111,54 @@ class GroupSessionService
         return $this->repository->getPastSessions($groupId);
     }
 
+    public function getSessionRecordings(string $sessionId): array
+    {
+        $session = $this->repository->findOrFail($sessionId);
 
+        if (!$session->meeting_id) {
+            return [
+                'has_recordings' => false,
+                'message' => 'This session does not have a Zoom meeting.',
+                'recordings' => [],
+            ];
+        }
+
+        $recordings = $this->zoomService->getRecordings($session->meeting_id);
+
+        // If recordings found and not already saved, save to session
+        if ($recordings['has_recordings'] && !$session->recording_url) {
+            $mainRecording = collect($recordings['recordings'])
+                ->firstWhere('file_type', 'MP4');
+
+            if ($mainRecording) {
+                $session->update([
+                    'recording_url' => $mainRecording['play_url'],
+                    'recording_download_url' => $mainRecording['download_url'],
+                    'recording_password' => $recordings['password'] ?? null,
+                ]);
+            }
+        }
+
+        return $recordings;
+    }
+
+    public function deleteSessionRecordings(string $sessionId): bool
+    {
+        $session = $this->repository->findOrFail($sessionId);
+
+        if (!$session->meeting_id) {
+            throw new \Exception('This session does not have a Zoom meeting.');
+        }
+
+        $this->zoomService->deleteRecordings($session->meeting_id);
+
+        // Clear recording fields
+        $session->update([
+            'recording_url' => null,
+            'recording_download_url' => null,
+            'recording_password' => null,
+        ]);
+
+        return true;
+    }
 }
