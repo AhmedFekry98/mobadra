@@ -28,14 +28,15 @@ class GroupSessionController extends Controller
         return $this->executeService(function () {
             $this->authorize('viewAny', Group::class);
 
-            $locationType = request('type');
             $sessions = $this->service->getAllSessions(
-                paginate: true,
-                type: $locationType
+                paginate: request()->has('page'),
+                locationType: request('type')
             );
 
             return $this->okResponse(
-                GroupSessionResource::collection($sessions),
+                request()->has('page')
+                    ? GroupSessionResource::collection($sessions)
+                    : GroupSessionResource::collection($sessions),
                 "All sessions retrieved successfully"
             );
         }, 'GroupSessionController@index');
