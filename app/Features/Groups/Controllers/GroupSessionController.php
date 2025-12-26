@@ -24,18 +24,13 @@ class GroupSessionController extends Controller
 
     public function index()
     {
+
         return $this->executeService(function () {
             $this->authorize('viewAny', Group::class);
 
-            // Get type and clean it if it contains query string
-            $type = request()->query('type');
-            if ($type && str_contains($type, '?')) {
-                $type = explode('?', $type)[0];
-            }
-
             $sessions = $this->service->getAllSessions(
                 paginate: true,
-                type: $type
+                type: request('type')
             );
 
             return $this->okResponse(
