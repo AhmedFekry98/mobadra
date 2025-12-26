@@ -13,13 +13,13 @@ class GroupSessionRepository
         return GroupSession::query();
     }
 
-    public function getAll(?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
+    public function getAll(?bool $paginate = false, ?string $locationType = null): Collection|LengthAwarePaginator
     {
         $query = $this->query()->with(['group', 'lesson']);
 
-        if ($type !== null) {
-            $query->whereHas('group', function ($q) use ($type) {
-                $q->where('location_type', $type);
+        if ($locationType !== null) {
+            $query->whereHas('group', function ($q) use ($locationType) {
+                $q->where('location_type', $locationType);
             });
         }
 

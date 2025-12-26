@@ -13,9 +13,9 @@ class GroupSessionService
         protected GroupSessionRepository $repository
     ) {}
 
-    public function getAllSessions(?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
+    public function getAllSessions(?bool $paginate = false, ?string $locationType = null): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($paginate, $type);
+        return $this->repository->getAll($paginate, $locationType);
     }
 
     public function getSessionsByGroup(string $groupId, ?string $type = null): Collection

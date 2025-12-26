@@ -28,10 +28,10 @@ class GroupSessionController extends Controller
         return $this->executeService(function () {
             $this->authorize('viewAny', Group::class);
 
-            $type = request('type');
+            $locationType = request('type');
             $sessions = $this->service->getAllSessions(
                 paginate: true,
-                type: $type
+                type: $locationType
             );
 
             return $this->okResponse(
