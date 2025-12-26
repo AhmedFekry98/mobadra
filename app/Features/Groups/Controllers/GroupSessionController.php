@@ -30,7 +30,7 @@ class GroupSessionController extends Controller
 
             $sessions = $this->service->getAllSessions(
                 paginate: true,
-                type:$type = request('type')
+                type: request()->query('type')
             );
 
             return $this->okResponse(
