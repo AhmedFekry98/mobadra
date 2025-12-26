@@ -49,19 +49,6 @@ class AssignmentController extends Controller
         }, 'AssignmentController@submitAssignment');
     }
 
-    public function gradeSubmission(string $submissionId, GradeSubmissionRequest $request)
-    {
-        return $this->executeService(function () use ($submissionId, $request) {
-            $graderId = auth()->user()->id;
-            $submission = $this->service->gradeSubmission($submissionId, $graderId, $request->validated());
-
-            return $this->okResponse(
-                AssignmentSubmissionResource::make($submission),
-                "Assignment graded successfully"
-            );
-        }, 'AssignmentController@gradeSubmission');
-    }
-
     public function submissions(string $assignmentId)
     {
         return $this->executeService(function () use ($assignmentId) {

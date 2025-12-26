@@ -14,7 +14,6 @@ class AssignmentSubmissionResource extends JsonResource
         return [
             'id' => $resource?->id,
             'assignment_id' => $resource?->assignment_id,
-            'student_id' => $resource?->student_id,
             'content' => $resource?->content,
             'status' => $resource?->status,
             'submitted_at' => $resource?->submitted_at?->toISOString(),
@@ -22,14 +21,14 @@ class AssignmentSubmissionResource extends JsonResource
             'feedback' => $resource?->feedback,
             'graded_at' => $resource?->graded_at?->toISOString(),
             'is_late' => $resource?->is_late,
-            'student' => $this->whenLoaded('student', fn() => [
-                'id' => $resource->student->id,
-                'name' => $resource->student->name,
-            ]),
-            'grader' => $this->whenLoaded('grader', fn() => [
+            'student' => [
+                'id' => $resource->student?->id,
+                'name' => $resource->student?->name,
+            ],
+            'grader' => [
                 'id' => $resource->grader?->id,
                 'name' => $resource->grader?->name,
-            ]),
+            ],
             'attachments' => $resource?->getMedia('attachments')->map(fn($media) => [
                 'id' => $media->id,
                 'url' => $media->getUrl(),

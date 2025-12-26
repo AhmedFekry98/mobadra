@@ -49,23 +49,32 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
     Route::put('questions/{questionId}', [QuizController::class, 'updateQuestion'])->name('questions.update');
     Route::delete('questions/{questionId}', [QuizController::class, 'destroyQuestion'])->name('questions.destroy');
 
-    // Attempts (Student)
+    // start attempt
     Route::post('{quizId}/attempts', [QuizController::class, 'startAttempt'])->name('attempts.start');
+    // submit answer
     Route::post('attempts/{attemptId}/questions/{questionId}', [QuizController::class, 'submitAnswer'])->name('attempts.answer');
+    // complete attempt
     Route::post('attempts/{attemptId}/complete', [QuizController::class, 'completeAttempt'])->name('attempts.complete');
+    // get attempt result
     Route::get('attempts/{attemptId}', [QuizController::class, 'attemptResult'])->name('attempts.result');
 });
 
 // Assignments
 Route::prefix('assignments')->name('assignments.')->group(function () {
+    // files
     Route::get('{assignmentId}/files', [AssignmentController::class, 'getFiles'])->name('files.index');
+    // add files
     Route::post('{assignmentId}/files', [AssignmentController::class, 'addFiles'])->name('files.add');
+    // remove file
     Route::delete('{assignmentId}/files/{mediaId}', [AssignmentController::class, 'removeFile'])->name('files.remove');
-    // Route::get('{assignmentId}/submissions', [AssignmentController::class, 'submissions'])->name('submissions.index');
-    // Route::get('{assignmentId}/my-submission', [AssignmentController::class, 'mySubmission'])->name('submissions.mine');
-    // Route::post('{assignmentId}/submissions', [AssignmentController::class, 'createSubmission'])->name('submissions.store');
-    // Route::post('submissions/{submissionId}/submit', [AssignmentController::class, 'submitAssignment'])->name('submissions.submit');
-    // Route::post('submissions/{submissionId}/grade', [AssignmentController::class, 'gradeSubmission'])->name('submissions.grade');
+
+    // return submissions
+    Route::get('{assignmentId}/submissions', [AssignmentController::class, 'submissions'])->name('submissions.index');
+    // create submission
+    Route::post('{assignmentId}/submissions', [AssignmentController::class, 'createSubmission'])->name('submissions.store');
+    // submit assignment
+    Route::post('submissions/{submissionId}/submit', [AssignmentController::class, 'submitAssignment'])->name('submissions.submit');
+
 });
 
 
