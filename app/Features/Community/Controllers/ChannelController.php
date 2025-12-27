@@ -29,7 +29,11 @@ class ChannelController extends Controller
     {
         return $this->executeService(function () use ($request) {
             $paginate = $request->has('page');
-            $channels = $this->service->getAllChannels(true, $paginate);
+            $channels = $this->service->getAllChannels(
+                user: auth()->user(),
+                activeOnly: true,
+                paginate: $paginate
+            );
 
             return $this->okResponse(
                 $paginate

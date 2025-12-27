@@ -3,16 +3,18 @@
 namespace App\Features\Community\Repositories;
 
 use App\Features\Community\Models\Channel;
+use App\Features\Community\Queries\ChannelRoleQuery;
 use App\Features\Grades\Models\Grade;
 use App\Features\Groups\Models\Group;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Features\SystemManagements\Models\User;
 
 class ChannelRepository
 {
-    public function getAll(bool $activeOnly = true, bool $paginate = false): Collection|LengthAwarePaginator
+    public function getAll(User $user, bool $activeOnly = true, bool $paginate = false): Collection|LengthAwarePaginator
     {
-        $query = Channel::query()->orderBy('sort_order');
+        $query = ChannelRoleQuery::resolve($user)->orderBy('sort_order');
 
         if ($activeOnly) {
             $query->where('is_active', true);

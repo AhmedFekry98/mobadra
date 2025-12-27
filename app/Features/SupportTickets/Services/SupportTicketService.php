@@ -4,6 +4,7 @@ namespace App\Features\SupportTickets\Services;
 
 use App\Features\SupportTickets\Models\SupportTicket;
 use App\Features\SupportTickets\Repositories\SupportTicketRepository;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -13,9 +14,9 @@ class SupportTicketService
         protected SupportTicketRepository $repository
     ) {}
 
-    public function getAllTickets(?bool $paginate = false): Collection|LengthAwarePaginator
+    public function getAllTickets(User $user, ?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($paginate);
+        return $this->repository->getAll($user, $paginate);
     }
 
     public function getTicketById(string $id): ?SupportTicket

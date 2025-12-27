@@ -29,6 +29,7 @@ class SupportTicketController extends Controller
             $this->authorize('viewAny', SupportTicket::class);
 
             $result = $this->service->getAllTickets(
+                user: auth()->user(),
                 paginate: request()->has('page')
             );
 

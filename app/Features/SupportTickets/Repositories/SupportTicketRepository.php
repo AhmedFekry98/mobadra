@@ -3,6 +3,8 @@
 namespace App\Features\SupportTickets\Repositories;
 
 use App\Features\SupportTickets\Models\SupportTicket;
+use App\Features\SupportTickets\Queries\SupportTicketsRoleQuery;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -13,9 +15,10 @@ class SupportTicketRepository
         return SupportTicket::query();
     }
 
-    public function getAll(?bool $paginate = false): Collection|LengthAwarePaginator
+    public function getAll(User $user,?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        $query = $this->query()->with(['user', 'assignedTo', 'latestReply']);
+          $query = SupportTicketsRoleQuery::resolve($user)
+            ->with(['user', 'assignedTo', 'latestReply']);
 
         return $paginate
             ? $query->paginate(config('paginate.count'))

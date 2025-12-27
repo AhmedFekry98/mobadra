@@ -6,6 +6,7 @@ use App\Features\Community\Models\Channel;
 use App\Features\Community\Repositories\ChannelRepository;
 use App\Features\Grades\Models\Grade;
 use App\Features\Groups\Models\Group;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
@@ -16,9 +17,9 @@ class ChannelService
         protected ChannelRepository $repository
     ) {}
 
-    public function getAllChannels(bool $activeOnly = true, bool $paginate = false): Collection|LengthAwarePaginator
+    public function getAllChannels(User $user, bool $activeOnly = true, bool $paginate = false): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($activeOnly, $paginate);
+        return $this->repository->getAll($user, $activeOnly, $paginate);
     }
 
     public function getChannelById(int $id): Channel
