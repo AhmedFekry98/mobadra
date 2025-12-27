@@ -28,6 +28,7 @@ class ChannelRequest extends BaseFormRequest
             'slug' => ['nullable', 'string', 'max:255', 'unique:channels,slug'],
             'description' => ['nullable', 'string'],
             'type' => ['sometimes', 'in:general,group,grade'],
+            "channelable"=> ['required_if:type,group,grade', 'string', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
             'is_private' => ['sometimes', 'boolean'],
             'sort_order' => ['sometimes', 'integer', 'min:0'],
