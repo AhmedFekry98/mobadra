@@ -7,6 +7,8 @@ use App\Features\SystemManagements\Controllers\PermissionController;
 use App\Features\SystemManagements\Controllers\RoleController;
 use App\Features\SystemManagements\Controllers\RolePermissionController;
 use App\Features\SystemManagements\Controllers\StaffController;
+use App\Features\SystemManagements\Controllers\StudentController;
+use App\Features\SystemManagements\Controllers\TeacherController;
 use App\Features\SystemManagements\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,26 @@ Route::prefix("system-managements")->group(function() {
         Route::get('/', [PermissionController::class, 'index']);
         Route::get('/{id}', [PermissionController::class, 'show']);
 
+    });
+
+    // students
+    Route::prefix("students")->group(function() {
+        Route::get('/', [StudentController::class, 'index']);
+        Route::post('/', [StudentController::class, 'store']);
+        Route::get('metadata', [StudentController::class, 'metadata']);
+        Route::get('/{id}', [StudentController::class, 'show']);
+        Route::put('/{id}', [StudentController::class, 'update']);
+        Route::delete('/{id}', [StudentController::class, 'destroy']);
+    });
+
+    // teacher
+    Route::prefix("teachers")->group(function() {
+        Route::get('/', [TeacherController::class, 'index']);
+        Route::post('/', [TeacherController::class, 'store']);
+        Route::get('metadata', [TeacherController::class, 'metadata']);
+        Route::get('/{id}', [TeacherController::class, 'show']);
+        Route::put('/{id}', [TeacherController::class, 'update']);
+        Route::delete('/{id}', [TeacherController::class, 'destroy']);
     });
 
     Route::prefix("staffs")->group(function() {

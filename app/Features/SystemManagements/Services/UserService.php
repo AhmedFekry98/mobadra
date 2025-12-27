@@ -145,6 +145,114 @@ class UserService
     }
 
     /**
+     * Get Student Users (only student role)
+     */
+    public function getStudentUsers(?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
+    {
+        $query = $this->repository->query()->whereHas('role', function ($q) {
+            $q->where('name', 'student');
+        });
+
+        $data = [
+            'search' => $search,
+            'filter' => $filter,
+            'sort' => $sort,
+        ];
+
+        $config = [
+            'searchable_columns' => UserMetadata::getSearchableColumns(),
+            'filters' => UserMetadata::getFilters(),
+            'operators' => UserMetadata::getOperators(),
+            'sortable_columns' => $this->getSortableColumns(),
+        ];
+
+        return $this->getWithGlobalHandlers($query, $data, $config, $paginate);
+    }
+
+    /**
+     * Get student user by ID (with role filtering)
+     */
+    public function getStudentUserById(string $id): User
+    {
+        return User::whereHas('role', function ($q) {
+            $q->where('name', 'student');
+        })->findOrFail($id);
+    }
+
+    /**
+     * Update student user (with role filtering)
+     */
+    public function updateStudentUser(string $id, array $data): User
+    {
+        $user = $this->getStudentUserById($id);
+        $user->update($data);
+        return $user->fresh(['role']);
+    }
+
+    /**
+     * Delete student user (with role filtering)
+     */
+    public function deleteStudentUser(string $id): bool
+    {
+        $user = $this->getStudentUserById($id);
+        return $user->delete();
+    }
+
+    /**
+     * Get Teacher Users (only teacher role)
+     */
+    public function getTeacherUsers(?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
+    {
+        $query = $this->repository->query()->whereHas('role', function ($q) {
+            $q->where('name', 'teacher');
+        });
+
+        $data = [
+            'search' => $search,
+            'filter' => $filter,
+            'sort' => $sort,
+        ];
+
+        $config = [
+            'searchable_columns' => UserMetadata::getSearchableColumns(),
+            'filters' => UserMetadata::getFilters(),
+            'operators' => UserMetadata::getOperators(),
+            'sortable_columns' => $this->getSortableColumns(),
+        ];
+
+        return $this->getWithGlobalHandlers($query, $data, $config, $paginate);
+    }
+
+    /**
+     * Get teacher user by ID (with role filtering)
+     */
+    public function getTeacherUserById(string $id): User
+    {
+        return User::whereHas('role', function ($q) {
+            $q->where('name', 'teacher');
+        })->findOrFail($id);
+    }
+
+    /**
+     * Update teacher user (with role filtering)
+     */
+    public function updateTeacherUser(string $id, array $data): User
+    {
+        $user = $this->getTeacherUserById($id);
+        $user->update($data);
+        return $user->fresh(['role']);
+    }
+
+    /**
+     * Delete teacher user (with role filtering)
+     */
+    public function deleteTeacherUser(string $id): bool
+    {
+        $user = $this->getTeacherUserById($id);
+        return $user->delete();
+    }
+
+    /**
      * Get active users
      */
     public function getActiveUsers(?bool $paginate = false): Collection|LengthAwarePaginator
