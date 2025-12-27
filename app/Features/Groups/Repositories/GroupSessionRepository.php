@@ -3,6 +3,8 @@
 namespace App\Features\Groups\Repositories;
 
 use App\Features\Groups\Models\GroupSession;
+use App\Features\Groups\Queries\GroupSessionRoleQuery;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -13,9 +15,10 @@ class GroupSessionRepository
         return GroupSession::query();
     }
 
-    public function getAll(?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
+    public function getAll(User $user, ?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
     {
-        $query = $this->query()->with(['group', 'lesson']);
+          $query = GroupSessionRoleQuery::resolve($user)
+            ->with(['group', 'lesson']);
 
         if ($type !== null) {
             $query->whereHas('group', function ($q) use ($type) {

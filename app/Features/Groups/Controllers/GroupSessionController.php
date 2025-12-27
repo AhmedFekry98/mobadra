@@ -35,6 +35,8 @@ class GroupSessionController extends Controller
             }
 
             $sessions = $this->service->getAllSessions(
+
+                user: auth()->user(),
                 paginate: request()->has('page'),
                 type: $type
             );

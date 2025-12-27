@@ -4,6 +4,7 @@ namespace App\Features\Groups\Services;
 
 use App\Features\Groups\Models\GroupSession;
 use App\Features\Groups\Repositories\GroupSessionRepository;
+use App\Features\SystemManagements\Models\User;
 use App\Services\ZoomService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,9 +18,9 @@ class GroupSessionService
         protected ZoomService $zoomService
     ) {}
 
-    public function getAllSessions(?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
+    public function getAllSessions(User $user, ?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($paginate, $type);
+        return $this->repository->getAll($user, $paginate, $type);
     }
 
     public function getSessionsByGroup(string $groupId, ?string $type = null): Collection
