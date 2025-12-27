@@ -4,6 +4,7 @@ namespace Database\Seeders\Courses;
 
 use App\Features\Courses\Models\Term;
 use App\Features\Courses\Models\Course;
+use App\Features\Grades\Models\Grade;
 use Illuminate\Database\Seeder;
 
 class CoursesSeeder extends Seeder
@@ -13,56 +14,22 @@ class CoursesSeeder extends Seeder
      */
     public function run(): void
     {
-        $firstTerm = Term::where('name', 'First Term 2024-2025')->first();
-        $secondTerm = Term::where('name', 'Second Term 2024-2025')->first();
+
 
         $courses = [
+            // grade 4 term 1
             [
-                'term_id' => $firstTerm?->id,
-                'title' => 'Introduction to Programming',
-                'description' => 'Learn the fundamentals of programming with practical examples',
+                'term_id' => Term::where('name','First Term')->first()->id,
+                'title' => 'Introduction to computer and programming Course',
+                'description' => 'Introduction to computer and programming Course for grade 4',
                 'slug' => 'intro-to-programming',
-                'grade_id' => 1,
+                'grade_id' => Grade::where('name','Grade 4')->first()->id,
                 'is_active' => true,
-            ],
-            [
-                'term_id' => $firstTerm?->id,
-                'title' => 'Web Development Basics',
-                'description' => 'Learn HTML, CSS, and JavaScript fundamentals',
-                'slug' => 'web-dev-basics',
-                'grade_id' => 2,
-                'is_active' => true,
-            ],
-            [
-                'term_id' => $firstTerm?->id,
-                'title' => 'Database Fundamentals',
-                'description' => 'Learn SQL and database design principles',
-                'slug' => 'database-fundamentals',
-                'grade_id' => 3,
-                'is_active' => true,
-            ],
-            [
-                'term_id' => $secondTerm?->id,
-                'title' => 'Advanced Programming',
-                'description' => 'Advanced programming concepts and design patterns',
-                'slug' => 'advanced-programming',
-                'grade_id' => 4,
-                'is_active' => false,
-            ],
-            [
-                'term_id' => $secondTerm?->id,
-                'title' => 'API Development',
-                'description' => 'Build RESTful APIs with Laravel',
-                'slug' => 'api-development',
-                'grade_id' => 5,
-                'is_active' => false,
             ],
         ];
 
         foreach ($courses as $course) {
-            if ($course['term_id']) {
-                Course::create($course);
-            }
+            Course::create($course);
         }
 
         $this->command->info('✅ Courses seeded successfully!');

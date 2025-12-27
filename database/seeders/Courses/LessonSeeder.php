@@ -13,181 +13,64 @@ class LessonSeeder extends Seeder
      */
     public function run(): void
     {
-        $programming = Course::where('title', 'Introduction to programming')->first();
-        $webDevCourse = Course::where('title', 'Web Development Basics')->first();
-        $dataScience = Course::where('title', 'Data Science with Python')->first();
+
+        $cousreId = Course::where('title', 'Introduction to computer and programming Course')->first()->id;
 
         $lessons = [
             // Python Course lessons
             [
-                'course_id' => $programming?->id,
-                'title' => 'Welcome to Python',
-                'description' => 'Course overview and objectives',
+                'course_id' => $cousreId,
+                'title' => ' Introduction to Computers',
+                'description' => 'This session introduces students to the fundamental concepts of computer systems. They will explore what computers are, identify their tasks, and distinguish between hardware (input/output devices, internal parts) and software. The session also clarifies the roles of "Users" versus "Programmers" through interactive class activities where students identify computer components in real-life scenarios.',
                 'order' => 1,
                 'is_active' => true,
             ],
             [
-                'course_id' => $programming?->id,
-                'title' => 'Setting Up Your Environment',
-                'description' => 'Install and configure Python',
+                'course_id' => $cousreId,
+                'title' => 'Introduction to Block Coding',
+                'description' => 'This session moves from theory to practice by introducing programming basics. Students learn what a program is and the difference between block-based and text-based languages. They get familiar with the Pictoblox interface, learning to manage sprites, backdrops, and basic blocks. Activities focus on understanding "Sequence" by translating real-life steps into code.',
                 'order' => 2,
                 'is_active' => true,
             ],
             [
-                'course_id' => $programming?->id,
-                'title' => 'Variables and Data Types',
-                'description' => 'Understanding variables and data types',
+                'course_id' => $cousreId,
+                'title' => 'Variables in Programming',
+                'description' => 'Students delve into storing data using variables. The session explains why variables are necessary (e.g., for keeping score) and covers variable types (numbers and strings). Activities include initializing variables, changing their values, and using them to track game states like "Score" or "Player Name."',
                 'order' => 3,
                 'is_active' => true,
             ],
             [
-                'course_id' => $programming?->id,
-                'title' => 'Control Flow',
-                'description' => 'If statements and loops',
+                'course_id' => $cousreId,
+                'title' => 'Events and If Conditions',
+                'description' => 'This session covers interactivity and decision-making. Students learn about Events (triggers like key presses or clicking) and X-Y coordinates for movement. The session introduces "If" conditions, enabling the program to make decisions based on specific scenarios, such as detecting collisions in a "Maze game."',
                 'order' => 4,
                 'is_active' => true,
             ],
             [
-                'course_id' => $programming?->id,
+                'course_id' => $cousreId,
+                'title' => 'Loops in Programming',
+                'description' => 'This session focuses on the concept of repetition. Students explore different types of loops: counting loops (Repeat number), conditional loops (Repeat until), and infinite loops (Forever). Through the "Space War" game activity, students learn when to apply each loop type to efficiently automate repetitive tasks like background music or movement.',
+                'order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $cousreId,
+                'title' => 'User Inputs',
+                'description' => 'Focusing on interaction, this session teaches how to accept and process data from the user. Students learn to use "Ask and Wait" blocks and store the input in the "Answer" variable. Activities include creating a "Robot Assistant" that can ask questions, join text strings, and perform calculations based on user input.',
+                'order' => 6,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $cousreId,
+                'title' => 'Operators',
+                'description' => 'This session introduces the logic and math capabilities of programming. Students explore three types of operators: Mathematical (math operations), Comparing (greater than, less than, equal), and Logical (True/False operations). Through the "Shopping Assistant" activity, students use these operators to make complex decisions, such as checking if a shoe size fits.',
+                'order' => 7,
+                'is_active' => true,
+            ],
+            [
+                'course_id' => $cousreId,
                 'title' => 'Functions',
-                'description' => 'Creating and using functions',
-                'order' => 5,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $programming?->id,
-                'title' => 'Object-Oriented programming',
-                'description' => 'Classes and objects in Python',
-                'order' => 6,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $programming?->id,
-                'title' => 'File Handling',
-                'description' => 'Reading and writing files',
-                'order' => 7,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $programming?->id,
-                'title' => 'Practice Session',
-                'description' => 'Hands-on practice session',
-                'order' => 8,
-                'is_active' => true,
-            ],
-
-            // Web Development Course lessons
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'Introduction to HTML',
-                'description' => 'Basic HTML tags and structure',
-                'order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'HTML Forms',
-                'description' => 'Creating forms and inputs',
-                'order' => 2,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'CSS Basics',
-                'description' => 'Styling web pages',
-                'order' => 3,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'CSS Flexbox',
-                'description' => 'Layout with Flexbox',
-                'order' => 4,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'JavaScript Basics',
-                'description' => 'Introduction to JavaScript',
-                'order' => 5,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'DOM Manipulation',
-                'description' => 'Working with the DOM',
-                'order' => 6,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'Responsive Design',
-                'description' => 'Making websites responsive',
-                'order' => 7,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $webDevCourse?->id,
-                'title' => 'Project Workshop',
-                'description' => 'Build a complete website',
-                'order' => 8,
-                'is_active' => true,
-            ],
-
-            // Data Science Course lessons
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Introduction to Data Science',
-                'description' => 'Overview of data science',
-                'order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'NumPy Basics',
-                'description' => 'Working with NumPy arrays',
-                'order' => 2,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Pandas DataFrames',
-                'description' => 'Data manipulation with Pandas',
-                'order' => 3,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Data Visualization',
-                'description' => 'Creating charts and graphs',
-                'order' => 4,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Machine Learning Intro',
-                'description' => 'Introduction to ML concepts',
-                'order' => 5,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Supervised Learning',
-                'description' => 'Classification and regression',
-                'order' => 6,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Model Evaluation',
-                'description' => 'Evaluating ML models',
-                'order' => 7,
-                'is_active' => true,
-            ],
-            [
-                'course_id' => $dataScience?->id,
-                'title' => 'Data Science Lab',
-                'description' => 'Hands-on data analysis project',
+                'description' => 'The final session introduces advanced code organization using Functions ("My Blocks"). Students learn to define their own custom blocks to group commands, improving code readability and reusability. Activities include creating a custom "Jump" block and a "Dance" block that accepts arguments to control speed.',
                 'order' => 8,
                 'is_active' => true,
             ],

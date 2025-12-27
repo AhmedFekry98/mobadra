@@ -14,19 +14,19 @@ class TermSeeder extends Seeder
     {
         $terms = [
             [
-                'name' => 'First Term 2024-2025',
-                'description' => 'First academic term for the year 2024-2025',
+                'name' => 'First Term',
+                'description' => 'First academic term',
                 'is_active' => true,
             ],
             [
-                'name' => 'Second Term 2024-2025',
-                'description' => 'Second academic term for the year 2024-2025',
-                'is_active' => false,
+                'name' => 'Second Term',
+                'description' => 'Second academic term',
+                'is_active' => true,
             ],
             [
-                'name' => 'Summer Term 2025',
-                'description' => 'Summer academic term for the year 2025',
-                'is_active' => false,
+                'name' => 'Summer Term',
+                'description' => 'Summer academic term',
+                'is_active' => true,
             ],
         ];
 
