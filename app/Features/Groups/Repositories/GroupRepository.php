@@ -141,9 +141,12 @@ class GroupRepository
         string $endTime,
         ?string $location = null
     ): ?Group {
+        // Normalize days to lowercase and sort for consistent comparison
+        $normalizedDays = array_map('strtolower', $days);
+        sort($normalizedDays);
+
         $query = Group::where('grade_id', $gradeId)
             ->where('location_type', $locationType)
-            ->where('days', json_encode($days))
             ->where('start_time', $startTime)
             ->where('end_time', $endTime)
             ->where('is_active', true);
@@ -152,6 +155,13 @@ class GroupRepository
             $query->where('location', $location);
         }
 
-        return $query->get()->first(fn($group) => $group->hasCapacity());
+        // Filter by days in PHP since JSON comparison can be unreliable
+        return $query->get()
+            ->filter(function ($group) use ($normalizedDays) {
+                $groupDays = array_map('strtolower', $group->days ?? []);
+                sort($groupDays);
+                return $groupDays === $normalizedDays;
+            })
+            ->first(fn($group) => $group->hasCapacity());
     }
 }
