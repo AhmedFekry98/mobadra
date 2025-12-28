@@ -6,6 +6,7 @@ use App\Features\Chat\Models\Conversation;
 use App\Features\Chat\Models\ConversationParticipant;
 use App\Features\Chat\Repositories\ConversationRepository;
 use App\Features\Groups\Models\Group;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,9 @@ class ConversationService
         protected ConversationRepository $repository
     ) {}
 
-    public function getUserConversations(int $userId, ?string $type = null): LengthAwarePaginator
+    public function getUserConversations(User $user, ?string $type = null): LengthAwarePaginator
     {
-        return $this->repository->getUserConversations($userId, $type);
+        return $this->repository->getUserConversations($user, $type);
     }
 
     public function getConversationById(int $id): Conversation

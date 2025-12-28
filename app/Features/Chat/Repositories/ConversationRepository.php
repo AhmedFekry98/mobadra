@@ -4,6 +4,8 @@ namespace App\Features\Chat\Repositories;
 
 use App\Features\Chat\Models\Conversation;
 use App\Features\Chat\Models\ConversationParticipant;
+use App\Features\Chat\Queries\ConversationsRoleQuery;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -41,14 +43,16 @@ class ConversationRepository
         return $this->findByIdOrFail($id)->delete();
     }
 
-    public function getUserConversations(int $userId, ?string $type = null): LengthAwarePaginator
+    public function getUserConversations(User $user, ?string $type = null): LengthAwarePaginator
     {
+        $userId = $user->id;
+
         // Get participant info with last_read_at for unread count calculation
         $participantSubquery = ConversationParticipant::select('conversation_id', 'last_read_at')
             ->where('user_id', $userId)
             ->whereNull('left_at');
 
-        $query = $this->model
+        $query = ConversationsRoleQuery::resolve($user)
             ->select('conversations.*')
             ->joinSub($participantSubquery, 'my_participant', function ($join) {
                 $join->on('conversations.id', '=', 'my_participant.conversation_id');

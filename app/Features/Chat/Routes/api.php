@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\Chat\Controllers\ChatParticipantController;
 use App\Features\Chat\Controllers\ConversationController;
 use App\Features\Chat\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,6 @@ Route::prefix('messages')->name('messages.')->group(function () {
     Route::patch('{id}', [MessageController::class, 'update']);
     Route::delete('{id}', [MessageController::class, 'destroy'])->name('destroy');
 });
+
+// Chat Participants - Get available users for chat based on groups
+Route::get('chat-participants', [ChatParticipantController::class, 'index'])->name('chat-participants.index');

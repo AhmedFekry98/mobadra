@@ -26,9 +26,9 @@ class ConversationController extends Controller
     {
         return $this->executeService(function () use ($request) {
             $type = $request->query('type');
-            $userId = auth()->user()->id;
+            $user = auth()->user();
 
-            $conversations = $this->service->getUserConversations($userId, $type);
+            $conversations = $this->service->getUserConversations($user, $type);
 
             return $this->okResponse(
                 ConversationResource::collection($conversations),
