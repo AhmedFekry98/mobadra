@@ -30,6 +30,7 @@ class CourseController extends Controller
             $this->authorize('viewAny', Course::class);
 
             $result = $this->service->getCourses(
+                user: auth()->user(),
                 search: request('search'),
                 filter: request('filter'),
                 sort: request('sort'),

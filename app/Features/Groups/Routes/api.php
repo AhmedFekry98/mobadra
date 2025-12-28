@@ -82,23 +82,23 @@ Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
 //     Route::patch('{id}', [AttendanceController::class, 'update']);
 // });
 
-// // Content Progress (تتبع مشاهدة الفيديوهات)
-// Route::prefix('content-progress')->name('content_progress.')->group(function () {
-//     // Student routes
-//     Route::post('update', [ContentProgressController::class, 'updateProgress'])->name('update');
-//     Route::get('content/{lessonContentId}', [ContentProgressController::class, 'getProgress'])->name('get');
-//     Route::get('group/{groupId}', [ContentProgressController::class, 'getGroupProgress'])->name('group');
-//     Route::post('content/{lessonContentId}/complete', [ContentProgressController::class, 'markCompleted'])->name('complete');
+// Content Progress (تتبع مشاهدة الفيديوهات)
+Route::prefix('content-progress')->name('content_progress.')->group(function () {
+    // Student routes
+    Route::post('update', [ContentProgressController::class, 'updateProgress'])->name('update');
+    Route::get('content/{lessonContentId}', [ContentProgressController::class, 'getProgress'])->name('get');
+    Route::get('group/{groupId}', [ContentProgressController::class, 'getGroupProgress'])->name('group');
+    Route::post('content/{lessonContentId}/complete', [ContentProgressController::class, 'markCompleted'])->name('complete');
 
-//     // Teacher routes
-//     Route::get('group/{groupId}/students', [ContentProgressController::class, 'getStudentsProgress'])->name('students');
-//     Route::get('group/{groupId}/course/{courseId}/summary', [ContentProgressController::class, 'getProgressSummary'])->name('summary');
-// });
+    // Teacher routes
+    Route::get('group/{groupId}/students', [ContentProgressController::class, 'getStudentsProgress'])->name('students');
+    Route::get('group/{groupId}/course/{courseId}/summary', [ContentProgressController::class, 'getProgressSummary'])->name('summary');
+});
 
-// // Bunny Webhook (بدون authentication)
-// Route::post('webhooks/bunny', [BunnyWebhookController::class, 'handleWebhook'])
-//     ->name('webhooks.bunny')
-//     ->withoutMiddleware(['auth:sanctum']);
+// Bunny Webhook (بدون authentication)
+Route::post('webhooks/bunny', [BunnyWebhookController::class, 'handleWebhook'])
+    ->name('webhooks.bunny')
+    ->withoutMiddleware(['auth:sanctum']);
 
 // // Zoom Webhook (بدون authentication)
 // Route::post('webhooks/zoom', [ZoomWebhookController::class, 'handleWebhook'])

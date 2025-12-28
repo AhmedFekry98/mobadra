@@ -3,6 +3,9 @@
 namespace App\Features\Courses\Repositories;
 
 use App\Features\Courses\Models\Course;
+use App\Features\Courses\Queries\CoursesRoleQuery;
+use App\Features\SystemManagements\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -13,9 +16,14 @@ class CourseRepository
         return Course::query();
     }
 
-    public function getAll(?bool $paginate = false): Collection|LengthAwarePaginator
+    public function getQueryByUser(User $user): Builder
     {
-        $query = $this->query();
+        return CoursesRoleQuery::resolve($user);
+    }
+
+    public function getAll(User $user, ?bool $paginate = false): Collection|LengthAwarePaginator
+    {
+        $query = CoursesRoleQuery::resolve($user);
 
         return $paginate
             ? $query->paginate(config('paginate.count'))

@@ -5,6 +5,7 @@ namespace App\Features\Courses\Services;
 use App\Features\Courses\Metadata\CourseMetadata;
 use App\Features\Courses\Models\Course;
 use App\Features\Courses\Repositories\CourseRepository;
+use App\Features\SystemManagements\Models\User;
 use App\Traits\HasGlobalQueryHandlers;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,9 +19,9 @@ class CourseService
         protected CourseRepository $repository
     ) {}
 
-    public function getCourses(?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
+    public function getCourses(User $user, ?string $search = null, ?array $filter = null, ?array $sort = null, ?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        $query = $this->repository->query()->with('term');
+        $query = $this->repository->getQueryByUser($user)->with('term');
 
         $data = [
             'search' => $search,

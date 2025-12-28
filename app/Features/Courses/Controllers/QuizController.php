@@ -196,4 +196,19 @@ class QuizController extends Controller
             );
         }, 'QuizController@destroyFinalQuiz');
     }
+
+    public function submitFinalQuiz(string $courseId)
+    {
+        return $this->executeService(function () use ($courseId) {
+            $studentId = auth()->user()->id;
+            $answers = request('answers', []);
+
+            $attempt = $this->service->submitFinalQuiz($courseId, $studentId, $answers);
+
+            return $this->okResponse(
+                QuizAttemptResource::make($attempt),
+                "Final Quiz submitted successfully"
+            );
+        }, 'QuizController@submitFinalQuiz');
+    }
 }

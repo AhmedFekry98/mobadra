@@ -244,4 +244,51 @@ class QuizService
             return $quiz->delete();
         });
     }
+
+    public function submitFinalQuiz(int $courseId, int $studentId, array $answers): QuizAttempt
+    {
+        return DB::transaction(function () use ($courseId, $studentId, $answers) {
+            $course = Course::findOrFail($courseId);
+
+            if (!$course->final_quiz_id) {
+                throw new \Exception('This course does not have a final quiz');
+            }
+
+            $quiz = Quiz::findOrFail($course->final_quiz_id);
+
+            if (!$quiz->canStudentAttempt($studentId)) {
+                throw new \Exception('Maximum attempts reached for this quiz');
+            }
+
+            $attemptNumber = $quiz->attempts()
+                ->where('student_id', $studentId)
+                ->count() + 1;
+
+            $attempt = QuizAttempt::create([
+                'quiz_id' => $quiz->id,
+                'student_id' => $studentId,
+                'attempt_number' => $attemptNumber,
+                'status' => 'in_progress',
+                'started_at' => now(),
+            ]);
+
+            foreach ($answers as $answer) {
+                $quizAnswer = QuizAnswer::create([
+                    'attempt_id' => $attempt->id,
+                    'question_id' => $answer['question_id'],
+                    'selected_option_id' => $answer['selected_option_id'] ?? null,
+                    'text_answer' => $answer['text_answer'] ?? null,
+                ]);
+                $quizAnswer->checkAnswer();
+            }
+
+            $attempt->status = 'completed';
+            $attempt->completed_at = now();
+            $attempt->save();
+
+            $attempt->calculateScore();
+
+            return $attempt->fresh(['answers.question', 'quiz']);
+        });
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Features\Courses\Models;
 
 use App\Features\Grades\Models\Grade;
+use App\Features\Groups\Models\Group;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -44,6 +45,11 @@ class Course extends Model implements HasMedia
     public function finalQuiz()
     {
         return $this->belongsTo(Quiz::class, 'final_quiz_id');
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
     }
 
     // media
