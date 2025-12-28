@@ -19,6 +19,14 @@ class GroupSessionResource extends JsonResource
                 'location' => $resource?->group?->location,
                 'location_map_url' => $resource?->group?->location_map_url,
             ],
+            "course" => [
+                "id" => $resource?->lesson?->course?->id,
+                "title" => $resource?->lesson?->course?->title,
+            ],
+            "term" => [
+                "id" => $resource?->lesson?->course?->term?->id,
+                "name" => $resource?->lesson?->course?->term?->name,
+            ],
             'session_date' => $resource?->session_date?->format('Y-m-d'),
             'start_time' => $resource?->start_time,
             'end_time' => $resource?->end_time,
