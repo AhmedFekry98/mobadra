@@ -43,12 +43,14 @@ class RolePermissionSeeder extends Seeder
                 'support_tickets.create',
             ])->get();
 
+            $lesson = Permission::where('name', 'lesson.viewAny')->first();
+
             $course = Permission::where('name', 'course.viewAny')->first();
 
-            if ($editPost) {
+            if ($lesson) {
                 RolePermission::firstOrCreate([
                     'role_id' => 2, // student
-                    'permission_id' => $editPost->id,
+                    'permission_id' => $lesson->id,
                 ]);
             }
 
