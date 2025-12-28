@@ -9,26 +9,26 @@ class GradePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('grades.view');
+        return $user->hasPermission('grade.view');
     }
 
     public function view(User $user, Grade $grade): bool
     {
-        return $user->hasPermission('grades.view');
+        return $user->hasPermission('grade.view');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermission('grades.create');
+        return $user->hasPermission('grade.create');
     }
 
     public function update(User $user, Grade $grade): bool
     {
-        return $user->hasPermission('grades.update');
+        return $user->hasPermission('grade.update');
     }
 
     public function delete(User $user, Grade $grade): bool
     {
-        return $user->hasPermission('grades.delete');
+        return $user->hasPermission('grade.delete');
     }
 }

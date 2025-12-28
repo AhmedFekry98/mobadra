@@ -25,6 +25,7 @@ class ConversationController extends Controller
     public function index(Request $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('viewAny', Conversation::class);
             $type = $request->query('type');
             $user = auth()->user();
 
@@ -40,6 +41,7 @@ class ConversationController extends Controller
     public function store(CreateConversationRequest $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('create', Conversation::class);
             $userId = auth()->user()->id;
             $data = $request->validated();
 
@@ -55,6 +57,7 @@ class ConversationController extends Controller
     public function show(string $id)
     {
         return $this->executeService(function () use ($id) {
+            $this->authorize('view', Conversation::class);
             $conversation = $this->service->getConversationById($id);
             $userId = auth()->user()->id;
 
@@ -73,6 +76,7 @@ class ConversationController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $conversation = $this->service->getConversationById($id);
+            $this->authorize('update', $conversation);
             $userId = auth()->user()->id;
 
             if (!$conversation->hasParticipant($userId)) {

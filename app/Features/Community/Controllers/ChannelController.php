@@ -28,6 +28,7 @@ class ChannelController extends Controller
     public function index(Request $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('viewAny', Channel::class);
             $paginate = $request->has('page');
             $channels = $this->service->getAllChannels(
                 user: auth()->user(),
@@ -47,6 +48,7 @@ class ChannelController extends Controller
     public function store(ChannelRequest $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('create', Channel::class);
             $data = $request->validated();
 
             $channel = $this->service->createChannel($data);
@@ -61,7 +63,9 @@ class ChannelController extends Controller
     public function show(string $id)
     {
         return $this->executeService(function () use ($id) {
+
             $channel = $this->service->getChannelById($id);
+            $this->authorize('view', $channel);
 
             return $this->okResponse(
                 ChannelResource::make($channel->load('posts')),
@@ -74,6 +78,7 @@ class ChannelController extends Controller
     {
         return $this->executeService(function () use ($request, $id) {
             $channel = $this->service->updateChannel($id, $request->validated());
+            $this->authorize('update', $channel);
 
             return $this->okResponse(
                 ChannelResource::make($channel),
@@ -85,6 +90,8 @@ class ChannelController extends Controller
     public function destroy(string $id)
     {
         return $this->executeService(function () use ($id) {
+            $channel = $this->service->getChannelById($id);
+            $this->authorize('delete', $channel);
             $this->service->deleteChannel($id);
 
             return $this->okResponse(

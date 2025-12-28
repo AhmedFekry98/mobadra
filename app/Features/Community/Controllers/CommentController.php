@@ -25,6 +25,7 @@ class CommentController extends Controller
     {
         return $this->executeService(function () use ($postId) {
             $comments = $this->service->getPostComments($postId);
+            $this->authorize('view', $comments);
 
             return $this->okResponse(
                 CommentResource::collection($comments),
@@ -38,6 +39,7 @@ class CommentController extends Controller
         return $this->executeService(function () use ($request, $postId) {
             $userId = auth()->user()->id;
             $comment = $this->service->createComment($postId, $userId, $request->validated());
+            $this->authorize('create', $comment);
 
             return $this->okResponse(
                 CommentResource::make($comment),
@@ -50,6 +52,7 @@ class CommentController extends Controller
     {
         return $this->executeService(function () use ($request, $id) {
             $comment = $this->service->getCommentById($id);
+            $this->authorize('update', $comment);
             $userId = auth()->user()->id;
 
             if ($comment->user_id !== $userId) {
@@ -69,6 +72,7 @@ class CommentController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $comment = $this->service->getCommentById($id);
+            $this->authorize('delete', $comment);
             $userId = auth()->user()->id;
 
             if ($comment->user_id !== $userId) {
@@ -86,6 +90,7 @@ class CommentController extends Controller
         return $this->executeService(function () use ($id) {
             $userId = auth()->user()->id;
             $result = $this->service->toggleLike($id, $userId);
+            $this->authorize('like', $result);
 
             return $this->okResponse(
                 $result,
@@ -98,7 +103,7 @@ class CommentController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $replies = $this->service->getCommentReplies($id);
-
+            $this->authorize('reply', $replies);
             return $this->okResponse(
                 CommentResource::collection($replies),
                 "Replies retrieved successfully"

@@ -12,26 +12,36 @@ class GroupPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('groups.viewAny');
+        return $user->hasPermission('group.viewAny');
     }
 
     public function view(User $user, Group $group): bool
     {
-        return $user->hasPermission('groups.view');
+        return $user->hasPermission('group.view');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermission('groups.create');
+        return $user->hasPermission('group.create');
     }
 
     public function update(User $user, Group $group): bool
     {
-        return $user->hasPermission('groups.update');
+        return $user->hasPermission('group.update');
     }
 
     public function delete(User $user, Group $group): bool
     {
-        return $user->hasPermission('groups.delete');
+        return $user->hasPermission('group.delete');
+    }
+
+    public function restore(User $user, Group $group): bool
+    {
+        return $user->hasPermission('group.restore');
+    }
+
+    public function forceDelete(User $user, Group $group): bool
+    {
+        return $user->hasPermission('group.forceDelete');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Features\SupportTickets\Controllers;
 
 use App\Features\SupportTickets\Models\SupportTicket;
+use App\Features\SupportTickets\Models\SupportTicketReply;
 use App\Features\SupportTickets\Requests\SupportTicketReplyRequest;
 use App\Features\SupportTickets\Services\SupportTicketReplyService;
 use App\Features\SupportTickets\Services\SupportTicketService;
@@ -84,11 +85,10 @@ class SupportTicketReplyController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $reply = $this->service->getReplyById($id);
-            $ticket = $this->ticketService->getTicketById($reply->ticket_id);
-            $this->authorize('view', $ticket);
+            $this->authorize('view', $reply);
 
             // Check if user can view internal notes
-            if ($reply->is_internal_note && !auth()->user()->hasPermission('support_tickets.view')) {
+            if ($reply->is_internal_note && !auth()->user()->hasPermission('support_tickets.viewAny')) {
                 return $this->errorResponse('Unauthorized', 403);
             }
 
@@ -103,11 +103,7 @@ class SupportTicketReplyController extends Controller
     {
         return $this->executeService(function () use ($request, $id) {
             $reply = $this->service->getReplyById($id);
-
-            // Only the author or staff can update
-            if ($reply->user_id !== auth()->user()->id && !auth()->user()->hasPermission('support_tickets.update')) {
-                return $this->errorResponse('Unauthorized', 403);
-            }
+            $this->authorize('update', $reply);
 
             $reply = $this->service->updateReply($id, $request->validated());
 
@@ -122,11 +118,7 @@ class SupportTicketReplyController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $reply = $this->service->getReplyById($id);
-
-            // Only staff can delete replies
-            if (!auth()->user()->hasPermission('support_tickets.delete')) {
-                return $this->errorResponse('Unauthorized', 403);
-            }
+            $this->authorize('delete', $reply);
 
             $this->service->deleteReply($id);
 

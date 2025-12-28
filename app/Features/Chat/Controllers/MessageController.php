@@ -3,6 +3,7 @@
 namespace App\Features\Chat\Controllers;
 
 use App\Features\Chat\Events\UserTyping;
+use App\Features\Chat\Models\Message;
 use App\Features\Chat\Requests\SendMessageRequest;
 use App\Features\Chat\Requests\EditMessageRequest;
 use App\Features\Chat\Services\ConversationService;
@@ -29,6 +30,7 @@ class MessageController extends Controller
     {
         return $this->executeService(function () use ($conversationId, $request) {
             $conversation = $this->conversationService->getConversationById($conversationId);
+            $this->authorize('view', $conversation);
             $userId = auth()->user()->id;
 
             if (!$conversation->hasParticipant($userId)) {
@@ -48,6 +50,7 @@ class MessageController extends Controller
     public function store(SendMessageRequest $request, string $conversationId)
     {
         return $this->executeService(function () use ($request, $conversationId) {
+            $this->authorize('create', Message::class);
             $conversation = $this->conversationService->getConversationById($conversationId);
             $userId = auth()->user()->id;
 
@@ -80,6 +83,7 @@ class MessageController extends Controller
     {
         return $this->executeService(function () use ($request, $id) {
             $message = $this->service->getMessageById($id);
+            $this->authorize('update', $message);
             $userId = auth()->user()->id;
 
             if ($message->sender_id !== $userId) {
@@ -99,6 +103,7 @@ class MessageController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $message = $this->service->getMessageById($id);
+            $this->authorize('delete', $message);
             $userId = auth()->user()->id;
 
             // User can delete their own messages, or admin can delete any

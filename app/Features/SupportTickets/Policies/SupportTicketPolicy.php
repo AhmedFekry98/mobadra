@@ -37,4 +37,14 @@ class SupportTicketPolicy
     {
         return $user->hasPermission('support_tickets.delete');
     }
+
+    public function restore(User $user, SupportTicket $ticket): bool
+    {
+        return $user->hasPermission('support_tickets.restore');
+    }
+
+    public function forceDelete(User $user, SupportTicket $ticket): bool
+    {
+        return $user->hasPermission('support_tickets.forceDelete');
+    }
 }

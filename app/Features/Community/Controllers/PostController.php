@@ -26,6 +26,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('viewAny', Post::class);
             $userId = $request->query('user_id');
             $paginate = $request->has('page');
             $posts = $this->service->getPosts($userId, $paginate);
@@ -42,6 +43,7 @@ class PostController extends Controller
     public function store(CreatePostRequest $request)
     {
         return $this->executeService(function () use ($request) {
+            $this->authorize('create', Post::class);
             $userId = auth()->user()->id;
             $post = $this->service->createPost($userId, $request->validated());
 
@@ -55,6 +57,7 @@ class PostController extends Controller
     public function show(string $id)
     {
         return $this->executeService(function () use ($id) {
+            $this->authorize('view', Post::class);
             $post = $this->service->getPostWithDetails($id);
 
             return $this->okResponse(
@@ -68,6 +71,7 @@ class PostController extends Controller
     {
         return $this->executeService(function () use ($request, $id) {
             $post = $this->service->getPostById($id);
+            $this->authorize('update', $post);
             $userId = auth()->user()->id;
 
             if ($post->user_id !== $userId) {
@@ -87,6 +91,7 @@ class PostController extends Controller
     {
         return $this->executeService(function () use ($id) {
             $post = $this->service->getPostById($id);
+            $this->authorize('delete', $post);
             $userId = auth()->user()->id;
 
             if ($post->user_id !== $userId) {
@@ -102,6 +107,8 @@ class PostController extends Controller
     public function toggleLike(string $id)
     {
         return $this->executeService(function () use ($id) {
+            $post = $this->service->getPostById($id);
+            $this->authorize('like', $post);
             $userId = auth()->user()->id;
             $result = $this->service->toggleLike($id, $userId);
 

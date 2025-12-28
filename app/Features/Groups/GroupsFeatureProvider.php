@@ -2,7 +2,10 @@
 
 namespace App\Features\Groups;
 
+use App\Features\Groups\Models\Group;
+use App\Features\Groups\Policies\GroupPolicy;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +31,15 @@ class GroupsFeatureProvider extends ServiceProvider
         $this->mapRoutes();
         $this->loadConfigurations();
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+        $this->registerPolicies();
+    }
+
+    /**
+     * Register policies.
+     */
+    protected function registerPolicies(): void
+    {
+        Gate::policy(Group::class, GroupPolicy::class);
     }
 
     /**

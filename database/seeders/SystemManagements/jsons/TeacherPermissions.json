@@ -1,0 +1,159 @@
+[
+    {
+        "group": "General Dashboard",
+        "items": [
+            {"name": "dashboard_view", "caption": "Show Dashboard"},
+            {"name": "dashboard_stats", "caption": "Show Dashboard Stats"}
+        ]
+    },
+    {
+        "group": "Conversations",
+        "items": [
+            {"name":"conversation.viewAny", "caption":"Conversations Show All"},
+            {"name":"conversation.view", "caption":"Conversations Show Single"},
+            {"name":"conversation.create", "caption":"Conversations Create"},
+            {"name":"conversation.update", "caption":"Conversations Update"},
+            {"name":"conversation.delete", "caption":"Conversations Delete"},
+            {"name":"conversation.restore", "caption":"Conversations Restore"},
+            {"name":"conversation.forceDelete", "caption":"Conversations Force Delete"}
+        ]
+    },
+    {
+        "group": "Messages",
+        "items": [
+            {"name":"message.viewAny", "caption":"Messages Show All"},
+            {"name":"message.view", "caption":"Messages Show Single"},
+            {"name":"message.create", "caption":"Messages Create"},
+            {"name":"message.update", "caption":"Messages Update"},
+            {"name":"message.delete", "caption":"Messages Delete"},
+            {"name":"message.restore", "caption":"Messages Restore"},
+            {"name":"message.forceDelete", "caption":"Messages Force Delete"}
+        ]
+    },
+    {
+        "group": "Channels",
+        "items": [
+            {"name":"channel.viewAny", "caption":"Channels Show All"},
+            {"name":"channel.view", "caption":"Channels Show Single"}
+        ]
+    },
+    {
+        "group": "Comments",
+        "items": [
+            {"name":"comment.viewAny", "caption":"Comments Show All"},
+            {"name":"comment.view", "caption":"Comments Show Single"},
+            {"name":"comment.create", "caption":"Comments Create"},
+            {"name":"comment.update", "caption":"Comments Update"},
+            {"name":"comment.delete", "caption":"Comments Delete"},
+            {"name":"comment.restore", "caption":"Comments Restore"},
+            {"name":"comment.forceDelete", "caption":"Comments Force Delete"},
+            {"name":"comment.like", "caption":"Comments Like"},
+            {"name":"comment.reply", "caption":"Comments Reply"}
+        ]
+    },
+    {
+        "group": "Posts",
+        "items": [
+            {"name":"post.viewAny", "caption":"Posts Show All"},
+            {"name":"post.view", "caption":"Posts Show Single"},
+            {"name":"post.create", "caption":"Posts Create"},
+            {"name":"post.update", "caption":"Posts Update"},
+            {"name":"post.delete", "caption":"Posts Delete"},
+            {"name":"post.restore", "caption":"Posts Restore"},
+            {"name":"post.forceDelete", "caption":"Posts Force Delete"},
+            {"name":"post.like", "caption":"Posts Like"}
+        ]
+    },
+    {
+        "group": "Terms",
+        "items": [
+            {"name": "term.viewAny", "caption": "Show Terms"},
+            {"name": "term.view", "caption": "View Single Term"}
+        ]
+    },
+    {
+        "group": "Courses",
+        "items": [
+            {"name": "course.viewAny", "caption": "Show Courses"},
+            {"name": "course.view", "caption": "View Single Course"}
+        ]
+    },
+    {
+        "group": "Lessons",
+        "items": [
+            {"name": "lesson.viewAny", "caption": "Show Lessons"},
+            {"name": "lesson.view", "caption": "View Single Lesson"}
+        ]
+    },
+    {
+        "group": "Lesson Contents",
+        "items": [
+            {"name": "lesson_content.viewAny", "caption": "Show Lesson Contents"},
+            {"name": "lesson_content.view", "caption": "View Single Lesson Content"}
+        ]
+    },
+    {
+        "group": "Grades",
+        "items": [
+            {"name": "grade.viewAny", "caption": "Show Grades"},
+            {"name": "grade.view", "caption": "View Single Grade"}
+        ]
+    },
+    {
+        "group": "Groups",
+        "items": [
+            {"name": "group.viewAny", "caption": "Show Groups"},
+            {"name": "group.view", "caption": "View Single Group"}
+        ]
+    },
+    {
+        "group" : "Support Tickets",
+        "items": [
+           {"name":"support_tickets.viewAny","caption":"Show Support Tickets"},
+           {"name":"support_tickets.view","caption":"View Single Support Ticket"},
+           {"name":"support_tickets.create","caption":"Create Support Ticket"}
+        ]
+    },
+    {
+        "group" : "Support Ticket Replies",
+        "items": [
+           {"name":"support_ticket_reply.viewAny","caption":"Show Support Ticket Replies"},
+           {"name":"support_ticket_reply.view","caption":"View Single Support Ticket Reply"},
+           {"name":"support_ticket_reply.create","caption":"Create Support Ticket Reply"},
+           {"name":"support_ticket_reply.update","caption":"Update Support Ticket Reply"}
+        ]
+    },
+    {
+        "group": "Quizzes",
+        "items": [
+            {"name": "quiz.viewAny", "caption": "Show Quizzes"},
+            {"name": "quiz.view", "caption": "View Single Quiz"},
+            {"name": "quiz.create", "caption": "Create New Quiz"},
+            {"name": "quiz.update", "caption": "Update Quiz"}
+        ]
+    },
+    {
+        "group": "Questions",
+        "items": [
+            {"name": "question.viewAny", "caption": "Show Questions"},
+            {"name": "question.view", "caption": "View Single Question"},
+            {"name": "question.create", "caption": "Create New Question"},
+            {"name": "question.update", "caption": "Update Question"}
+        ]
+    },
+    {
+        "group": "Enrollments",
+        "items": [
+            {"name": "enrollment.viewAny", "caption": "Show Enrollments"},
+            {"name": "enrollment.view", "caption": "View Single Enrollment"}
+        ]
+    },
+    {
+        "group": "Notifications",
+        "items": [
+            {"name": "notification.viewAny", "caption": "Show Notifications"},
+            {"name": "notification.view", "caption": "View Single Notification"},
+            {"name": "notification.create", "caption": "Create New Notification"}
+        ]
+    }
+]
