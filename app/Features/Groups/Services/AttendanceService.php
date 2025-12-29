@@ -51,7 +51,7 @@ class AttendanceService
         );
     }
 
-    public function bulkRecordAttendance(string $sessionId, array $attendanceData, ?string $recordedBy = null): array
+    public function bulkRecordAttendance(string $sessionId, array $attendanceData, ?string $recordedBy = null): Collection
     {
         return DB::transaction(function () use ($sessionId, $attendanceData, $recordedBy) {
             $session = $this->sessionRepository->findOrFail($sessionId);
@@ -73,11 +73,13 @@ class AttendanceService
                 );
             }
 
-            return $results;
+            $collection = new Collection($results);
+            $collection->load('student');
+            return $collection;
         });
     }
 
-    public function initializeSessionAttendance(string $sessionId): array
+    public function initializeSessionAttendance(string $sessionId): Collection
     {
         return DB::transaction(function () use ($sessionId) {
             $session = $this->sessionRepository->findOrFail($sessionId);
@@ -97,7 +99,9 @@ class AttendanceService
                 );
             }
 
-            return $results;
+            $collection = new Collection($results);
+            $collection->load('student');
+            return $collection;
         });
     }
 

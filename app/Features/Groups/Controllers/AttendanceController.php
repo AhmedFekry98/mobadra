@@ -74,7 +74,7 @@ class AttendanceController extends Controller
             );
 
             return $this->okResponse(
-                AttendanceResource::collection(collect($attendances)->load('student')),
+                AttendanceResource::collection($attendances),
                 "Attendance recorded successfully"
             );
         }, 'AttendanceController@bulkRecordAttendance');
@@ -89,7 +89,7 @@ class AttendanceController extends Controller
             $attendances = $this->service->initializeSessionAttendance($sessionId);
 
             return $this->okResponse(
-                AttendanceResource::collection(collect($attendances)->load('student')),
+                AttendanceResource::collection($attendances),
                 "Session attendance initialized successfully"
             );
         }, 'AttendanceController@initializeSession');
