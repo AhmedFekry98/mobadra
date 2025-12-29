@@ -15,14 +15,12 @@ class AttendanceResource extends JsonResource
             'group_id' => $resource?->group_id,
             'session_id' => $resource?->session_id,
             'student_id' => $resource?->student_id,
-            'student' => $this->when($resource?->relationLoaded('student'), function () use ($resource) {
-                return [
+            'student' => [
                     'id' => $resource->student?->id,
                     'name' => $resource->student?->name,
                     'email' => $resource->student?->email,
                     'image' => $resource->student?->getFirstMediaUrl('user-image'),
-                ];
-            }),
+            ],
             'status' => $resource?->status,
             'attended_at' => $resource?->attended_at?->format('Y-m-d H:i:s'),
             'notes' => $resource?->notes,
