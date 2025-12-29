@@ -103,7 +103,8 @@
         "group": "Groups",
         "items": [
             {"name": "group.viewAny", "caption": "Show Groups"},
-            {"name": "group.view", "caption": "View Single Group"}
+            {"name": "group.view", "caption": "View Single Group"},
+            {"name": "group.update", "caption": "Update Group"}
         ]
     },
     {

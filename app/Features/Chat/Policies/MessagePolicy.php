@@ -14,7 +14,7 @@ class MessagePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('Message.viewAny');
+        return $user->hasPermission('message.viewAny');
     }
 
     /**
@@ -22,7 +22,7 @@ class MessagePolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasPermission('Message.view');
+        return $user->hasPermission('message.view');
     }
 
     /**
@@ -30,7 +30,7 @@ class MessagePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermission('Message.create');
+        return $user->hasPermission('message.create');
     }
 
     /**
@@ -38,7 +38,7 @@ class MessagePolicy
      */
     public function update(User $user): bool
     {
-        return $user->hasPermission('Message.update');
+        return $user->hasPermission('message.update');
     }
 
     /**
@@ -46,7 +46,7 @@ class MessagePolicy
      */
     public function delete(User $user): bool
     {
-        return $user->hasPermission('Message.delete');
+        return $user->hasPermission('message.delete');
     }
 
     /**
@@ -54,7 +54,7 @@ class MessagePolicy
      */
     public function restore(User $user): bool
     {
-        return $user->hasPermission('Message.restore');
+        return $user->hasPermission('message.restore');
     }
 
     /**
@@ -62,6 +62,6 @@ class MessagePolicy
      */
     public function forceDelete(User $user): bool
     {
-        return $user->hasPermission('Message.forceDelete');
+        return $user->hasPermission('message.forceDelete');
     }
 }
