@@ -27,12 +27,6 @@ class AttendanceResource extends JsonResource
             'attended_at' => $resource?->attended_at?->format('Y-m-d H:i:s'),
             'notes' => $resource?->notes,
             'recorded_by' => $resource?->recorded_by,
-            'recorder' => $this->when($resource?->relationLoaded('recorder'), function () use ($resource) {
-                return [
-                    'id' => $resource->recorder?->id,
-                    'name' => $resource->recorder?->name,
-                ];
-            }),
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];
