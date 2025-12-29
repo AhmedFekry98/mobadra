@@ -68,19 +68,19 @@ Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
     Route::get('{id}/recordings', [GroupSessionController::class, 'getRecordings'])->name('recordings');
     Route::delete('{id}/recordings', [GroupSessionController::class, 'deleteRecordings'])->name('recordings.delete');
 
-    // // Session Attendance
-    // Route::get('{sessionId}/attendance', [AttendanceController::class, 'getBySession'])->name('attendance');
-    // Route::post('{sessionId}/attendance', [AttendanceController::class, 'recordAttendance'])->name('record_attendance');
-    // Route::post('{sessionId}/attendance/bulk', [AttendanceController::class, 'bulkRecordAttendance'])->name('bulk_attendance');
-    // Route::post('{sessionId}/attendance/initialize', [AttendanceController::class, 'initializeSession'])->name('initialize_attendance');
-    // Route::get('{sessionId}/attendance/stats', [AttendanceController::class, 'getSessionStats'])->name('attendance_stats');
+    // Session Attendance
+    Route::get('{sessionId}/attendance', [AttendanceController::class, 'getBySession'])->name('attendance');
+    Route::post('{sessionId}/attendance', [AttendanceController::class, 'recordAttendance'])->name('record_attendance');
+    Route::post('{sessionId}/attendance/bulk', [AttendanceController::class, 'bulkRecordAttendance'])->name('bulk_attendance');
+    Route::post('{sessionId}/attendance/initialize', [AttendanceController::class, 'initializeSession'])->name('initialize_attendance');
+    Route::get('{sessionId}/attendance/stats', [AttendanceController::class, 'getSessionStats'])->name('attendance_stats');
 });
 
-// // Attendance (standalone routes)
-// Route::prefix('attendances')->name('attendances.')->group(function () {
-//     Route::put('{id}', [AttendanceController::class, 'update'])->name('update');
-//     Route::patch('{id}', [AttendanceController::class, 'update']);
-// });
+// Attendance (standalone routes)
+Route::prefix('attendances')->name('attendances.')->group(function () {
+    Route::put('{id}', [AttendanceController::class, 'update'])->name('update');
+    Route::patch('{id}', [AttendanceController::class, 'update']);
+});
 
 // Content Progress (تتبع مشاهدة الفيديوهات)
 Route::prefix('content-progress')->name('content_progress.')->group(function () {
