@@ -24,13 +24,32 @@ class AttendanceController extends Controller
         $this->middleware('auth:sanctum');
     }
 
+    public function index()
+    {
+        return $this->executeService(function () {
+            $user = auth()->user();
+            $attendances = $this->service->getAllAttendance(
+                user: $user,
+                paginate: request()->has('page')
+            );
+
+            return $this->okResponse(
+                request()->has('page')
+                    ? AttendanceResource::collection($attendances)
+                    : AttendanceResource::collection($attendances),
+                "Attendance retrieved successfully"
+            );
+        }, 'AttendanceController@index');
+    }
+
     public function getBySession(string $sessionId)
     {
         return $this->executeService(function () use ($sessionId) {
             $session = $this->sessionService->getSessionById($sessionId);
             $this->authorize('view', Group::find($session->group_id));
 
-            $attendances = $this->service->getAttendanceBySession($sessionId);
+            $user = auth()->user();
+            $attendances = $this->service->getAttendanceBySession($sessionId, $user);
 
             return $this->okResponse(
                 AttendanceResource::collection($attendances),

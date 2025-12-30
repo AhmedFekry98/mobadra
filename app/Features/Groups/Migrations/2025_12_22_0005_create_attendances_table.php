@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
             $table->foreignId('session_id')->constrained('group_sessions')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('status', ['present', 'absent', 'late', 'excused'])->default('absent');
+            $table->enum('status', ['present', 'absent', 'late', 'excused','pending'])->default('pending');
             $table->timestamp('attended_at')->nullable();
             $table->text('notes')->nullable();
             $table->foreignId('recorded_by')->nullable()->constrained('users')->nullOnDelete();

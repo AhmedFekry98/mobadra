@@ -6,6 +6,7 @@ use App\Features\Courses\Controllers\LessonController;
 use App\Features\Courses\Controllers\LessonContentController;
 use App\Features\Courses\Controllers\QuizController;
 use App\Features\Courses\Controllers\AssignmentController;
+use App\Features\Courses\Controllers\VideoQuizController;
 use Illuminate\Support\Facades\Route;
 
 // Terms
@@ -85,6 +86,26 @@ Route::prefix('assignments')->name('assignments.')->group(function () {
     // submit assignment
     Route::post('submissions/{submissionId}/submit', [AssignmentController::class, 'submitAssignment'])->name('submissions.submit');
 
+});
+
+// Video Quizzes (اختبارات الفيديو)
+Route::prefix('video-quizzes')->name('video_quizzes.')->group(function () {
+    // Get quiz by video content ID
+    Route::get('video/{videoContentId}', [VideoQuizController::class, 'show'])->name('show');
+    // Create/Update quiz for video
+    Route::post('video/{videoContentId}', [VideoQuizController::class, 'store'])->name('store');
+
+    // Questions
+    Route::post('{quizId}/questions', [VideoQuizController::class, 'addQuestion'])->name('questions.store');
+    Route::put('questions/{questionId}', [VideoQuizController::class, 'updateQuestion'])->name('questions.update');
+    Route::delete('questions/{questionId}', [VideoQuizController::class, 'deleteQuestion'])->name('questions.destroy');
+
+    // Student Attempts
+    Route::post('{quizId}/attempts', [VideoQuizController::class, 'startAttempt'])->name('attempts.start');
+    Route::post('attempts/{attemptId}/answer', [VideoQuizController::class, 'submitAnswer'])->name('attempts.answer');
+    Route::post('attempts/{attemptId}/complete', [VideoQuizController::class, 'completeAttempt'])->name('attempts.complete');
+    Route::get('attempts/{attemptId}', [VideoQuizController::class, 'attemptResult'])->name('attempts.result');
+    Route::get('{quizId}/my-attempts', [VideoQuizController::class, 'myAttempts'])->name('attempts.my');
 });
 
 

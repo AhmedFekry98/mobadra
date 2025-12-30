@@ -28,6 +28,16 @@ class VideoContent extends Model
         return $this->morphOne(LessonContent::class, 'contentable');
     }
 
+    public function quiz()
+    {
+        return $this->hasOne(VideoQuiz::class);
+    }
+
+    public function hasQuiz(): bool
+    {
+        return $this->quiz()->exists();
+    }
+
     /**
      * Get signed URL for video playback (protected)
      */

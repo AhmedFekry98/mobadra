@@ -6,7 +6,9 @@ use App\Features\Groups\Models\Attendance;
 use App\Features\Groups\Repositories\AttendanceRepository;
 use App\Features\Groups\Repositories\GroupStudentRepository;
 use App\Features\Groups\Repositories\GroupSessionRepository;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceService
@@ -17,14 +19,19 @@ class AttendanceService
         protected GroupSessionRepository $sessionRepository
     ) {}
 
-    public function getAttendanceBySession(string $sessionId): Collection
+    public function getAllAttendance(User $user, ?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        return $this->repository->getBySessionId($sessionId);
+        return $this->repository->getAll($user, $paginate);
     }
 
-    public function getAttendanceByGroup(string $groupId): Collection
+    public function getAttendanceBySession(string $sessionId, ?User $user = null): Collection
     {
-        return $this->repository->getByGroupId($groupId);
+        return $this->repository->getBySessionId($sessionId, $user);
+    }
+
+    public function getAttendanceByGroup(string $groupId, ?User $user = null): Collection
+    {
+        return $this->repository->getByGroupId($groupId, $user);
     }
 
     public function getAttendanceByStudent(string $studentId): Collection
@@ -94,7 +101,7 @@ class AttendanceService
                     ],
                     [
                         'group_id' => $session->group_id,
-                        'status' => 'absent',
+                        'status' => 'pending',
                     ]
                 );
             }

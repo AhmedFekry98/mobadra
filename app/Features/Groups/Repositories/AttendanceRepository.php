@@ -3,7 +3,10 @@
 namespace App\Features\Groups\Repositories;
 
 use App\Features\Groups\Models\Attendance;
+use App\Features\Groups\Queries\AttendanceRoleQuery;
+use App\Features\SystemManagements\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AttendanceRepository
 {
@@ -12,18 +15,32 @@ class AttendanceRepository
         return Attendance::query();
     }
 
-    public function getBySessionId(string $sessionId): Collection
+    public function getAll(User $user, ?bool $paginate = false): Collection|LengthAwarePaginator
     {
-        return Attendance::where('session_id', $sessionId)
-            ->with('student')
-            ->get();
+        $query = AttendanceRoleQuery::resolve($user)
+            ->with(['student', 'session', 'group']);
+
+        return $paginate
+            ? $query->paginate(config('paginate.count'))
+            : $query->get();
     }
 
-    public function getByGroupId(string $groupId): Collection
+    public function getBySessionId(string $sessionId, ?User $user = null): Collection
     {
-        return Attendance::where('group_id', $groupId)
-            ->with(['session', 'student'])
-            ->get();
+        $query = $user
+            ? AttendanceRoleQuery::resolve($user)->where('session_id', $sessionId)
+            : Attendance::where('session_id', $sessionId);
+
+        return $query->with('student')->get();
+    }
+
+    public function getByGroupId(string $groupId, ?User $user = null): Collection
+    {
+        $query = $user
+            ? AttendanceRoleQuery::resolve($user)->where('group_id', $groupId)
+            : Attendance::where('group_id', $groupId);
+
+        return $query->with(['session', 'student'])->get();
     }
 
     public function getByStudentId(string $studentId): Collection

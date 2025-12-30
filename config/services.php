@@ -43,4 +43,18 @@ return [
         'token_expiry_seconds' => env('BUNNY_TOKEN_EXPIRY', 86400), // 24 hours default
     ],
 
+    'translation' => [
+        'provider' => env('TRANSLATION_PROVIDER', 'google'), // google or aws
+    ],
+
+    'google' => [
+        'translate_api_key' => env('GOOGLE_TRANSLATE_API_KEY'),
+    ],
+
+    'aws' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
 ];
