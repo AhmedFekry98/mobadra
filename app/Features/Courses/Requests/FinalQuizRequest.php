@@ -22,6 +22,10 @@ class FinalQuizRequest extends BaseFormRequest
             'max_attempts' => ['nullable', 'integer', 'min:1'],
             'shuffle_questions' => ['nullable', 'boolean'],
             'show_answers' => ['nullable', 'boolean'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'order' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
         ];
     }
 }

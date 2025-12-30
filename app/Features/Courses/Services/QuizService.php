@@ -174,14 +174,18 @@ class QuizService
         ];
     }
 
+    // ==================== Final Quizzes (Multiple) ====================
+
+    public function getCourseFinalQuizzes(int $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        return $course->finalQuizzes()->with(['questions.options'])->get();
+    }
+
     public function createFinalQuiz(int $courseId, array $data): Quiz
     {
         return DB::transaction(function () use ($courseId, $data) {
             $course = Course::findOrFail($courseId);
-
-            if ($course->final_quiz_id) {
-                throw new \Exception('This course already has a final quiz');
-            }
 
             $quiz = Quiz::create([
                 'time_limit' => $data['time_limit'] ?? null,
@@ -191,70 +195,98 @@ class QuizService
                 'show_answers' => $data['show_answers'] ?? false,
             ]);
 
-            $course->update(['final_quiz_id' => $quiz->id]);
+            $maxOrder = $course->finalQuizzes()->max('course_final_quizzes.order') ?? 0;
 
-            return $quiz;
+            $course->finalQuizzes()->attach($quiz->id, [
+                'title' => $data['title'] ?? null,
+                'description' => $data['description'] ?? null,
+                'order' => $data['order'] ?? $maxOrder + 1,
+                'is_active' => $data['is_active'] ?? true,
+            ]);
+
+            return $quiz->load('questions.options');
         });
     }
 
-    public function getFinalQuizByCourseId(int $courseId): ?Quiz
+    public function getFinalQuizByCourseId(int $courseId, int $quizId): Quiz
     {
         $course = Course::findOrFail($courseId);
 
-        if (!$course->final_quiz_id) {
-            return null;
+        $quiz = $course->finalQuizzes()
+            ->where('quizzes.id', $quizId)
+            ->with(['questions.options'])
+            ->first();
+
+        if (!$quiz) {
+            throw new \Exception('Final quiz not found for this course');
         }
 
-        return Quiz::with(['questions.options'])->findOrFail($course->final_quiz_id);
+        return $quiz;
     }
 
-    public function updateFinalQuiz(int $courseId, array $data): Quiz
+    public function updateFinalQuiz(int $courseId, int $quizId, array $data): Quiz
     {
-        $course = Course::findOrFail($courseId);
-
-        if (!$course->final_quiz_id) {
-            throw new \Exception('This course does not have a final quiz');
-        }
-
-        $quiz = Quiz::findOrFail($course->final_quiz_id);
-
-        $quiz->update([
-            'time_limit' => $data['time_limit'] ?? $quiz->time_limit,
-            'passing_score' => $data['passing_score'] ?? $quiz->passing_score,
-            'max_attempts' => $data['max_attempts'] ?? $quiz->max_attempts,
-            'shuffle_questions' => $data['shuffle_questions'] ?? $quiz->shuffle_questions,
-            'show_answers' => $data['show_answers'] ?? $quiz->show_answers,
-        ]);
-
-        return $quiz->fresh(['questions.options']);
-    }
-
-    public function deleteFinalQuiz(int $courseId): bool
-    {
-        return DB::transaction(function () use ($courseId) {
+        return DB::transaction(function () use ($courseId, $quizId, $data) {
             $course = Course::findOrFail($courseId);
 
-            if (!$course->final_quiz_id) {
-                throw new \Exception('This course does not have a final quiz');
+            $quiz = $course->finalQuizzes()->where('quizzes.id', $quizId)->first();
+
+            if (!$quiz) {
+                throw new \Exception('Final quiz not found for this course');
             }
 
-            $quiz = Quiz::findOrFail($course->final_quiz_id);
-            $course->update(['final_quiz_id' => null]);
+            $quiz->update([
+                'time_limit' => $data['time_limit'] ?? $quiz->time_limit,
+                'passing_score' => $data['passing_score'] ?? $quiz->passing_score,
+                'max_attempts' => $data['max_attempts'] ?? $quiz->max_attempts,
+                'shuffle_questions' => $data['shuffle_questions'] ?? $quiz->shuffle_questions,
+                'show_answers' => $data['show_answers'] ?? $quiz->show_answers,
+            ]);
 
+            $pivotData = [];
+            if (isset($data['title'])) $pivotData['title'] = $data['title'];
+            if (isset($data['description'])) $pivotData['description'] = $data['description'];
+            if (isset($data['order'])) $pivotData['order'] = $data['order'];
+            if (isset($data['is_active'])) $pivotData['is_active'] = $data['is_active'];
+
+            if (!empty($pivotData)) {
+                $course->finalQuizzes()->updateExistingPivot($quizId, $pivotData);
+            }
+
+            return $quiz->fresh(['questions.options']);
+        });
+    }
+
+    public function deleteFinalQuiz(int $courseId, int $quizId): bool
+    {
+        return DB::transaction(function () use ($courseId, $quizId) {
+            $course = Course::findOrFail($courseId);
+
+            $quiz = $course->finalQuizzes()->where('quizzes.id', $quizId)->first();
+
+            if (!$quiz) {
+                throw new \Exception('Final quiz not found for this course');
+            }
+
+            $course->finalQuizzes()->detach($quizId);
             return $quiz->delete();
         });
     }
 
-    public function submitFinalQuiz(int $courseId, int $studentId, array $answers): QuizAttempt
+    public function submitFinalQuiz(int $courseId, int $quizId, int $studentId, array $answers): QuizAttempt
     {
-        return DB::transaction(function () use ($courseId, $studentId, $answers) {
+        return DB::transaction(function () use ($courseId, $quizId, $studentId, $answers) {
             $course = Course::findOrFail($courseId);
 
-            if (!$course->final_quiz_id) {
-                throw new \Exception('This course does not have a final quiz');
+            $quiz = $course->finalQuizzes()->where('quizzes.id', $quizId)->first();
+
+            if (!$quiz) {
+                throw new \Exception('Final quiz not found for this course');
             }
 
-            $quiz = Quiz::findOrFail($course->final_quiz_id);
+            if (!$quiz->pivot->is_active) {
+                throw new \Exception('This final quiz is not active');
+            }
 
             if (!$quiz->canStudentAttempt($studentId)) {
                 throw new \Exception('Maximum attempts reached for this quiz');

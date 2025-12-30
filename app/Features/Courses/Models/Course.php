@@ -47,6 +47,14 @@ class Course extends Model implements HasMedia
         return $this->belongsTo(Quiz::class, 'final_quiz_id');
     }
 
+    public function finalQuizzes()
+    {
+        return $this->belongsToMany(Quiz::class, 'course_final_quizzes')
+            ->withPivot(['title', 'description', 'order', 'is_active'])
+            ->withTimestamps()
+            ->orderBy('course_final_quizzes.order');
+    }
+
     public function groups()
     {
         return $this->hasMany(Group::class);

@@ -62,12 +62,13 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
     // get all attempts by quiz id
     Route::get('{quizId}/attempts', [QuizController::class, 'attemptsByQuiz'])->name('attempts.byQuiz');
 
-    // Final Quiz (by Course ID)
-    Route::get('course/{courseId}/final', [QuizController::class, 'showFinalQuiz'])->name('final.show');
-    Route::post('course/{courseId}/final', [QuizController::class, 'storeFinalQuiz'])->name('final.store');
-    Route::put('course/{courseId}/final', [QuizController::class, 'updateFinalQuiz'])->name('final.update');
-    Route::delete('course/{courseId}/final', [QuizController::class, 'destroyFinalQuiz'])->name('final.destroy');
-    Route::post('course/{courseId}/final/submit', [QuizController::class, 'submitFinalQuiz'])->name('final.submit');
+    // Final Quizzes (by Course ID)
+    Route::get('course/{courseId}/finals', [QuizController::class, 'indexFinalQuizzes'])->name('finals.index');
+    Route::post('course/{courseId}/finals', [QuizController::class, 'storeFinalQuiz'])->name('finals.store');
+    Route::get('course/{courseId}/finals/{quizId}', [QuizController::class, 'showFinalQuiz'])->name('finals.show');
+    Route::put('course/{courseId}/finals/{quizId}', [QuizController::class, 'updateFinalQuiz'])->name('finals.update');
+    Route::delete('course/{courseId}/finals/{quizId}', [QuizController::class, 'destroyFinalQuiz'])->name('finals.destroy');
+    Route::post('course/{courseId}/finals/{quizId}/submit', [QuizController::class, 'submitFinalQuiz'])->name('finals.submit');
 });
 
 // Assignments

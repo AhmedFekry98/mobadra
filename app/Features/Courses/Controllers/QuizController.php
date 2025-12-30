@@ -154,17 +154,10 @@ class QuizController extends Controller
         }, 'QuizController@storeFinalQuiz');
     }
 
-    public function showFinalQuiz(string $courseId)
+    public function showFinalQuiz(string $courseId, string $quizId)
     {
-        return $this->executeService(function () use ($courseId) {
-            $quiz = $this->service->getFinalQuizByCourseId($courseId);
-
-            if (!$quiz) {
-                return $this->okResponse(
-                    null,
-                    "This course does not have a final quiz"
-                );
-            }
+        return $this->executeService(function () use ($courseId, $quizId) {
+            $quiz = $this->service->getFinalQuizByCourseId($courseId, $quizId);
 
             return $this->okResponse(
                 QuizResource::make($quiz),
@@ -173,10 +166,10 @@ class QuizController extends Controller
         }, 'QuizController@showFinalQuiz');
     }
 
-    public function updateFinalQuiz(string $courseId, FinalQuizRequest $request)
+    public function updateFinalQuiz(string $courseId, string $quizId, FinalQuizRequest $request)
     {
-        return $this->executeService(function () use ($courseId, $request) {
-            $quiz = $this->service->updateFinalQuiz($courseId, $request->validated());
+        return $this->executeService(function () use ($courseId, $quizId, $request) {
+            $quiz = $this->service->updateFinalQuiz($courseId, $quizId, $request->validated());
 
             return $this->okResponse(
                 QuizResource::make($quiz),
@@ -185,10 +178,10 @@ class QuizController extends Controller
         }, 'QuizController@updateFinalQuiz');
     }
 
-    public function destroyFinalQuiz(string $courseId)
+    public function destroyFinalQuiz(string $courseId, string $quizId)
     {
-        return $this->executeService(function () use ($courseId) {
-            $this->service->deleteFinalQuiz($courseId);
+        return $this->executeService(function () use ($courseId, $quizId) {
+            $this->service->deleteFinalQuiz($courseId, $quizId);
 
             return $this->okResponse(
                 null,
@@ -197,18 +190,30 @@ class QuizController extends Controller
         }, 'QuizController@destroyFinalQuiz');
     }
 
-    public function submitFinalQuiz(string $courseId)
+    public function submitFinalQuiz(string $courseId, string $quizId)
     {
-        return $this->executeService(function () use ($courseId) {
+        return $this->executeService(function () use ($courseId, $quizId) {
             $studentId = auth()->user()->id;
             $answers = request('answers', []);
 
-            $attempt = $this->service->submitFinalQuiz($courseId, $studentId, $answers);
+            $attempt = $this->service->submitFinalQuiz($courseId, $quizId, $studentId, $answers);
 
             return $this->okResponse(
                 QuizAttemptResource::make($attempt),
                 "Final Quiz submitted successfully"
             );
         }, 'QuizController@submitFinalQuiz');
+    }
+
+    public function indexFinalQuizzes(string $courseId)
+    {
+        return $this->executeService(function () use ($courseId) {
+            $quizzes = $this->service->getCourseFinalQuizzes($courseId);
+
+            return $this->okResponse(
+                QuizResource::collection($quizzes),
+                "Final quizzes retrieved successfully"
+            );
+        }, 'QuizController@indexFinalQuizzes');
     }
 }
