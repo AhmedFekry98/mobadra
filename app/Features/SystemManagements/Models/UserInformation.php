@@ -19,6 +19,7 @@ class UserInformation extends Model
     protected $fillable = [
         'user_id',
         'grade_id',
+        'governorate_id',
         'phone_code',
         'phone_number',
         'date_of_birth',
@@ -49,5 +50,10 @@ class UserInformation extends Model
     public function grade()
     {
         return $this->belongsTo(Grade::class);
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
     }
 }

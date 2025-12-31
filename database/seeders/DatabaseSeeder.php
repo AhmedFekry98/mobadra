@@ -19,7 +19,7 @@ use Database\Seeders\SystemManagements\AuditSeeder;
 use Database\Seeders\SystemManagements\FAQSeeder;
 use Database\Seeders\SystemManagements\UserInformationSeeder;
 use App\Features\Grades\Seeders\GradeSeeder;
-
+use App\Features\SystemManagements\Seeders\GovernorateSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder
         GeneralSettingSeeder::class,
         AuditSeeder::class,
         FAQSeeder::class,
+        GovernorateSeeder::class,
         UserInformationSeeder::class,
+
     ];
 
     /**
@@ -54,6 +56,7 @@ class DatabaseSeeder extends Seeder
         GradeSeeder::class,
         GeneralSettingSeeder::class,
         TermSeeder::class,
+        GovernorateSeeder::class,
     ];
 
 

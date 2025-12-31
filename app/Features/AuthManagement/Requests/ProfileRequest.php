@@ -45,6 +45,7 @@ class ProfileRequest extends BaseFormRequest
 
             // User Information fields
             'user_information' => ['sometimes', 'array'],
+            'user_information.governorate_id' => ['sometimes', 'nullable', 'exists:governorates,id'],
             'user_information.phone_code' => ['sometimes', 'nullable', 'string', 'max:10'],
             'user_information.phone_number' => ['sometimes', 'nullable', 'string', 'max:20'],
             'user_information.date_of_birth' => ['sometimes', 'nullable', 'date', 'before:today'],
