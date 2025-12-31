@@ -34,6 +34,9 @@ Route::prefix("system-managements")->group(function() {
         Route::get('/', [StudentController::class, 'index']);
         Route::post('/', [StudentController::class, 'store']);
         Route::get('metadata', [StudentController::class, 'metadata']);
+        Route::get('export', [StudentController::class, 'export']);
+        Route::get('import/template', [StudentController::class, 'downloadTemplate']);
+        Route::post('import', [StudentController::class, 'import']);
         Route::get('/{id}', [StudentController::class, 'show']);
         Route::put('/{id}', [StudentController::class, 'update']);
         Route::delete('/{id}', [StudentController::class, 'destroy']);

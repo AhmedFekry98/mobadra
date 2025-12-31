@@ -4,6 +4,9 @@ namespace App\Features\SystemManagements\Controllers;
 
 use App\Features\AuthManagement\Transformers\ProfileCollection;
 use App\Features\AuthManagement\Transformers\ProfileResource;
+use App\Features\SystemManagements\Exports\StudentsExport;
+use App\Features\SystemManagements\Exports\StudentsTemplateExport;
+use App\Features\SystemManagements\Imports\StudentsImport;
 use App\Features\SystemManagements\Models\User;
 use App\Features\SystemManagements\Requests\StudentRequest;
 use App\Features\SystemManagements\Services\UserService;
@@ -13,6 +16,7 @@ use App\Traits\HandleServiceExceptions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -133,5 +137,64 @@ class StudentController extends Controller
                 "Student metadata retrieved successfully"
             );
         }, 'StudentController@metadata');
+    }
+
+    /**
+     * Export students to Excel file
+     */
+    public function export(Request $request)
+    {
+        $this->authorize('viewAny', User::class);
+
+        $filters = [
+            'search' => $request->get('search'),
+            'grade_id' => $request->get('grade_id'),
+        ];
+
+        $filename = 'students_' . date('Y-m-d_His') . '.xlsx';
+
+        return Excel::download(new StudentsExport($filters), $filename);
+    }
+
+    /**
+     * Download import template
+     */
+    public function downloadTemplate()
+    {
+        $this->authorize('viewAny', User::class);
+
+        return Excel::download(new StudentsTemplateExport(), 'students_import_template.xlsx');
+    }
+
+    /**
+     * Import students from Excel file
+     */
+    public function import(Request $request)
+    {
+        return $this->executeService(function () use ($request) {
+            $this->authorize('create', User::class);
+
+            $request->validate([
+                'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            ]);
+
+            $import = new StudentsImport();
+            Excel::import($import, $request->file('file'));
+
+            $summary = $import->getImportSummary();
+
+            if ($summary['failed_count'] > 0 && $summary['success_count'] === 0) {
+                return $this->errorResponse(
+                    'Import failed. No students were imported.',
+                    422,
+                    $summary
+                );
+            }
+
+            return $this->okResponse(
+                $summary,
+                "Import completed. {$summary['success_count']} students imported successfully, {$summary['failed_count']} failed."
+            );
+        }, 'StudentController@import');
     }
 }
