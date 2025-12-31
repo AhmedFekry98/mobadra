@@ -15,6 +15,8 @@ class QuizResource extends JsonResource
         return [
             'id' => $resource?->id,
             'time_limit' => $resource?->time_limit,
+            "title" => $resource?->title,
+            "description" => $resource?->description,
             'passing_score' => $resource?->passing_score,
             'max_attempts' => $resource?->max_attempts,
             'shuffle_questions' => $resource?->shuffle_questions,
