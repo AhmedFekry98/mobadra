@@ -3,12 +3,14 @@
 use App\Features\SystemManagements\Controllers\AuditController;
 use App\Features\SystemManagements\Controllers\FAQController;
 use App\Features\SystemManagements\Controllers\GeneralSettingController;
+use App\Features\SystemManagements\Controllers\GovernorateController;
 use App\Features\SystemManagements\Controllers\PermissionController;
 use App\Features\SystemManagements\Controllers\RoleController;
 use App\Features\SystemManagements\Controllers\RolePermissionController;
 use App\Features\SystemManagements\Controllers\StaffController;
 use App\Features\SystemManagements\Controllers\StudentController;
 use App\Features\SystemManagements\Controllers\TeacherController;
+use App\Features\SystemManagements\Controllers\TrainingCenterController;
 use App\Features\SystemManagements\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -102,6 +104,24 @@ Route::prefix("system-managements")->group(function() {
         Route::get('/{id}', [FAQController::class, 'show']);
         Route::put('/{id}', [FAQController::class, 'update']);
         Route::delete('/{id}', [FAQController::class, 'destroy']);
+    });
+
+    // Governorates
+    Route::prefix("governorates")->group(function() {
+        Route::get('/', [GovernorateController::class, 'index']);
+        Route::post('/', [GovernorateController::class, 'store']);
+        Route::get('/{id}', [GovernorateController::class, 'show']);
+        Route::put('/{id}', [GovernorateController::class, 'update']);
+        Route::delete('/{id}', [GovernorateController::class, 'destroy']);
+    });
+
+    // Training Centers
+    Route::prefix("training-centers")->group(function() {
+        Route::get('/', [TrainingCenterController::class, 'index']);
+        Route::post('/', [TrainingCenterController::class, 'store']);
+        Route::get('/{id}', [TrainingCenterController::class, 'show']);
+        Route::put('/{id}', [TrainingCenterController::class, 'update']);
+        Route::delete('/{id}', [TrainingCenterController::class, 'destroy']);
     });
 
 });
