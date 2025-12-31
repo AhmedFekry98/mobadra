@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,19 +10,21 @@ class CourseResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $lang = app()->getLocale();
         $resource = $this->resource;
         return [
+            'locale' => $lang, // DEBUG: remove this after testing
             'id' => $resource?->id,
             'term' =>  [
                 'id' => $resource?->term_id,
-                'name' => $resource?->term?->name,
+                'name' => $lang == 'en' ? $resource?->term?->name : GoogleTranslateHelper::translate($resource?->term?->name ?? '', $lang),
             ],
             'grade' => [
                 'id' => $resource?->grade_id,
-                'name' => $resource?->grade?->name,
+                'name' => $lang == 'en' ? $resource?->grade?->name : GoogleTranslateHelper::translate($resource?->grade?->name ?? '', $lang),
             ],
-            'title' => $resource?->title,
-            'description' => $resource?->description,
+            'title' => $lang == 'en' ? $resource?->title : GoogleTranslateHelper::translate($resource?->title ?? '', $lang),
+            'description' => $lang == 'en' ? $resource?->description : GoogleTranslateHelper::translate($resource?->description ?? '', $lang),
             'slug' => $resource?->slug,
             'is_active' => $resource?->is_active,
             'image' => $this->getImageDetails($resource),

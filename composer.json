@@ -10,12 +10,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "google/cloud-translate": "1.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-medialibrary": "^11.13",
+        "stichoza/google-translate-php": "^5.3",
         "stripe/stripe-php": "^18.1"
     },
     "require-dev": {
@@ -34,8 +36,12 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Graphicode\\Features\\": "Core/src/"
-        }
+        },
+        "files": [
+            "app/Helpers/GoogleTranslateHelper.php"
+        ]
     },
+
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
