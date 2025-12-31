@@ -64,7 +64,8 @@ class Course extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('course-image')
-        ->useFallbackUrl(asset('/img/course-default.jpg'))
-            ->singleFile();
+            ->useFallbackUrl(asset('/img/course-default.jpg'))
+            ->singleFile()
+            ->useDisk('media');
     }
 }
