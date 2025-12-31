@@ -6,6 +6,7 @@ use App\Features\SystemManagements\Models\Governorate;
 use App\Features\SystemManagements\Requests\GovernorateRequest;
 use App\Features\SystemManagements\Transformers\GovernorateCollection;
 use App\Features\SystemManagements\Transformers\GovernorateResource;
+use App\Features\SystemManagements\Transformers\TrainingCenterResource;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -101,5 +102,21 @@ class GovernorateController extends Controller
                 "Governorate deleted successfully"
             );
         }, 'GovernorateController@destroy');
+    }
+
+    public function trainingCenters(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            $governorate = Governorate::findOrFail($id);
+            $trainingCenters = $governorate->trainingCenters()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get();
+
+            return $this->okResponse(
+                TrainingCenterResource::collection($trainingCenters),
+                "Training centers retrieved successfully"
+            );
+        }, 'GovernorateController@trainingCenters');
     }
 }

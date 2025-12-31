@@ -26,6 +26,7 @@ class GroupRequest extends BaseFormRequest
         return [
             'course_id' => ['required', 'exists:courses,id'],
             'grade_id' => ['required', 'exists:grades,id'],
+            'governorate_id' => ['required_if:location_type,offline', 'nullable', 'exists:governorates,id'],
             'name' => ['required', 'string', 'max:255'],
             'max_capacity' => ['sometimes', 'integer', 'min:1', 'max:100'],
             'days' => ['required', 'array', 'min:1'],
@@ -46,6 +47,7 @@ class GroupRequest extends BaseFormRequest
         return [
             'course_id' => ['sometimes', 'exists:courses,id'],
             'grade_id' => ['sometimes', 'exists:grades,id'],
+            'governorate_id' => ['required_if:location_type,offline', 'nullable', 'exists:governorates,id'],
             'name' => ['sometimes', 'string', 'max:255'],
             'max_capacity' => ['sometimes', 'integer', 'min:1', 'max:100'],
             'days' => ['sometimes', 'array', 'min:1'],

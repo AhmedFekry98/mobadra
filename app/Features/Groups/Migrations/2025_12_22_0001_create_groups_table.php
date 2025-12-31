@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->foreignId('grade_id')->nullable()->constrained('grades')->nullOnDelete();
+            $table->foreignId('governorate_id')->nullable()->constrained('governorates')->nullOnDelete();
             $table->string('name');
             $table->integer('max_capacity')->default(25);
             $table->json('days'); // ["friday", "saturday"]

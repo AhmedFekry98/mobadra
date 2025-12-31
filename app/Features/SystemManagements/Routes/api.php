@@ -111,6 +111,7 @@ Route::prefix("system-managements")->group(function() {
         Route::get('/', [GovernorateController::class, 'index']);
         Route::post('/', [GovernorateController::class, 'store']);
         Route::get('/{id}', [GovernorateController::class, 'show']);
+        Route::get('/{id}/training-centers', [GovernorateController::class, 'trainingCenters']);
         Route::put('/{id}', [GovernorateController::class, 'update']);
         Route::delete('/{id}', [GovernorateController::class, 'destroy']);
     });

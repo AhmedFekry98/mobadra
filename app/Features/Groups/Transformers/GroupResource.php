@@ -27,6 +27,10 @@ class GroupResource extends JsonResource
                 'id' => $resource?->grade_id,
                 'name' => $lang == 'en' ? $resource?->grade?->name : GoogleTranslateHelper::translate($resource?->grade?->name ?? '', $lang),
             ],
+            'governorate' => [
+                'id' => $resource?->governorate_id,
+                'name' => $lang == 'en' ? $resource?->governorate?->name : GoogleTranslateHelper::translate($resource?->governorate?->name ?? '', $lang),
+            ],
             'name' => $lang == 'en' ? $resource?->name : GoogleTranslateHelper::translate($resource?->name ?? '', $lang),
             'max_capacity' => $resource?->max_capacity,
             'days' => $resource?->days,
