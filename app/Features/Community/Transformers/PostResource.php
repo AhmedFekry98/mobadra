@@ -2,6 +2,7 @@
 
 namespace App\Features\Community\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,15 +12,16 @@ class PostResource extends JsonResource
     {
         $resource = $this->resource;
         $userId = auth()->id();
+        $lang = app()->getLocale();
 
         return [
             'id' => $resource?->id,
             'channel' => $resource?->channel ? [
                 'id' => $resource->channel->id,
-                'name' => $resource->channel->name,
+                'name' => $lang == 'en' ? $resource->channel->name : GoogleTranslateHelper::translate($resource->channel->name ?? '', $lang),
                 'slug' => $resource->channel->slug,
             ] : null,
-            'content' => $resource?->content,
+            'content' => $lang == 'en' ? $resource?->content : GoogleTranslateHelper::translate($resource?->content ?? '', $lang),
             'visibility' => $resource?->visibility,
             'is_pinned' => $resource?->is_pinned,
             'likes_count' => $resource?->likes_count,
@@ -27,7 +29,7 @@ class PostResource extends JsonResource
             'is_liked' => $userId ? $resource?->isLikedBy($userId) : false,
             'user' => $this->whenLoaded('user', fn() => [
                 'id' => $resource->user->id,
-                'name' => $resource->user->name,
+                'name' => $lang == 'en' ? $resource->user->name : GoogleTranslateHelper::translate($resource->user->name ?? '', $lang),
                 'avatar' => $resource->user->getFirstMediaUrl('avatar'),
             ]),
             'attachments' => $resource?->getMedia('attachments')->map(fn($media) => [

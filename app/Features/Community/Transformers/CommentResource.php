@@ -2,6 +2,7 @@
 
 namespace App\Features\Community\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,19 +12,19 @@ class CommentResource extends JsonResource
     {
         $resource = $this->resource;
         $userId = auth()->id();
-
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'post_id' => $resource?->post_id,
             'parent_id' => $resource?->parent_id,
-            'content' => $resource?->content,
+            'content' => $lang == 'en' ? $resource?->content : GoogleTranslateHelper::translate($resource?->content ?? '', $lang),
             'likes_count' => $resource?->likes_count,
             'replies_count' => $resource?->replies_count,
             'is_liked' => $userId ? $resource?->isLikedBy($userId) : false,
             'is_edited' => $resource?->is_edited,
             'user' => $this->whenLoaded('user', fn() => [
                 'id' => $resource->user->id,
-                'name' => $resource->user->name,
+                'name' => $lang == 'en' ? $resource->user->name : GoogleTranslateHelper::translate($resource->user->name ?? '', $lang),
                 'avatar' => $resource->user->getFirstMediaUrl('avatar'),
             ]),
             'replies' => $this->whenLoaded('replies', fn() => CommentResource::collection($resource->replies)),

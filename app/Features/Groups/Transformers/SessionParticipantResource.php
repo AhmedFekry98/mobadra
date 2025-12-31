@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,7 +11,7 @@ class SessionParticipantResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
-
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'session_id' => $resource?->session_id,
@@ -19,7 +20,7 @@ class SessionParticipantResource extends JsonResource
                 $resource?->relationLoaded('user'),
                 fn() => [
                     'id' => $resource->user?->id,
-                    'name' => $resource->user?->name,
+                    'name' => $lang == 'en' ? $resource->user?->name : GoogleTranslateHelper::translate($resource->user?->name ?? '', $lang),
                     'email' => $resource->user?->email,
                 ]
             ),

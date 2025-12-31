@@ -2,6 +2,7 @@
 
 namespace App\Features\Chat\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,12 +12,13 @@ class ConversationResource extends JsonResource
     {
         $resource = $this->resource;
         $userId = auth()->id();
+        $lang = app()->getLocale();
 
         return [
             'id' => $resource?->id,
             'type' => $resource?->type,
-            'name' => $resource?->name ?? $this->getConversationName($userId),
-            'description' => $resource?->description,
+            'name' => $lang == 'en' ? $resource?->name : GoogleTranslateHelper::translate($resource?->name ?? '', $lang),
+            'description' => $lang == 'en' ? $resource?->description : GoogleTranslateHelper::translate($resource?->description ?? '', $lang),
             'is_active' => $resource?->is_active,
             'unread_count' => $resource?->unread_count ?? 0,
             'last_message_at' => $resource?->last_message_at?->toISOString(),

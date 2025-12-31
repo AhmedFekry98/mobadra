@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,7 +11,7 @@ class AssignmentResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
-
+        $lang = app()->getLocale();
         $files = $resource?->getMedia('assignment_files')->map(function ($media) {
             return [
                 'id' => $media->id,
@@ -23,7 +24,7 @@ class AssignmentResource extends JsonResource
 
         return [
             'id' => $resource?->id,
-            'instructions' => $resource?->instructions,
+            'instructions' => $lang == 'en' ? $resource?->instructions : GoogleTranslateHelper::translate($resource?->instructions ?? '', $lang),
             'due_date' => $resource?->due_date?->toISOString(),
             'max_score' => $resource?->max_score,
             'allow_late_submission' => $resource?->allow_late_submission,

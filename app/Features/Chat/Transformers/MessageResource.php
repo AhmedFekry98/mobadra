@@ -2,6 +2,7 @@
 
 namespace App\Features\Chat\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,7 +11,7 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
-
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'conversation_id' => $resource?->conversation_id,
@@ -29,7 +30,7 @@ class MessageResource extends JsonResource
                 ],
             ]),
             'type' => $resource?->type,
-            'content' => $resource?->is_deleted ? 'This message was deleted' : $resource?->content,
+            'content' => $lang == 'en' ? $resource?->content : GoogleTranslateHelper::translate($resource?->content ?? '', $lang),
             'is_edited' => $resource?->is_edited,
             'edited_at' => $resource?->edited_at?->toISOString(),
             'is_deleted' => $resource?->is_deleted,

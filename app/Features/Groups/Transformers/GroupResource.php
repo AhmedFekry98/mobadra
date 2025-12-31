@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,31 +10,33 @@ class GroupResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+
         $resource = $this->resource;
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'term' => [
                 'id' => $resource?->course?->term?->id,
-                'name' => $resource?->course?->term?->name,
+                'name' => $lang == 'en' ? $resource?->course?->term?->name : GoogleTranslateHelper::translate($resource?->course?->term?->name ?? '', $lang),
             ],
             'course' => [
                 'id' => $resource?->course?->id,
-                'title' => $resource?->course?->title,
+                'title' => $lang == 'en' ? $resource?->course?->title : GoogleTranslateHelper::translate($resource?->course?->title ?? '', $lang),
             ],
             'grade' => [
                 'id' => $resource?->grade_id,
-                'name' => $resource?->grade?->name,
+                'name' => $lang == 'en' ? $resource?->grade?->name : GoogleTranslateHelper::translate($resource?->grade?->name ?? '', $lang),
             ],
-            'name' => $resource?->name,
+            'name' => $lang == 'en' ? $resource?->name : GoogleTranslateHelper::translate($resource?->name ?? '', $lang),
             'max_capacity' => $resource?->max_capacity,
             'days' => $resource?->days,
             'start_date' => $resource?->start_date?->format('Y-m-d'),
             'end_date' => $resource?->end_date?->format('Y-m-d'),
             'start_time' => $resource?->start_time,
             'end_time' => $resource?->end_time,
-            'location' => $resource?->location,
+            'location' => $lang == 'en' ? $resource?->location : GoogleTranslateHelper::translate($resource?->location ?? '', $lang),
             'location_type' => $resource?->location_type,
-            'location_map_url' => $resource?->location_map_url,
+            'location_map_url' => $lang == 'en' ? $resource?->location_map_url : GoogleTranslateHelper::translate($resource?->location_map_url ?? '', $lang),
             'is_active' => $resource?->is_active,
             'students_count' => $resource?->relationLoaded('groupStudents')
                 ? $resource->groupStudents->where('status', 'active')->count()

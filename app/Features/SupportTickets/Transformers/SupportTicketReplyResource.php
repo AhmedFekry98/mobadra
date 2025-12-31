@@ -2,6 +2,7 @@
 
 namespace App\Features\SupportTickets\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,19 +11,20 @@ class SupportTicketReplyResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'ticket_id' => $resource?->ticket_id,
             'user_id' => $resource?->user_id,
-            'user' => $this->when($resource?->relationLoaded('user'), function () use ($resource) {
+            'user' => $this->when($resource?->relationLoaded('user'), function () use ($resource, $lang) {
                 return [
                     'id' => $resource->user?->id,
-                    'name' => $resource->user?->name,
+                    'name' => $lang == 'en' ? $resource->user?->name : GoogleTranslateHelper::translate($resource->user?->name ?? '', $lang),
                     'email' => $resource->user?->email,
                     'image' => $resource->user?->getFirstMediaUrl('user-image'),
                 ];
             }),
-            'message' => $resource?->message,
+            'message' => $lang == 'en' ? $resource?->message : GoogleTranslateHelper::translate($resource?->message ?? '', $lang),
             'is_staff_reply' => $resource?->is_staff_reply,
             'is_internal_note' => $resource?->is_internal_note,
             'attachments' => $resource?->getMedia('attachments')->map(function ($media) {

@@ -2,6 +2,7 @@
 
 namespace App\Features\Grades\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,11 +11,12 @@ class GradeResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
-            'name' => $resource?->name,
+            'name' => $lang == 'en' ? $resource?->name : GoogleTranslateHelper::translate($resource?->name ?? '', $lang),
             'code' => $resource?->code,
-            'description' => $resource?->description,
+            'description' => $lang == 'en' ? $resource?->description : GoogleTranslateHelper::translate($resource?->description ?? '', $lang),
             'min_age' => $resource?->min_age,
             'max_age' => $resource?->max_age,
             'age_range' => $resource?->age_range,

@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,14 +11,15 @@ class GroupStudentResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'group_id' => $resource?->group_id,
             'student_id' => $resource?->student_id,
-            'student' => $this->when($resource?->relationLoaded('student'), function () use ($resource) {
+            'student' => $this->when($resource?->relationLoaded('student'), function () use ($resource, $lang) {
                 return [
                     'id' => $resource->student?->id,
-                    'name' => $resource->student?->name,
+                    'name' => $lang == 'en' ? $resource->student?->name : GoogleTranslateHelper::translate($resource->student?->name ?? '', $lang),
                     'email' => $resource->student?->email,
                     'image' => $resource->student?->getFirstMediaUrl('user-image'),
                 ];

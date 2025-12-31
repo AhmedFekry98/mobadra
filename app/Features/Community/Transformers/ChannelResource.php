@@ -2,6 +2,7 @@
 
 namespace App\Features\Community\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,12 +11,12 @@ class ChannelResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
-
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
-            'name' => $resource?->name,
+            'name' => $lang == 'en' ? $resource?->name : GoogleTranslateHelper::translate($resource?->name ?? '', $lang),
             'slug' => $resource?->slug,
-            'description' => $resource?->description,
+            'description' => $lang == 'en' ? $resource?->description : GoogleTranslateHelper::translate($resource?->description ?? '', $lang),
             'type' => $resource?->type,
             'is_active' => $resource?->is_active,
             'is_private' => $resource?->is_private,
@@ -23,11 +24,11 @@ class ChannelResource extends JsonResource
             'posts_count' => $resource?->relationLoaded('posts')
                 ? $resource->posts->count()
                 : null,
-            'channelable' => $this->when($resource?->channelable_id, function () use ($resource) {
+            'channelable' => $this->when($resource?->channelable_id, function () use ($resource,$lang) {
                 return [
                     'type' => $resource->channelable_type ? class_basename($resource->channelable_type) : null,
                     'id' => $resource->channelable_id,
-                    'name' => $resource->channelable?->name ?? null,
+                    'name' => $lang == 'en' ? $resource->channelable?->name : GoogleTranslateHelper::translate($resource->channelable?->name ?? '', $lang),
                 ];
             }),
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),

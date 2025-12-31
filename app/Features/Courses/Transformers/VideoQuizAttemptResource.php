@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,24 +10,26 @@ class VideoQuizAttemptResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $resource = $this->resource;
+        $lang = app()->getLocale();
         return [
-            'id' => $this->id,
-            'video_quiz_id' => $this->video_quiz_id,
-            'student_id' => $this->student_id,
-            'status' => $this->status,
-            'started_at' => $this->started_at,
-            'completed_at' => $this->completed_at,
-            'score' => $this->score,
-            'total_points' => $this->total_points,
-            'percentage' => $this->percentage,
-            'passed' => $this->passed,
+            'id' => $resource?->id,
+            'video_quiz_id' => $resource?->video_quiz_id,
+            'student_id' => $resource?->student_id,
+            'status' => $resource?->status,
+            'started_at' => $resource?->started_at,
+            'completed_at' => $resource?->completed_at,
+            'score' => $resource?->score,
+            'total_points' => $resource?->total_points,
+            'percentage' => $resource?->percentage,
+            'passed' => $resource?->passed,
             'video_quiz' => new VideoQuizResource($this->whenLoaded('videoQuiz')),
             'answers' => VideoQuizAnswerResource::collection($this->whenLoaded('answers')),
             'student' => $this->whenLoaded('student', fn() => [
-                'id' => $this->student->id,
-                'name' => $this->student->name,
+                'id' => $resource->student->id,
+                'name' => $lang == 'en' ? $resource->student->name : GoogleTranslateHelper::translate($resource->student->name ?? '', $lang),
             ]),
-            'created_at' => $this->created_at,
+            'created_at' => $resource?->created_at,
         ];
     }
 }

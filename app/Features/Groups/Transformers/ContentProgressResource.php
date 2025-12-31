@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Transformers;
 
+use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,7 +11,7 @@ class ContentProgressResource extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
-
+        $lang = app()->getLocale();
         return [
             'id' => $resource?->id,
             'user_id' => $resource?->user_id,
@@ -26,7 +27,7 @@ class ContentProgressResource extends JsonResource
                 $resource?->relationLoaded('lessonContent'),
                 fn() => [
                     'id' => $resource->lessonContent?->id,
-                    'title' => $resource->lessonContent?->title,
+                    'title' => $lang == 'en' ? $resource->lessonContent?->title : GoogleTranslateHelper::translate($resource->lessonContent?->title ?? '', $lang),
                     'content_type' => $resource->lessonContent?->content_type,
                 ]
             ),
