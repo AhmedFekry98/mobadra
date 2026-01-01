@@ -34,6 +34,7 @@ class UserInformation extends Model
         'emergency_contact_phone',
         'bio',
         'social_links',
+        'acceptance_exam'
     ];
 
     protected $casts = [
