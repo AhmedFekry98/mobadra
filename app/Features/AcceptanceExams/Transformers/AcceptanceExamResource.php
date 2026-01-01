@@ -20,7 +20,7 @@ class AcceptanceExamResource extends JsonResource
             'show_answers' => $this->show_answers,
             'is_active' => $this->is_active,
             'questions_count' => $this->whenLoaded('questions', fn() => $this->questions->count()),
-            'questions' => AcceptanceExamQuestionResource::collection($this->whenLoaded('questions')),
+            'questions' => $this->whenLoaded('questions', fn() => AcceptanceExamQuestionResource::collection($this->questions)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
