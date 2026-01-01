@@ -185,8 +185,20 @@ class UserService
     public function updateStudentUser(string $id, array $data): User
     {
         $user = $this->getStudentUserById($id);
+
+        $userInformationData = $data['user_information'] ?? null;
+        unset($data['user_information']);
+
         $user->update($data);
-        return $user->fresh(['role']);
+
+        if ($userInformationData) {
+            $user->userInformation()->updateOrCreate(
+                ['user_id' => $user->id],
+                $userInformationData
+            );
+        }
+
+        return $user->fresh(['role', 'userInformation']);
     }
 
     /**
