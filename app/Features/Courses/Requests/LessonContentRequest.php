@@ -14,6 +14,45 @@ class LessonContentRequest extends BaseFormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Convert camelCase to snake_case for all input
+        $contentData = $this->input('contentData') ?? $this->input('content_data') ?? [];
+        
+        if (!empty($contentData)) {
+            // Convert keys inside contentData from camelCase to snake_case
+            $convertedContentData = [];
+            foreach ($contentData as $key => $value) {
+                $snakeKey = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+                $convertedContentData[$snakeKey] = $value;
+            }
+            
+            $this->merge([
+                'content_data' => $convertedContentData,
+            ]);
+        }
+
+        // Convert content_type from camelCase if needed
+        if ($this->has('contentType') && !$this->has('content_type')) {
+            $this->merge(['content_type' => $this->input('contentType')]);
+        }
+
+        // Convert lesson_id from camelCase if needed
+        if ($this->has('lessonId') && !$this->has('lesson_id')) {
+            $this->merge(['lesson_id' => $this->input('lessonId')]);
+        }
+
+        // Convert is_required from camelCase if needed
+        if ($this->has('isRequired') && !$this->has('is_required')) {
+            $this->merge(['is_required' => $this->input('isRequired')]);
+        }
+
+        // Convert is_published from camelCase if needed
+        if ($this->has('isPublished') && !$this->has('is_published')) {
+            $this->merge(['is_published' => $this->input('isPublished')]);
+        }
+    }
+
     public function rules(): array
     {
         $isUpdate = $this->isMethod('put') || $this->isMethod('patch');
@@ -100,7 +139,7 @@ class LessonContentRequest extends BaseFormRequest
                 'content_data.files.*' => ['file', 'max:51200'],
             ],
             'material' => [
-                'content_data.file' => [$required, 'file', 'max:51200'],
+                'content_data.file' => ['sometimes', 'file', 'max:51200', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,zip,rar'],
                 'content_data.file_type' => ['nullable', 'string'],
                 'content_data.is_downloadable' => ['sometimes', 'boolean'],
             ],

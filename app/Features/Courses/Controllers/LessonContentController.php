@@ -178,4 +178,17 @@ class LessonContentController extends Controller
         }, 'LessonContentController@getMaterialsByLesson');
     }
 
+    public function getMaterialFiles(string $materialId)
+    {
+        return $this->executeService(function () use ($materialId) {
+            $this->authorize('viewAny', LessonContent::class);
+            $files = $this->service->getMaterialFiles($materialId);
+
+            return $this->okResponse(
+                $files,
+                "Material files retrieved successfully"
+            );
+        }, 'LessonContentController@getMaterialFiles');
+    }
+
 }

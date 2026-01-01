@@ -234,4 +234,19 @@ class LessonContentService
     {
         return $this->repository->count();
     }
+
+    public function getMaterialFiles(string $materialId): array
+    {
+        $material = Material::findOrFail($materialId);
+        
+        return $material->getMedia('material_file')->map(function ($media) {
+            return [
+                'id' => $media->id,
+                'file_name' => $media->file_name,
+                'file_url' => $media->getUrl(),
+                'file_size' => $media->size,
+                'file_type' => $media->mime_type,
+            ];
+        })->toArray();
+    }
 }

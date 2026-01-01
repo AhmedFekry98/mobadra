@@ -37,6 +37,7 @@ Route::prefix('lesson-contents')->name('lesson_contents.')->group(function () {
     Route::get('lesson/{lessonId}/quizzes', [LessonContentController::class, 'getQuizzesByLesson'])->name('quizzes_by_lesson');
     Route::get('lesson/{lessonId}/assignments', [LessonContentController::class, 'getAssignmentsByLesson'])->name('assignments_by_lesson');
     Route::get('lesson/{lessonId}/materials', [LessonContentController::class, 'getMaterialsByLesson'])->name('materials_by_lesson');
+    Route::get('materials/{materialId}/files', [LessonContentController::class, 'getMaterialFiles'])->name('material_files');
     Route::apiResource('', LessonContentController::class)->parameters(['' => 'lesson_content']);
 });
 
