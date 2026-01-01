@@ -44,7 +44,12 @@ class AcceptanceExamsFeatureProvider extends ServiceProvider
      */
     public function loadConfigurations(): void
     {
-        $featureConfigFiles = File::files(__DIR__ . '/Config');
+        $configPath = __DIR__ . '/Config';
+        if (!File::exists($configPath)) {
+            return;
+        }
+
+        $featureConfigFiles = File::files($configPath);
         foreach ($featureConfigFiles as $splFile) {
             list($name, $extenssion) = explode('.', $splFile->getFilename());
             $path = $splFile->getRealPath();
