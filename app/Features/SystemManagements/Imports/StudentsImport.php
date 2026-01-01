@@ -6,6 +6,7 @@ use App\Features\Grades\Models\Grade;
 use App\Features\SystemManagements\Models\Role;
 use App\Features\SystemManagements\Models\User;
 use App\Features\SystemManagements\Models\UserInformation;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class StudentsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 {
@@ -53,11 +55,11 @@ class StudentsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     ]);
                     $user = $existingUser;
                 } else {
-                    // Create new user
+                    // Create new user with default password if not provided
                     $user = User::create([
                         'name' => $data['name'],
                         'email' => $data['email'],
-                        'password' => Hash::make($data['password']),
+                        'password' => Hash::make($data['password'] ?? 'password'),
                         'role_id' => $studentRole->id,
                     ]);
                 }
@@ -113,6 +115,11 @@ class StudentsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             $normalizedKey = strtolower(str_replace([' ', '-'], '_', trim($key ?? '')));
             // Convert numeric values to strings for phone/postal fields
             $normalizedRow[$normalizedKey] = is_numeric($value) ? (string) $value : $value;
+        }
+
+        // Convert Excel date serial number to date string
+        if (!empty($normalizedRow['date_of_birth'])) {
+            $normalizedRow['date_of_birth'] = $this->parseDate($normalizedRow['date_of_birth']);
         }
 
         $validator = Validator::make($normalizedRow, [
@@ -183,5 +190,56 @@ class StudentsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             'failed_rows' => $this->failedRows,
             'errors' => $this->errors,
         ];
+    }
+
+    /**
+     * Parse date from various formats including Excel serial numbers
+     */
+    protected function parseDate(mixed $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        // If it's a pure numeric value, it's likely an Excel date serial number
+        if (is_numeric($value) && (int)$value > 1000 && (int)$value < 100000) {
+            try {
+                $date = ExcelDate::excelToDateTimeObject((int)$value);
+                return $date->format('Y-m-d');
+            } catch (\Exception $e) {
+                // Fall through to other parsing methods
+            }
+        }
+
+        // Try to parse various date formats
+        $formats = [
+            'Y-m-d',
+            'd-m-Y',
+            'd/m/Y',
+            'm/d/Y',
+            'Y/m/d',
+            'd-m-Y :H:i',
+            'd-m-Y:H:i',
+            'Y-m-d H:i:s',
+        ];
+
+        foreach ($formats as $format) {
+            try {
+                $date = Carbon::createFromFormat($format, trim($value));
+                if ($date) {
+                    return $date->format('Y-m-d');
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        // Try Carbon's flexible parsing as last resort
+        try {
+            $date = Carbon::parse($value);
+            return $date->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }
