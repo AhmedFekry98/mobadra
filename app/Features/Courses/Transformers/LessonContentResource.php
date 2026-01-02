@@ -43,17 +43,16 @@ class LessonContentResource extends JsonResource
 
         // For video content, use signed URLs and embed (protected)
         if ($resource->content_type === 'video') {
-            // Check if English video is requested and available
+            // Check if English video is requested
             $videoType = request('type');
-            $videoUrl = $contentable->video_url;
-
-            if ($videoType === 'en' && $contentable->video_url_en) {
-                $videoUrl = $contentable->video_url_en;
-            }
+            $videoUrl = $videoType === 'en' && $contentable->video_url_en
+                ? $contentable->video_url_en
+                : $contentable->video_url;
 
             return [
                 'id' => $contentable->id,
-                'video_url' => $videoType === 'en' ? $contentable->video_url_en : $contentable->video_url,
+                'video_url' => $contentable->video_url,
+                'video_url_en' => $contentable->video_url_en,
                 'video_provider' => $lang == 'en' ? $contentable->video_provider : GoogleTranslateHelper::translate($contentable->video_provider ?? '', $lang),
                 'duration' => $contentable->duration,
                 'embed_html' => $this->getEmbedHtmlForVideo($contentable, $videoUrl),
