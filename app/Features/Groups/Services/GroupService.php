@@ -63,9 +63,9 @@ class GroupService
     /**
      * Get available schedules for student based on their grade
      */
-    public function getAvailableSchedulesForStudent(string $gradeId, string $locationType): array
+    public function getAvailableSchedulesForStudent(string $gradeId, string $locationType, ?string $governorateId = null): array
     {
-        return $this->repository->getAvailableSchedulesForStudent($gradeId, $locationType);
+        return $this->repository->getAvailableSchedulesForStudent($gradeId, $locationType, $governorateId);
     }
 
     /**

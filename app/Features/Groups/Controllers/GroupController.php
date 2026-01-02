@@ -139,7 +139,9 @@ class GroupController extends Controller
                 );
             }
 
-            $schedules = $this->service->getAvailableSchedulesForStudent($gradeId, $locationType);
+            $governorateId = $locationType === 'offline' ? $user->userInformation?->governorate_id : null;
+
+            $schedules = $this->service->getAvailableSchedulesForStudent($gradeId, $locationType, $governorateId);
 
             return $this->okResponse(
                 $schedules,
