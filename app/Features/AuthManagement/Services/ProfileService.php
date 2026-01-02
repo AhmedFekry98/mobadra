@@ -43,6 +43,11 @@ class ProfileService
      */
     protected function updateUserInformation(User $user, array $informationData): void
     {
+        // Convert empty strings to null for nullable fields
+        $informationData = array_map(function ($value) {
+            return $value === '' ? null : $value;
+        }, $informationData);
+
         if ($user->userInformation) {
             $user->userInformation->update($informationData);
         } else {
