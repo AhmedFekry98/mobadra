@@ -18,7 +18,7 @@ class AcceptanceExamQuestionResource extends JsonResource
             'order' => $this->order,
             'explanation' => $this->explanation,
             'is_active' => $this->is_active,
-            'options' => AcceptanceExamQuestionOptionResource::collection($this->whenLoaded('options')),
+            'options' => $this->whenLoaded('options', fn() => AcceptanceExamQuestionOptionResource::collection($this->options)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

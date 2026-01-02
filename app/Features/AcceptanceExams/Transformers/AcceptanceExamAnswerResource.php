@@ -17,8 +17,8 @@ class AcceptanceExamAnswerResource extends JsonResource
             'text_answer' => $this->text_answer,
             'is_correct' => $this->is_correct,
             'points_earned' => $this->points_earned,
-            'question' => AcceptanceExamQuestionResource::make($this->whenLoaded('question')),
-            'selected_option' => AcceptanceExamQuestionOptionResource::make($this->whenLoaded('selectedOption')),
+            'question' => $this->whenLoaded('question', fn() => AcceptanceExamQuestionResource::make($this->question)),
+            'selected_option' => $this->whenLoaded('selectedOption', fn() => AcceptanceExamQuestionOptionResource::make($this->selectedOption)),
         ];
     }
 }

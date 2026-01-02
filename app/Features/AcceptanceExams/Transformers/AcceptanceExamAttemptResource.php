@@ -21,13 +21,13 @@ class AcceptanceExamAttemptResource extends JsonResource
             'total_points' => $this->total_points,
             'percentage' => $this->percentage,
             'passed' => $this->passed,
-            'acceptance_exam' => AcceptanceExamResource::make($this->whenLoaded('acceptanceExam')),
+            'acceptance_exam' => $this->whenLoaded('acceptanceExam', fn() => AcceptanceExamResource::make($this->acceptanceExam)),
             'student' => $this->whenLoaded('student', fn() => [
                 'id' => $this->student->id,
                 'name' => $this->student->name,
                 'email' => $this->student->email,
             ]),
-            'answers' => AcceptanceExamAnswerResource::collection($this->whenLoaded('answers')),
+            'answers' => $this->whenLoaded('answers', fn() => AcceptanceExamAnswerResource::collection($this->answers)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

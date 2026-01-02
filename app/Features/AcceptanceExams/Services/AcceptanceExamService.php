@@ -155,7 +155,10 @@ class AcceptanceExamService
 
     public function completeAttempt(int $attemptId): AcceptanceExamAttempt
     {
-        $attempt = AcceptanceExamAttempt::with(['answers.question', 'acceptanceExam', 'student.userInformation'])->findOrFail($attemptId);
+        try {
+            DB::beginTransaction();
+            $attempt = AcceptanceExamAttempt::with(['answers.question', 'acceptanceExam', 'student.userInformation'])->findOrFail($attemptId);
+
 
         if ($attempt->status !== 'in_progress') {
             throw new \Exception('This attempt has already been completed');
@@ -177,8 +180,14 @@ class AcceptanceExamService
                 'acceptance_exam' => 'waiting',
             ]);
         }
+        DB::commit();
 
         return $attempt->fresh(['answers.question', 'acceptanceExam']);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            throw new \Exception('This attempt has already been completed');
+        }
     }
 
     public function getAttemptResult(int $attemptId): AcceptanceExamAttempt
