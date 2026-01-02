@@ -34,6 +34,7 @@ class UserInformationResource extends JsonResource
                 'id' => $resource?->governorate?->id,
                 'name' => $lang == 'en' ? $resource?->governorate?->name : GoogleTranslateHelper::translate($resource?->governorate?->name ?? '', $lang),
             ],
+            'acceptance_exam' => $resource?->acceptance_exam,
             'nationality' => $lang == 'en' ? $resource?->nationality : GoogleTranslateHelper::translate($resource?->nationality ?? '', $lang),
             'address' => $lang == 'en' ? $resource?->address : GoogleTranslateHelper::translate($resource?->address ?? '', $lang),
             'city' => $lang == 'en' ? $resource?->city : GoogleTranslateHelper::translate($resource?->city ?? '', $lang),
