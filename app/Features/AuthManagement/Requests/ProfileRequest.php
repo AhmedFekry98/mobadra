@@ -41,7 +41,7 @@ class ProfileRequest extends BaseFormRequest
         return [
             // Basic user info
             'name' => ['sometimes', 'string', 'max:255'],
-            'image' => ['sometimes', 'nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'image' => ['sometimes', 'nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
 
             // User Information fields
             'user_information' => ['sometimes', 'array'],
@@ -101,7 +101,7 @@ class ProfileRequest extends BaseFormRequest
         return [
             'image.image' => 'The file must be a valid image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, webp.',
-            'image.max' => 'The image must not be greater than 2MB.',
+            'image.max' => 'The image must not be greater than 5MB.',
             'user_information.date_of_birth.before' => 'Date of birth must be before today.',
             'user_services.*.exists' => 'Selected service does not exist.',
         ];
