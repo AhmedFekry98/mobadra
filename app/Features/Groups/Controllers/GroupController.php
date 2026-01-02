@@ -113,7 +113,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Get available schedules for student based on their grade
+     * Get available schedules for student based on their grade and course
      * For online groups: returns unique schedules (days + time)
      * For offline groups: returns unique schedules (days + time + location)
      */
@@ -131,6 +131,7 @@ class GroupController extends Controller
             }
 
             $locationType = request('type'); // 'online' or 'offline'
+            $courseId = request('course_id');
 
             if (!$locationType || !in_array($locationType, ['online', 'offline'])) {
                 return $this->errorResponse(
@@ -141,7 +142,7 @@ class GroupController extends Controller
 
             $governorateId = $locationType === 'offline' ? $user->userInformation?->governorate_id : null;
 
-            $schedules = $this->service->getAvailableSchedulesForStudent($gradeId, $locationType, $governorateId);
+            $schedules = $this->service->getAvailableSchedulesForStudent($gradeId, $locationType, $governorateId, $courseId);
 
             return $this->okResponse(
                 $schedules,

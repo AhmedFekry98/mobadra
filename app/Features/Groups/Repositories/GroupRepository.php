@@ -87,11 +87,11 @@ class GroupRepository
     }
 
     /**
-     * Get available schedules for student based on grade and location type
+     * Get available schedules for student based on grade, course and location type
      * Returns unique schedules (days + time) without duplicates
      * For offline groups, filters by student's governorate_id
      */
-    public function getAvailableSchedulesForStudent(string $gradeId, string $locationType, ?string $governorateId = null): array
+    public function getAvailableSchedulesForStudent(string $gradeId, string $locationType, ?string $governorateId = null, ?string $courseId = null): array
     {
         $query = Group::where('grade_id', $gradeId)
             ->where('location_type', $locationType)
@@ -100,6 +100,10 @@ class GroupRepository
 
         if ($locationType === 'offline' && $governorateId) {
             $query->where('governorate_id', $governorateId);
+        }
+
+        if ($courseId) {
+            $query->where('course_id', $courseId);
         }
 
         $groups = $query->get();
