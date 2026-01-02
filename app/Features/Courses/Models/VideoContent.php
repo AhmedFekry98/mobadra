@@ -12,6 +12,7 @@ class VideoContent extends Model
 
     protected $fillable = [
         'video_url', // This stores the Bunny video ID
+        'video_url_en', // English version video ID
         'video_provider',
         'duration',
         'thumbnail_url',

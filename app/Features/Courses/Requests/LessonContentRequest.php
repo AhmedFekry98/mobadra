@@ -18,7 +18,7 @@ class LessonContentRequest extends BaseFormRequest
     {
         // Convert camelCase to snake_case for all input
         $contentData = $this->input('contentData') ?? $this->input('content_data') ?? [];
-        
+
         if (!empty($contentData)) {
             // Convert keys inside contentData from camelCase to snake_case
             $convertedContentData = [];
@@ -26,7 +26,7 @@ class LessonContentRequest extends BaseFormRequest
                 $snakeKey = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
                 $convertedContentData[$snakeKey] = $value;
             }
-            
+
             $this->merge([
                 'content_data' => $convertedContentData,
             ]);
@@ -110,6 +110,7 @@ class LessonContentRequest extends BaseFormRequest
         return match ($contentType) {
             'video' => [
                 'content_data.video_url' => [$required, 'string'],
+                'content_data.video_url_en' => ['nullable', 'string'],
                 'content_data.video_provider' => ['sometimes', 'string', 'in:bunny'],
                 'content_data.duration' => ['sometimes', 'integer', 'min:0'],
                 'content_data.thumbnail_url' => ['nullable', 'string'],
