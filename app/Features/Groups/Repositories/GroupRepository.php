@@ -96,7 +96,7 @@ class GroupRepository
         $query = Group::where('grade_id', $gradeId)
             ->where('location_type', $locationType)
             ->where('is_active', true)
-            ->with('groupStudents');
+            ->with(['groupStudents', 'governorate']);
 
         if ($locationType === 'offline' && $governorateId) {
             $query->where('governorate_id', $governorateId);
@@ -121,6 +121,7 @@ class GroupRepository
                     'end_time' => $group->end_time,
                     'location' => $locationType === 'offline' ? $group->location : null,
                     'location_map_url' => $locationType === 'offline' ? $group->location_map_url : null,
+                    'governorate' => $locationType === 'offline' ? $group->governorate?->name : null,
                     'has_capacity' => false,
                 ];
             }

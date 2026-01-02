@@ -36,6 +36,18 @@ class GroupStudentService
                 return ['error' => 'Student is already enrolled in this group'];
             }
 
+            // Check if student is already enrolled in any group with same grade and location type
+            $existingEnrollment = $this->repository->findStudentInSameGradeAndType(
+                $studentId,
+                $group->grade_id,
+                $group->location_type
+            );
+
+            if ($existingEnrollment) {
+                $typeLabel = $group->location_type === 'online' ? 'online' : 'offline';
+                return ['error' => "Student is already enrolled in an {$typeLabel} group for this grade"];
+            }
+
             // Check if group has capacity
             if (!$group->hasCapacity()) {
                 // Try to find a similar group with capacity
@@ -108,6 +120,18 @@ class GroupStudentService
         ?string $location = null
     ): GroupStudent|array {
         return DB::transaction(function () use ($studentId, $gradeId, $locationType, $days, $startTime, $endTime, $location) {
+            // Check if student is already enrolled in any group with same grade and location type
+            $existingEnrollment = $this->repository->findStudentInSameGradeAndType(
+                $studentId,
+                $gradeId,
+                $locationType
+            );
+
+            if ($existingEnrollment) {
+                $typeLabel = $locationType === 'online' ? 'online' : 'offline';
+                return ['error' => "Student is already enrolled in an {$typeLabel} group for this grade"];
+            }
+
             // Find a group with capacity for this schedule
             $group = $this->groupRepository->findGroupWithCapacityForSchedule(
                 $gradeId,
@@ -120,21 +144,6 @@ class GroupStudentService
 
             if (!$group) {
                 return ['error' => 'No available group found for this schedule'];
-            }
-
-            // Check if student is already in any group with same schedule
-            $existingEnrollment = $this->repository->findStudentInSameSchedule(
-                $studentId,
-                $gradeId,
-                $locationType,
-                $days,
-                $startTime,
-                $endTime,
-                $location
-            );
-
-            if ($existingEnrollment) {
-                return ['error' => 'Student is already enrolled in a group with this schedule'];
             }
 
             return $this->repository->create([
