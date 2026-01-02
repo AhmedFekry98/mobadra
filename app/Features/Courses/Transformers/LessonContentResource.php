@@ -2,6 +2,7 @@
 
 namespace App\Features\Courses\Transformers;
 
+use App\Features\Groups\Models\ContentProgress;
 use App\Helpers\GoogleTranslateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -12,7 +13,7 @@ class LessonContentResource extends JsonResource
     {
         $resource = $this->resource;
         $lang = app()->getLocale();
-        return [
+        $data = [
             'id' => $resource?->id,
             'lesson' => [
                 'id' => $resource?->lesson?->id,
@@ -31,6 +32,13 @@ class LessonContentResource extends JsonResource
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];
+
+        // Add content progress for students only
+        if (auth()->check() && auth()->user()->role_name === 'student') {
+            $data['content_progress'] = $this->getContentProgress($resource);
+        }
+
+        return $data;
     }
 
     protected function formatContentable($resource, $lang): ?array
@@ -76,5 +84,25 @@ class LessonContentResource extends JsonResource
         }
 
         return $bunnyService->getEmbedHtml($videoUrl);
+    }
+
+    protected function getContentProgress($resource): ?array
+    {
+        if (!$resource?->id) {
+            return null;
+        }
+
+        $userId = auth()->id();
+
+        $progress = ContentProgress::where('user_id', $userId)
+            ->where('lesson_content_id', $resource->id)
+            ->first();
+
+        return [
+            'progress_percentage' => $progress?->progress_percentage ?? 0,
+            'is_completed' => $progress?->is_completed ?? false,
+            'last_position' => $progress?->last_position ?? 0,
+            'watch_time' => $progress?->watch_time ?? 0,
+        ];
     }
 }
