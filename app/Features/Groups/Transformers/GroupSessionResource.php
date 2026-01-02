@@ -54,14 +54,21 @@ class GroupSessionResource extends JsonResource
     protected function getContentProgress($resource): array
     {
         if (!$resource?->lesson_id || !auth()->check()) {
-            return [];
+            return [
+                'total' => [
+                    'total_contents' => 0,
+                    'completed_contents' => 0,
+                    'total_progress_percentage' => 0,
+                ],
+                'items' => [],
+            ];
         }
 
         $userId = auth()->id();
         $groupId = $resource->group_id;
         $lessonContents = $resource->lesson?->contents ?? collect();
 
-        return $lessonContents->map(function ($content) use ($userId, $groupId) {
+        $items = $lessonContents->map(function ($content) use ($userId, $groupId) {
             // Check for progress with matching group_id OR null group_id
             $progress = ContentProgress::where('user_id', $userId)
                 ->where('lesson_content_id', $content->id)
@@ -80,6 +87,21 @@ class GroupSessionResource extends JsonResource
                 'last_position' => $progress?->last_position ?? 0,
                 'watch_time' => $progress?->watch_time ?? 0,
             ];
-        })->toArray();
+        });
+
+        $totalContents = $items->count();
+        $completedContents = $items->where('is_completed', true)->count();
+        $totalProgressPercentage = $totalContents > 0
+            ? round($items->avg('progress_percentage'), 2)
+            : 0;
+
+        return [
+            'total' => [
+                'total_contents' => $totalContents,
+                'completed_contents' => $completedContents,
+                'total_progress_percentage' => $totalProgressPercentage,
+            ],
+            'items' => $items->toArray(),
+        ];
     }
 }
