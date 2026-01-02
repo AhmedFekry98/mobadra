@@ -2,6 +2,7 @@
 
 namespace App\Features\Groups\Transformers;
 
+use App\Features\Groups\Models\ContentProgress;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -44,8 +45,37 @@ class GroupSessionResource extends JsonResource
             // 'recording_download_url' => $resource?->recording_download_url,
             // 'recording_password' => $resource?->recording_password,
             // 'has_meeting' => !empty($resource?->moderator_link) || !empty($resource?->attendee_link),
+            'content_progress' => $this->getContentProgress($resource),
             'created_at' => $resource?->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $resource?->updated_at?->format('Y-m-d H:i:s'),
         ];
+    }
+
+    protected function getContentProgress($resource): array
+    {
+        if (!$resource?->lesson_id || !auth()->check()) {
+            return [];
+        }
+
+        $userId = auth()->id();
+        $groupId = $resource->group_id;
+        $lessonContents = $resource->lesson?->contents ?? collect();
+
+        return $lessonContents->map(function ($content) use ($userId, $groupId) {
+            $progress = ContentProgress::where('user_id', $userId)
+                ->where('lesson_content_id', $content->id)
+                ->where('group_id', $groupId)
+                ->first();
+
+            return [
+                'lesson_content_id' => $content->id,
+                'title' => $content->title,
+                'content_type' => $content->content_type,
+                'progress_percentage' => $progress?->progress_percentage ?? 0,
+                'is_completed' => $progress?->is_completed ?? false,
+                'last_position' => $progress?->last_position ?? 0,
+                'watch_time' => $progress?->watch_time ?? 0,
+            ];
+        })->toArray();
     }
 }

@@ -15,7 +15,7 @@ class AcceptanceExamService
 {
     public function getAllExams(?string $search = null, ?bool $paginate = false)
     {
-        $query = AcceptanceExam::with(['questions']);
+        $query = AcceptanceExam::with(['questions.options']);
 
         if ($search) {
             $query->where('title', 'like', "%{$search}%");

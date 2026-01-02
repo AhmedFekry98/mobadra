@@ -18,7 +18,7 @@ class GroupSessionRepository
     public function getAll(User $user, ?bool $paginate = false, ?string $type = null): Collection|LengthAwarePaginator
     {
           $query = GroupSessionRoleQuery::resolve($user)
-            ->with(['group', 'lesson']);
+            ->with(['group', 'lesson.contents']);
 
         if ($type !== null) {
             $query->whereHas('group', function ($q) use ($type) {
