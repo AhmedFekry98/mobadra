@@ -18,6 +18,7 @@ class AcceptanceExamRequest extends BaseFormRequest
     {
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             return [
+                'grade_id' => ['sometimes', 'exists:grades,id'],
                 'title' => ['sometimes', 'string', 'max:255'],
                 'description' => ['sometimes', 'nullable', 'string'],
                 'time_limit' => ['sometimes', 'nullable', 'integer', 'min:1'],
@@ -30,6 +31,7 @@ class AcceptanceExamRequest extends BaseFormRequest
         }
 
         return [
+            'grade_id' => ['required', 'exists:grades,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'time_limit' => ['nullable', 'integer', 'min:1'],

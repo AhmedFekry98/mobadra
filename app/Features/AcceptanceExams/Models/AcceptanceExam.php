@@ -2,6 +2,7 @@
 
 namespace App\Features\AcceptanceExams\Models;
 
+use App\Features\Grades\Models\Grade;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,7 @@ class AcceptanceExam extends Model
     use HasFactory;
 
     protected $fillable = [
+        'grade_id',
         'title',
         'description',
         'time_limit',
@@ -28,6 +30,11 @@ class AcceptanceExam extends Model
         'show_answers' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
 
     public function questions()
     {

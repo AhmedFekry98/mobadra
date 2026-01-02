@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('acceptance_exams', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('grade_id')->constrained('grades')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('time_limit')->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['is_active']);
+            $table->index(['grade_id']);
         });
     }
 

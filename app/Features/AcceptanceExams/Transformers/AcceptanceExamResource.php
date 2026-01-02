@@ -11,6 +11,11 @@ class AcceptanceExamResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'grade_id' => $this->grade_id,
+            'grade' => $this->whenLoaded('grade', fn() => [
+                'id' => $this->grade->id,
+                'name' => $this->grade->name,
+            ]),
             'title' => $this->title,
             'description' => $this->description,
             'time_limit' => $this->time_limit,

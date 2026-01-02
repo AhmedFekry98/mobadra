@@ -56,6 +56,28 @@ class AcceptanceExamController extends Controller
         }, 'AcceptanceExamController@show');
     }
 
+    /**
+     * Get exam for current student based on their grade (max 50 shuffled questions)
+     */
+    public function getMyExam()
+    {
+        return $this->executeService(function () {
+            $exam = $this->service->getExamForStudent(auth()->id());
+
+            if (!$exam) {
+                return $this->errorResponse(
+                    "No acceptance exam found for your grade",
+                    404
+                );
+            }
+
+            return $this->okResponse(
+                AcceptanceExamResource::make($exam),
+                "Acceptance exam retrieved successfully"
+            );
+        }, 'AcceptanceExamController@getMyExam');
+    }
+
     public function store(AcceptanceExamRequest $request)
     {
         return $this->executeService(function () use ($request) {

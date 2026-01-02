@@ -29,6 +29,41 @@ class AcceptanceExamService
         return AcceptanceExam::with(['questions.options'])->findOrFail($id);
     }
 
+    /**
+     * Get exam for student based on their grade with max 50 shuffled questions
+     */
+    public function getExamForStudent(int $studentId): ?AcceptanceExam
+    {
+        $user = \App\Features\SystemManagements\Models\User::with('userInformation')->findOrFail($studentId);
+        $gradeId = $user->userInformation?->grade_id;
+
+        if (!$gradeId) {
+            return null;
+        }
+
+        $exam = AcceptanceExam::where('grade_id', $gradeId)
+            ->where('is_active', true)
+            ->with(['grade'])
+            ->first();
+
+        if (!$exam) {
+            return null;
+        }
+
+        // Get questions shuffled and limited to 50
+        $questions = AcceptanceExamQuestion::where('acceptance_exam_id', $exam->id)
+            ->where('is_active', true)
+            ->with('options')
+            ->inRandomOrder()
+            ->limit(50)
+            ->get();
+
+        // Attach questions to exam
+        $exam->setRelation('questions', $questions);
+
+        return $exam;
+    }
+
     public function createExam(array $data): AcceptanceExam
     {
         return AcceptanceExam::create($data);

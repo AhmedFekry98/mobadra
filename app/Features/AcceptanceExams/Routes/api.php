@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('acceptance-exams')->group(function () {
     Route::get('/', [AcceptanceExamController::class, 'index']);
     Route::post('/', [AcceptanceExamController::class, 'store']);
+    Route::get('/my-exam', [AcceptanceExamController::class, 'getMyExam']);
     Route::get('/my-attempts', [AcceptanceExamController::class, 'getMyAttempts']);
 
     // Students by acceptance status
