@@ -34,6 +34,7 @@ class ProfileResource extends JsonResource
                 'name' => $resource?->role?->name,
                 'caption' => $lang == 'en' ? $resource?->role?->caption : GoogleTranslateHelper::translate($resource?->role?->caption ?? '', $lang),
             ],
+            'acceptance_exam' => $resource?->userInformation?->acceptance_exam,
             'user_information' => UserInformationResource::make($resource?->userInformation),
             'permissions' => $resource?->allPermissions()
                 ? PermissionResource::collection($resource->allPermissions())->pluck('name')
