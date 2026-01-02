@@ -62,9 +62,13 @@ class GroupSessionResource extends JsonResource
         $lessonContents = $resource->lesson?->contents ?? collect();
 
         return $lessonContents->map(function ($content) use ($userId, $groupId) {
+            // Check for progress with matching group_id OR null group_id
             $progress = ContentProgress::where('user_id', $userId)
                 ->where('lesson_content_id', $content->id)
-                ->where('group_id', $groupId)
+                ->where(function ($query) use ($groupId) {
+                    $query->where('group_id', $groupId)
+                        ->orWhereNull('group_id');
+                })
                 ->first();
 
             return [
