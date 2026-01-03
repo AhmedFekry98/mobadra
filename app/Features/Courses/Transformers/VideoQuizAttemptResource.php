@@ -23,7 +23,7 @@ class VideoQuizAttemptResource extends JsonResource
             'total_points' => $resource?->total_points,
             'percentage' => $resource?->percentage,
             'passed' => $resource?->passed,
-            'video_quiz' => new VideoQuizResource($this->whenLoaded('videoQuiz')),
+            'video_quiz' => $this->whenLoaded('videoQuiz', fn() => new VideoQuizResource($this->videoQuiz)),
             'answers' => VideoQuizAnswerResource::collection($this->whenLoaded('answers')),
             'student' => $this->whenLoaded('student', fn() => [
                 'id' => $resource->student->id,
