@@ -18,7 +18,6 @@ class UserMetadata
         return [
             'name',
             'email',
-            'phone'
         ];
     }
 
@@ -44,7 +43,7 @@ class UserMetadata
                 'label' => 'Phone',
                 'type' => 'text',
                 'operators' => ['=', '!=', 'like', 'not like'],
-                'searchable' => true
+                'searchable' => false
             ],
             [
                 'column' => 'role_id',
