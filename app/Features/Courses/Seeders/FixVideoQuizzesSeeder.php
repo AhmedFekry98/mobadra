@@ -4,6 +4,7 @@ namespace App\Features\Courses\Seeders;
 
 use App\Features\Courses\Models\LessonContent;
 use App\Features\Courses\Models\VideoQuiz;
+use App\Features\Courses\Models\VideoQuizQuestion;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -11,11 +12,11 @@ class FixVideoQuizzesSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->command->info('Starting to fix video_quizzes video_content_id...');
+        $this->command->info('Starting to fix video_quizzes...');
 
-        // Get all video quizzes that have wrong video_content_id (lesson_content_id instead of video_content_id)
-        $quizzes = VideoQuiz::all();
+        $quizzes = VideoQuiz::with('questions')->get();
         $fixed = 0;
+        $questionsMoved = 0;
         $deleted = 0;
         $skipped = 0;
 
@@ -32,8 +33,17 @@ class FixVideoQuizzesSeeder extends Seeder
                 $existingQuiz = VideoQuiz::where('video_content_id', $correctVideoContentId)->first();
 
                 if ($existingQuiz && $existingQuiz->id !== $quiz->id) {
-                    // Delete duplicate - keep the existing one
-                    $this->command->warn("Deleting duplicate quiz ID {$quiz->id} (video_content_id would be {$correctVideoContentId})");
+                    // Move questions from this quiz to the existing correct quiz
+                    $questionsCount = $quiz->questions->count();
+                    if ($questionsCount > 0) {
+                        VideoQuizQuestion::where('video_quiz_id', $quiz->id)
+                            ->update(['video_quiz_id' => $existingQuiz->id]);
+                        $this->command->info("Moved {$questionsCount} questions from quiz {$quiz->id} to quiz {$existingQuiz->id}");
+                        $questionsMoved += $questionsCount;
+                    }
+
+                    // Delete the duplicate quiz
+                    $this->command->warn("Deleting duplicate quiz ID {$quiz->id}");
                     $quiz->delete();
                     $deleted++;
                 } else {
@@ -48,6 +58,6 @@ class FixVideoQuizzesSeeder extends Seeder
             }
         }
 
-        $this->command->info("Done! Fixed: {$fixed}, Deleted duplicates: {$deleted}, Skipped: {$skipped}");
+        $this->command->info("Done! Fixed: {$fixed}, Questions moved: {$questionsMoved}, Deleted duplicates: {$deleted}, Skipped: {$skipped}");
     }
 }
