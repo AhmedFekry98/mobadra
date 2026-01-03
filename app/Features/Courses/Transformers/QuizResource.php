@@ -17,6 +17,10 @@ class QuizResource extends JsonResource
         return [
             'id' => $resource?->id,
             'time_limit' => $resource?->time_limit,
+            'term' =>[
+                'id' => $resource?->term?->id,
+                'name' => $lang == 'en' ? $resource?->term?->name : GoogleTranslateHelper::translate($resource?->term?->name ?? '', $lang),
+            ],
             'title' => $lang == 'en' ? $resource?->pivot?->title : GoogleTranslateHelper::translate($resource?->pivot?->title ?? '', $lang),
             'description' => $lang == 'en' ? $resource?->pivot?->description : GoogleTranslateHelper::translate($resource?->pivot?->description ?? '', $lang),
             'order' => $resource?->pivot?->order ?? null,
