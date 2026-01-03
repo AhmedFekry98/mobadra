@@ -76,6 +76,12 @@ Route::prefix('group-sessions')->name('group_sessions.')->group(function () {
     Route::get('{sessionId}/attendance/stats', [AttendanceController::class, 'getSessionStats'])->name('attendance_stats');
 });
 
+// Standalone Attendance routes
+Route::prefix('attendances')->name('attendances.')->group(function () {
+    Route::get('/', [AttendanceController::class, 'index'])->name('index');
+    Route::patch('{id}', [AttendanceController::class, 'update'])->name('update');
+});
+
 // Content Progress (تتبع مشاهدة الفيديوهات)
 Route::prefix('content-progress')->name('content_progress.')->group(function () {
     // Student routes
