@@ -27,6 +27,18 @@ class ResourceController extends Controller
         return $this->executeService(function () use ($request) {
             $query = Resource::with(['grade', 'uploader']);
 
+            // If user is a student, filter by their grade or general resources (no grade)
+            $user = Auth::user();
+            if ($user->role_name === 'student') {
+                $gradeId = $user->userInformation?->grade_id;
+                $query->where(function ($q) use ($gradeId) {
+                    $q->whereNull('grade_id'); // General resources
+                    if ($gradeId) {
+                        $q->orWhere('grade_id', $gradeId); // Student's grade resources
+                    }
+                });
+            }
+
             if ($request->has('search')) {
                 $search = $request->get('search');
                 $query->where(function ($q) use ($search) {
