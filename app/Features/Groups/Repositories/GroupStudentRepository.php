@@ -83,15 +83,21 @@ class GroupStudentRepository
     }
 
     /**
-     * Check if student is already enrolled in a group with same grade and location type
+     * Check if student is already enrolled in a group with same grade, location type, and term
      */
-    public function findStudentInSameGradeAndType(string $studentId, string $gradeId, string $locationType): ?GroupStudent
+    public function findStudentInSameGradeAndType(string $studentId, string $gradeId, string $locationType, ?string $termId = null): ?GroupStudent
     {
         return GroupStudent::where('student_id', $studentId)
             ->where('status', 'active')
-            ->whereHas('group', function ($q) use ($gradeId, $locationType) {
+            ->whereHas('group', function ($q) use ($gradeId, $locationType, $termId) {
                 $q->where('grade_id', $gradeId)
                     ->where('location_type', $locationType);
+
+                if ($termId) {
+                    $q->whereHas('course', function ($cq) use ($termId) {
+                        $cq->where('term_id', $termId);
+                    });
+                }
             })
             ->with('group')
             ->first();

@@ -37,28 +37,18 @@ class GroupStudentService
                 return ['error' => 'Student is already enrolled in this group'];
             }
 
-            // Check if student is already enrolled in any group within the same term
-            if ($group->course && $group->course->term_id) {
-                $existingTermEnrollment = $this->repository->findStudentInSameTerm(
-                    $studentId,
-                    $group->course->term_id
-                );
-
-                if ($existingTermEnrollment) {
-                    return ['error' => 'Student is already enrolled in a group for this term'];
-                }
-            }
-
-            // Check if student is already enrolled in any group with same grade and location type
+            // Check if student is already enrolled in any group with same grade, location type, and term
+            $termId = $group->course?->term_id;
             $existingEnrollment = $this->repository->findStudentInSameGradeAndType(
                 $studentId,
                 $group->grade_id,
-                $group->location_type
+                $group->location_type,
+                $termId
             );
 
             if ($existingEnrollment) {
                 $typeLabel = $group->location_type === 'online' ? 'online' : 'offline';
-                return ['error' => "Student is already enrolled in an {$typeLabel} group for this grade"];
+                return ['error' => "Student is already enrolled in an {$typeLabel} group for this grade in this term"];
             }
 
             // Check if group has capacity
