@@ -19,7 +19,7 @@ class VideoQuizResource extends JsonResource
             'is_required' => $resource?->is_required,
             'is_active' => $resource?->is_active,
             'questions_count' => $resource?->questions?->count() ?? 0,
-            'questions' => VideoQuizQuestionResource::collection($resource?->questions),
+            'questions' => $resource?->questions ? VideoQuizQuestionResource::collection($resource->questions) : [],
             'created_at' => $resource?->created_at,
             'updated_at' => $resource?->updated_at,
         ];

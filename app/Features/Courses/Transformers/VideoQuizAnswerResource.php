@@ -17,8 +17,8 @@ class VideoQuizAnswerResource extends JsonResource
             'selected_option_id' => $resource?->selected_option_id,
             'is_correct' => $resource?->is_correct,
             'points_earned' => $resource?->points_earned,
-            'question' => new VideoQuizQuestionResource($this->whenLoaded('question')),
-            'selected_option' => new VideoQuizOptionResource($this->whenLoaded('selectedOption')),
+            'question' => $this->whenLoaded('question', fn() => new VideoQuizQuestionResource($this->question)),
+            'selected_option' => $this->whenLoaded('selectedOption', fn() => new VideoQuizOptionResource($this->selectedOption)),
         ];
     }
 }

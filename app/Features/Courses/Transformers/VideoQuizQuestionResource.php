@@ -22,7 +22,7 @@ class VideoQuizQuestionResource extends JsonResource
             'timestamp_seconds' => $resource?->timestamp_seconds,
             'explanation' => $lang == 'en' ? $resource?->explanation : GoogleTranslateHelper::translate($resource?->explanation ?? '', $lang),
             'is_active' => $resource?->is_active,
-            'options' => VideoQuizOptionResource::collection($this->whenLoaded('options')),
+            'options' => $this->whenLoaded('options', fn() => VideoQuizOptionResource::collection($this->options)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -1,7 +1,7 @@
 # Reports API Documentation
 
 ## Overview
-The Reports API provides endpoints for retrieving attendance, quiz, and video quiz reports with various filtering options.
+The Reports API provides endpoints for retrieving attendance, quiz, video quiz, and content progress reports with various filtering options.
 
 **Base URL:** `/api/reports`
 
@@ -453,14 +453,241 @@ GET /api/reports/video-quizzes/lesson/{lessonId}
 
 ---
 
+## Content Progress Reports
+
+### 9. Get All Students Content Progress Report
+```
+GET /api/reports/content-progress
+```
+
+**Query Parameters:**
+- `period` - `this_week` | `this_month`
+- `date_from` - Start date
+- `date_to` - End date
+- `group_id` - Filter by group
+- `course_id` - Filter by course
+- `lesson_id` - Filter by lesson
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Content progress report retrieved successfully",
+  "data": {
+    "total_students": 25,
+    "overall_summary": {
+      "total_progress_records": 150,
+      "total_completed": 100,
+      "total_in_progress": 50,
+      "overall_completion_rate": 66.67,
+      "average_progress": 72.50,
+      "total_watch_time_seconds": 36000,
+      "total_watch_time_formatted": "10h 0m 0s"
+    },
+    "students": [
+      {
+        "student_id": 1,
+        "student_name": "Ahmed Mohamed",
+        "student_email": "ahmed@example.com",
+        "total_contents": 10,
+        "completed_contents": 8,
+        "in_progress_contents": 2,
+        "completion_rate": 80.00,
+        "average_progress": 85.50,
+        "total_watch_time_seconds": 3600,
+        "total_watch_time_formatted": "1h 0m 0s"
+      }
+    ],
+    "filters": {
+      "group_id": 1
+    }
+  }
+}
+```
+
+---
+
+### 10. Get Single Student Content Progress Report
+```
+GET /api/reports/content-progress/student/{studentId}
+```
+
+**Path Parameters:**
+- `studentId` (required) - Student ID
+
+**Query Parameters:**
+- `period` - `this_week` | `this_month`
+- `date_from` - Start date
+- `date_to` - End date
+- `group_id` - Filter by group
+- `course_id` - Filter by course
+- `lesson_id` - Filter by lesson
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Student content progress report retrieved successfully",
+  "data": {
+    "student": {
+      "id": 1,
+      "name": "Ahmed Mohamed",
+      "email": "ahmed@example.com"
+    },
+    "summary": {
+      "total_contents": 15,
+      "completed_contents": 10,
+      "in_progress_contents": 5,
+      "completion_rate": 66.67,
+      "average_progress": 75.00,
+      "total_watch_time_seconds": 5400,
+      "total_watch_time_formatted": "1h 30m 0s"
+    },
+    "by_course": [
+      {
+        "course_id": 1,
+        "course_title": "Introduction to Programming",
+        "total_contents": 10,
+        "completed_contents": 8,
+        "completion_rate": 80.00,
+        "average_progress": 85.00
+      }
+    ],
+    "by_lesson": [
+      {
+        "lesson_id": 1,
+        "lesson_title": "Getting Started",
+        "total_contents": 5,
+        "completed_contents": 4,
+        "completion_rate": 80.00,
+        "average_progress": 90.00
+      }
+    ],
+    "contents": [
+      {
+        "id": 1,
+        "lesson_content_id": 10,
+        "content_title": "Introduction Video",
+        "lesson_title": "Getting Started",
+        "course_title": "Introduction to Programming",
+        "group_id": 1,
+        "progress_percentage": 100,
+        "is_completed": true,
+        "watch_time_seconds": 600,
+        "watch_time_formatted": "10m 0s",
+        "last_position": 600,
+        "completed_at": "2025-01-15 14:30:00",
+        "updated_at": "2025-01-15 14:30:00"
+      }
+    ],
+    "filters": {}
+  }
+}
+```
+
+---
+
+### 11. Get Lesson Content Progress Report
+```
+GET /api/reports/content-progress/lesson/{lessonId}
+```
+
+**Path Parameters:**
+- `lessonId` (required) - Lesson ID
+
+**Query Parameters:**
+- `group_id` - Filter by group
+- `student_id` - Filter by specific student
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Lesson content progress report retrieved successfully",
+  "data": {
+    "lesson": {
+      "id": 1,
+      "title": "Getting Started",
+      "course": "Introduction to Programming"
+    },
+    "contents": [
+      {
+        "content_id": 10,
+        "title": "Introduction Video",
+        "total_students": 25,
+        "completed_count": 20,
+        "in_progress_count": 5,
+        "completion_rate": 80.00,
+        "average_progress": 85.00,
+        "total_watch_time": 15000
+      }
+    ],
+    "filters": {}
+  }
+}
+```
+
+---
+
+### 12. Get Group Content Progress Report
+```
+GET /api/reports/content-progress/group/{groupId}
+```
+
+**Path Parameters:**
+- `groupId` (required) - Group ID
+
+**Query Parameters:**
+- `period` - `this_week` | `this_month`
+- `date_from` - Start date
+- `date_to` - End date
+- `course_id` - Filter by course
+- `lesson_id` - Filter by lesson
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Group content progress report retrieved successfully",
+  "data": {
+    "group": {
+      "id": 1,
+      "name": "Group A"
+    },
+    "summary": {
+      "total_students": 25,
+      "total_progress_records": 250,
+      "total_completed": 180,
+      "overall_completion_rate": 72.00,
+      "average_progress": 78.50
+    },
+    "students": [
+      {
+        "student_id": 1,
+        "student_name": "Ahmed Mohamed",
+        "total_contents": 10,
+        "completed_contents": 8,
+        "completion_rate": 80.00,
+        "average_progress": 85.00,
+        "total_watch_time_seconds": 3600,
+        "total_watch_time_formatted": "1h 0m 0s"
+      }
+    ],
+    "filters": {}
+  }
+}
+```
+
+---
+
 ## Combined Student Report
 
-### 9. Get Full Student Report
+### 13. Get Full Student Report
 ```
 GET /api/reports/student/{studentId}
 ```
 
-Returns combined attendance, quiz, and video quiz data for a single student.
+Returns combined attendance, quiz, video quiz, and content progress data for a single student.
 
 **Path Parameters:**
 - `studentId` (required) - Student ID
@@ -526,6 +753,18 @@ Returns combined attendance, quiz, and video quiz data for a single student.
         "total_points_possible": 60
       },
       "by_video": []
+    },
+    "content_progress": {
+      "summary": {
+        "total_contents": 15,
+        "completed_contents": 10,
+        "in_progress_contents": 5,
+        "completion_rate": 66.67,
+        "average_progress": 75.00,
+        "total_watch_time_seconds": 5400,
+        "total_watch_time_formatted": "1h 30m 0s"
+      },
+      "by_course": []
     },
     "filters": {}
   }
