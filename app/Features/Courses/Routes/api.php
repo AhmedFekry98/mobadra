@@ -104,6 +104,7 @@ Route::prefix('video-quizzes')->name('video_quizzes.')->group(function () {
 
     // Student Attempts
     Route::post('{quizId}/attempts', [VideoQuizController::class, 'startAttempt'])->name('attempts.start');
+    Route::get('{quizId}/my-attempts', [VideoQuizController::class, 'myAttempts'])->name('attempts.my');
     Route::post('attempts/{attemptId}/answer', [VideoQuizController::class, 'submitAnswer'])->name('attempts.answer');
     Route::post('attempts/{attemptId}/complete', [VideoQuizController::class, 'completeAttempt'])->name('attempts.complete');
     Route::get('attempts/{attemptId}', [VideoQuizController::class, 'attemptResult'])->name('attempts.result');
