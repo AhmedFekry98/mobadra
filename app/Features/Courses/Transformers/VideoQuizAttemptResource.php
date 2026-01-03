@@ -24,7 +24,7 @@ class VideoQuizAttemptResource extends JsonResource
             'percentage' => $resource?->percentage,
             'passed' => $resource?->passed,
             'video_quiz' => $this->whenLoaded('videoQuiz', fn() => new VideoQuizResource($this->videoQuiz)),
-            'answers' => VideoQuizAnswerResource::collection($this->whenLoaded('answers')),
+            'answers' => $this->whenLoaded('answers', fn() => VideoQuizAnswerResource::collection($this->answers)),
             'student' => $this->whenLoaded('student', fn() => [
                 'id' => $resource->student->id,
                 'name' => $lang == 'en' ? $resource->student->name : GoogleTranslateHelper::translate($resource->student->name ?? '', $lang),
