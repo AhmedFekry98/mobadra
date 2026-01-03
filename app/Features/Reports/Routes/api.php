@@ -19,6 +19,12 @@ Route::prefix("reports")->name('reports.')->group(function() {
     Route::get('video-quizzes/student/{studentId}', [ReportController::class, 'studentVideoQuizReport'])->name('video_quizzes.student');
     Route::get('video-quizzes/lesson/{lessonId}', [ReportController::class, 'lessonVideoQuizReport'])->name('video_quizzes.lesson');
 
+    // Content Progress Reports (تقارير تقدم المحتوى)
+    Route::get('content-progress', [ReportController::class, 'contentProgressReport'])->name('content_progress.all');
+    Route::get('content-progress/student/{studentId}', [ReportController::class, 'studentContentProgressReport'])->name('content_progress.student');
+    Route::get('content-progress/lesson/{lessonId}', [ReportController::class, 'lessonContentProgressReport'])->name('content_progress.lesson');
+    Route::get('content-progress/group/{groupId}', [ReportController::class, 'groupContentProgressReport'])->name('content_progress.group');
+
     // Combined Student Report
     Route::get('student/{studentId}', [ReportController::class, 'studentFullReport'])->name('student.full');
 

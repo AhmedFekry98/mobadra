@@ -3,6 +3,7 @@
 namespace App\Features\Reports\Controllers;
 
 use App\Features\Reports\Services\AttendanceReportService;
+use App\Features\Reports\Services\ContentProgressReportService;
 use App\Features\Reports\Services\QuizReportService;
 use App\Features\Reports\Services\VideoQuizReportService;
 use App\Traits\ApiResponses;
@@ -18,7 +19,8 @@ class ReportController extends Controller
     public function __construct(
         protected AttendanceReportService $attendanceService,
         protected QuizReportService $quizService,
-        protected VideoQuizReportService $videoQuizService
+        protected VideoQuizReportService $videoQuizService,
+        protected ContentProgressReportService $contentProgressService
     ) {
         $this->middleware('auth:sanctum');
     }
@@ -109,6 +111,48 @@ class ReportController extends Controller
         }, 'ReportController@lessonVideoQuizReport');
     }
 
+    // ==================== Content Progress Reports ====================
+
+    public function contentProgressReport(Request $request)
+    {
+        return $this->executeService(function () use ($request) {
+            $filters = $this->getFilters($request);
+            $report = $this->contentProgressService->getAllStudentsContentProgressReport($filters);
+
+            return $this->okResponse($report, "Content progress report retrieved successfully");
+        }, 'ReportController@contentProgressReport');
+    }
+
+    public function studentContentProgressReport(Request $request, string $studentId)
+    {
+        return $this->executeService(function () use ($request, $studentId) {
+            $filters = $this->getFilters($request);
+            $report = $this->contentProgressService->getStudentContentProgressReport($studentId, $filters);
+
+            return $this->okResponse($report, "Student content progress report retrieved successfully");
+        }, 'ReportController@studentContentProgressReport');
+    }
+
+    public function lessonContentProgressReport(Request $request, string $lessonId)
+    {
+        return $this->executeService(function () use ($request, $lessonId) {
+            $filters = $this->getFilters($request);
+            $report = $this->contentProgressService->getLessonContentProgressReport($lessonId, $filters);
+
+            return $this->okResponse($report, "Lesson content progress report retrieved successfully");
+        }, 'ReportController@lessonContentProgressReport');
+    }
+
+    public function groupContentProgressReport(Request $request, string $groupId)
+    {
+        return $this->executeService(function () use ($request, $groupId) {
+            $filters = $this->getFilters($request);
+            $report = $this->contentProgressService->getGroupContentProgressReport($groupId, $filters);
+
+            return $this->okResponse($report, "Group content progress report retrieved successfully");
+        }, 'ReportController@groupContentProgressReport');
+    }
+
     // ==================== Combined Student Report ====================
 
     public function studentFullReport(Request $request, string $studentId)
@@ -119,6 +163,7 @@ class ReportController extends Controller
             $attendanceReport = $this->attendanceService->getStudentAttendanceReport($studentId, $filters);
             $quizReport = $this->quizService->getStudentQuizReport($studentId, $filters);
             $videoQuizReport = $this->videoQuizService->getStudentVideoQuizReport($studentId, $filters);
+            $contentProgressReport = $this->contentProgressService->getStudentContentProgressReport($studentId, $filters);
 
             return $this->okResponse([
                 'student' => $attendanceReport['student'],
@@ -133,6 +178,10 @@ class ReportController extends Controller
                 'video_quizzes' => [
                     'summary' => $videoQuizReport['summary'],
                     'by_video' => $videoQuizReport['by_video'],
+                ],
+                'content_progress' => [
+                    'summary' => $contentProgressReport['summary'],
+                    'by_course' => $contentProgressReport['by_course'],
                 ],
                 'filters' => $this->getFilters($request),
             ], "Student full report retrieved successfully");
