@@ -20,6 +20,7 @@ class ConversationParticipantResource extends JsonResource
                 'id' => $resource->user->id,
                 'name' => $lang == 'en' ? $resource->user->name : GoogleTranslateHelper::translate($resource->user->name ?? '', $lang),
                 'email' => $resource->user->email,
+                'image' => $resource->user->getFirstMediaUrl('user-image'),
             ]),
             'role' => $resource?->role,
             'joined_at' => $resource?->joined_at?->toISOString(),

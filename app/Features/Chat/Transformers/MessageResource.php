@@ -19,6 +19,7 @@ class MessageResource extends JsonResource
             'sender' => $this->whenLoaded('sender', fn() => [
                 'id' => $resource->sender->id,
                 'name' => $resource->sender->name,
+                'image' => $resource->sender->getFirstMediaUrl('user-image'),
             ]),
             'reply_to_id' => $resource?->reply_to_id,
             'reply_to' => $this->whenLoaded('replyTo', fn() => [
@@ -27,6 +28,7 @@ class MessageResource extends JsonResource
                 'sender' => [
                     'id' => $resource->replyTo->sender->id,
                     'name' => $resource->replyTo->sender->name,
+                    'image' => $resource->replyTo->sender->getFirstMediaUrl('user-image'),
                 ],
             ]),
             'type' => $resource?->type,
