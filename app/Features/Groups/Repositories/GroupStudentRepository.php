@@ -98,6 +98,20 @@ class GroupStudentRepository
     }
 
     /**
+     * Check if student is already enrolled in a group within the same term
+     */
+    public function findStudentInSameTerm(string $studentId, string $termId): ?GroupStudent
+    {
+        return GroupStudent::where('student_id', $studentId)
+            ->where('status', 'active')
+            ->whereHas('group.course', function ($q) use ($termId) {
+                $q->where('term_id', $termId);
+            })
+            ->with('group.course')
+            ->first();
+    }
+
+    /**
      * Check if student is already enrolled in a group with same schedule
      */
     public function findStudentInSameSchedule(

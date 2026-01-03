@@ -30,10 +30,23 @@ class GroupStudentService
     {
         return DB::transaction(function () use ($groupId, $studentId) {
             $group = $this->groupRepository->findOrFail($groupId);
+            $group->load('course');
 
             // Check if student is already in this group
             if ($this->repository->isStudentInGroup($groupId, $studentId)) {
                 return ['error' => 'Student is already enrolled in this group'];
+            }
+
+            // Check if student is already enrolled in any group within the same term
+            if ($group->course && $group->course->term_id) {
+                $existingTermEnrollment = $this->repository->findStudentInSameTerm(
+                    $studentId,
+                    $group->course->term_id
+                );
+
+                if ($existingTermEnrollment) {
+                    return ['error' => 'Student is already enrolled in a group for this term'];
+                }
             }
 
             // Check if student is already enrolled in any group with same grade and location type
