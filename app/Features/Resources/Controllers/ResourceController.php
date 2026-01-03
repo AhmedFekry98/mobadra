@@ -64,14 +64,6 @@ class ResourceController extends Controller
                 $query->whereNull('grade_id');
             }
 
-            if ($request->has('page')) {
-                $result = $query->orderBy('created_at', 'desc')->paginate($request->get('per_page', 15));
-                return $this->okResponse(
-                    ResourceCollection::make($result),
-                    "Resources retrieved successfully"
-                );
-            }
-
             return $this->okResponse(
                 ResourceResource::collection($query->orderBy('created_at', 'desc')->get()),
                 "Resources retrieved successfully"
