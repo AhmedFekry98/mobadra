@@ -142,12 +142,19 @@ class QuizService
 
     public function getAttemptResult(int $attemptId): QuizAttempt
     {
-        return QuizAttempt::with([
+        $attempt = QuizAttempt::with([
             'answers.question.options',
             'answers.selectedOption',
             'quiz',
             'student'
         ])->findOrFail($attemptId);
+
+        // Calculate score for both completed and in-progress attempts
+        if ($attempt->answers->count() > 0) {
+            $attempt->calculateScore();
+        }
+
+        return $attempt->fresh(['answers.question.options', 'answers.selectedOption', 'quiz', 'student']);
     }
 
     public function getAttemptsByQuizId(int $quizId)
