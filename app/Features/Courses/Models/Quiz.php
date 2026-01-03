@@ -54,4 +54,20 @@ class Quiz extends Model
 
         return $attemptCount < $this->max_attempts;
     }
+
+    public function getTermAttribute()
+    {
+        // For lesson quizzes: get term through lessonContent->lesson->course->term
+        if ($this->lessonContent) {
+            return $this->lessonContent->lesson?->course?->term;
+        }
+
+        // For final quizzes: get term through the pivot course relationship
+        // The course is loaded when accessing via finalQuizzes relationship
+        if ($this->pivot && isset($this->pivot->course_id)) {
+            return Course::find($this->pivot->course_id)?->term;
+        }
+
+        return null;
+    }
 }

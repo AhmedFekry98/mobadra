@@ -14,7 +14,7 @@ class QuizService
 {
     public function getQuizById(int $id): Quiz
     {
-        return Quiz::with(['questions.options'])->findOrFail($id);
+        return Quiz::with(['questions.options', 'lessonContent.lesson.course.term'])->findOrFail($id);
     }
 
     public function createQuestion(int $quizId, array $data): QuizQuestion
@@ -178,7 +178,7 @@ class QuizService
 
     public function getCourseFinalQuizzes(int $courseId)
     {
-        $course = Course::findOrFail($courseId);
+        $course = Course::with('term')->findOrFail($courseId);
         return $course->finalQuizzes()->with(['questions.options'])->get();
     }
 
@@ -214,7 +214,7 @@ class QuizService
 
         $quiz = $course->finalQuizzes()
             ->where('quizzes.id', $quizId)
-            ->with(['questions.options'])
+            ->with(['questions.options', 'lessonContent.lesson.course.term'])
             ->first();
 
         if (!$quiz) {
