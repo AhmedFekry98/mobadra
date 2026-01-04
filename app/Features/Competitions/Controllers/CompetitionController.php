@@ -30,10 +30,6 @@ class CompetitionController extends Controller
 
             $competitions = $this->service->getAllCompetitions($paginate, $perPage);
 
-            if ($paginate) {
-                return $this->paginatedResponse($competitions, CompetitionResource::class, "Competitions retrieved successfully");
-            }
-
             return $this->okResponse(
                 CompetitionResource::collection($competitions),
                 "Competitions retrieved successfully"
