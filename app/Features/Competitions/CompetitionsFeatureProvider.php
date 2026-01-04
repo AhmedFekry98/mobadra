@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
-class CompetitionFeatureProvider extends ServiceProvider
+class CompetitionsFeatureProvider extends ServiceProvider
 {
     public $featureName = "Competitions";
 
