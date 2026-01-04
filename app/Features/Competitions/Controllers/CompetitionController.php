@@ -55,7 +55,7 @@ class CompetitionController extends Controller
             $competition = $this->service->getCompetitionById($id);
 
             return $this->okResponse(
-                CompetitionResource::make($competition->load(['phases', 'hackathonDays'])),
+                CompetitionResource::make($competition->load(['levels'])),
                 "Competition retrieved successfully"
             );
         }, 'CompetitionController@show');
