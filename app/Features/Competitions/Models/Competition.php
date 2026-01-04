@@ -4,6 +4,7 @@ namespace App\Features\Competitions\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Competition extends Model
 {
@@ -22,5 +23,8 @@ class Competition extends Model
         'end_date' => 'date',
     ];
 
-
+    public function levels(): HasMany
+    {
+        return $this->hasMany(CompetitionLevel::class)->orderBy('level_order');
+    }
 }
