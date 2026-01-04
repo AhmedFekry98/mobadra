@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('level_order')->default(1);
             $table->unsignedInteger('capacity');
+            $table->string('course_slug')->nullable();
             $table->timestamps();
             $table->index(['competition_id', 'level_order']);
         });

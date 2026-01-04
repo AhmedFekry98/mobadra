@@ -22,4 +22,5 @@ Route::prefix('competition-levels')->name('competition-levels.')->group(function
     Route::get('{id}', [CompetitionLevelController::class, 'show'])->name('show');
     Route::patch('{id}', [CompetitionLevelController::class, 'update'])->name('update');
     Route::delete('{id}', [CompetitionLevelController::class, 'destroy'])->name('destroy');
+    Route::get('{id}/course', [CompetitionLevelController::class, 'course'])->name('course');
 });

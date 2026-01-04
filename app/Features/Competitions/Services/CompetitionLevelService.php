@@ -4,6 +4,7 @@ namespace App\Features\Competitions\Services;
 
 use App\Features\Competitions\Models\CompetitionLevel;
 use App\Features\Competitions\Repositories\CompetitionLevelRepository;
+use App\Features\Courses\Models\Course;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -36,5 +37,16 @@ class CompetitionLevelService
     public function deleteLevel(int $id): bool
     {
         return $this->repository->delete($id);
+    }
+
+    public function getLevelCourse(int $levelId): ?Course
+    {
+        $level = $this->repository->findOrFail($levelId);
+
+        if (!$level->course_slug) {
+            return null;
+        }
+
+        return Course::where('slug', $level->course_slug)->first();
     }
 }

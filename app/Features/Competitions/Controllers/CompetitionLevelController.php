@@ -5,6 +5,7 @@ namespace App\Features\Competitions\Controllers;
 use App\Features\Competitions\Requests\CompetitionLevelRequest;
 use App\Features\Competitions\Services\CompetitionLevelService;
 use App\Features\Competitions\Transformers\CompetitionLevelResource;
+use App\Features\Courses\Transformers\CourseResource;
 use App\Traits\ApiResponses;
 use App\Traits\HandleServiceExceptions;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -79,5 +80,21 @@ class CompetitionLevelController extends Controller
 
             return $this->okResponse(null, "Competition level deleted successfully");
         }, 'CompetitionLevelController@destroy');
+    }
+
+    public function course(string $id)
+    {
+        return $this->executeService(function () use ($id) {
+            $course = $this->service->getLevelCourse($id);
+
+            if (!$course) {
+                return $this->notFoundResponse("No course found for this level");
+            }
+
+            return $this->okResponse(
+                CourseResource::make($course->load(['lessons', 'term', 'grade'])),
+                "Level course retrieved successfully"
+            );
+        }, 'CompetitionLevelController@course');
     }
 }

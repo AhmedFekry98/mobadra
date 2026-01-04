@@ -27,6 +27,7 @@ class CompetitionLevelSeeder extends Seeder
                 'description' => 'First level of the competition',
                 'level_order' => 1,
                 'capacity' => 100,
+                'course_slug' => 'com-level-1',
             ],
             [
                 'competition_id' => $competition->id,
@@ -34,6 +35,7 @@ class CompetitionLevelSeeder extends Seeder
                 'description' => 'Second level of the competition',
                 'level_order' => 2,
                 'capacity' => 50,
+                'course_slug' => 'com-level-2',
             ],
             [
                 'competition_id' => $competition->id,
@@ -41,6 +43,7 @@ class CompetitionLevelSeeder extends Seeder
                 'description' => 'Third level of the competition',
                 'level_order' => 3,
                 'capacity' => 25,
+                'course_slug' => 'com-level-3',
             ],
             [
                 'competition_id' => $competition->id,
@@ -48,6 +51,7 @@ class CompetitionLevelSeeder extends Seeder
                 'description' => 'Hackathon level of the competition',
                 'level_order' => 4,
                 'capacity' => 20,
+                'course_slug' => null,
             ],
         ];
 

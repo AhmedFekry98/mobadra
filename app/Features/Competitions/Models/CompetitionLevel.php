@@ -2,6 +2,7 @@
 
 namespace App\Features\Competitions\Models;
 
+use App\Features\Courses\Models\Course;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ class CompetitionLevel extends Model
         'description',
         'level_order',
         'capacity',
+        'course_slug',
     ];
 
     protected $casts = [
@@ -26,5 +28,10 @@ class CompetitionLevel extends Model
     public function competition(): BelongsTo
     {
         return $this->belongsTo(Competition::class);
+    }
+
+    public function course()
+    {
+        return Course::where('slug', $this->course_slug)->first();
     }
 }
