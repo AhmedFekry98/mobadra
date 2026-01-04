@@ -45,9 +45,6 @@ class AttendanceController extends Controller
     public function getBySession(string $sessionId)
     {
         return $this->executeService(function () use ($sessionId) {
-            $session = $this->sessionService->getSessionById($sessionId);
-            $this->authorize('view', Group::find($session->group_id));
-
             $user = auth()->user();
             $attendances = $this->service->getAttendanceBySession($sessionId, $user);
 
@@ -61,9 +58,6 @@ class AttendanceController extends Controller
     public function recordAttendance(AttendanceRequest $request, string $sessionId)
     {
         return $this->executeService(function () use ($request, $sessionId) {
-            $session = $this->sessionService->getSessionById($sessionId);
-            $this->authorize('update', Group::find($session->group_id));
-
             $data = $request->validated();
             $attendance = $this->service->recordAttendance(
                 $sessionId,
@@ -83,9 +77,6 @@ class AttendanceController extends Controller
     public function bulkRecordAttendance(BulkAttendanceRequest $request, string $sessionId)
     {
         return $this->executeService(function () use ($request, $sessionId) {
-            $session = $this->sessionService->getSessionById($sessionId);
-            $this->authorize('update', Group::find($session->group_id));
-
             $attendances = $this->service->bulkRecordAttendance(
                 $sessionId,
                 $request->validated()['attendances'],
@@ -102,9 +93,6 @@ class AttendanceController extends Controller
     public function initializeSession(string $sessionId)
     {
         return $this->executeService(function () use ($sessionId) {
-            $session = $this->sessionService->getSessionById($sessionId);
-            $this->authorize('update', Group::find($session->group_id));
-
             $attendances = $this->service->initializeSessionAttendance($sessionId);
 
             return $this->okResponse(
@@ -129,9 +117,6 @@ class AttendanceController extends Controller
     public function getSessionStats(string $sessionId)
     {
         return $this->executeService(function () use ($sessionId) {
-            $session = $this->sessionService->getSessionById($sessionId);
-            $this->authorize('view', Group::find($session->group_id));
-
             $stats = $this->service->getSessionAttendanceStats($sessionId);
 
             return $this->okResponse(
@@ -144,8 +129,6 @@ class AttendanceController extends Controller
     public function getGroupReport(string $groupId)
     {
         return $this->executeService(function () use ($groupId) {
-            $this->authorize('view', Group::findOrFail($groupId));
-
             $report = $this->service->getGroupAttendanceReport($groupId);
 
             return $this->okResponse(
